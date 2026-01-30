@@ -110,8 +110,9 @@
 
         // Filter
         filteredRoutes = allRoutes.filter(r => {
-            // Search (Name or Location)
-            const searchableText = `${r.name} ${r.location || ''}`.toLowerCase();
+            // Search (Name, Location, or Tags)
+            const tagsText = (r.tags || []).join(' ');
+            const searchableText = `${r.name} ${r.location || ''} ${tagsText}`.toLowerCase();
             if (searchQuery && !searchableText.includes(searchQuery)) return false;
 
             // Type (Race/Training)

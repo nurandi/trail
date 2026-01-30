@@ -213,22 +213,25 @@ def get_custom_location(lat, lng):
             for loc in custom_locs:
                 dist = calculate_distance(lat, lng, loc['lat'], loc['lng'])
                 if dist <= 300:  # Increased to 300m for better match rate
-                    return loc['name']
+                    return {
+                        'name': loc['name'],
+                        'tags': loc.get('tag', [])
+                    }
     except Exception as e:
         print(f"    ⚠️ Error reading custom locations: {e}")
     return None
 
 
 def get_location_name(lat, lng):
-    """Get location name: custom list first, then Mapbox reverse geocoding"""
+    """Get location info: custom list first, then Mapbox reverse geocoding"""
     # 1. Check Custom Data First
-    custom_name = get_custom_location(lat, lng)
-    if custom_name:
-        return custom_name
+    custom_data = get_custom_location(lat, lng)
+    if custom_data:
+        return custom_data['name'], custom_data['tags']
 
     # 2. Fallback to Mapbox
     if not MAPBOX_ACCESS_TOKEN:
-        return None
+        return None, []
     try:
         url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{lng},{lat}.json"
         params = {
@@ -240,8 +243,9 @@ def get_location_name(lat, lng):
         if res.status_code == 200:
             data = res.json()
             if data['features']:
-                return data['features'][0]['place_name'].split(',')[0]
-        return None
+                name = data['features'][0]['place_name'].split(',')[0]
+                return name, []
+        return None, []
     except Exception as e:
         print(f"    ⚠️ Error reverse geocoding: {e}")
         return None
@@ -266,30 +270,37 @@ def create_route_data(activities, existing_routes=None):
         is_race = activity.get('workout_type') == 1
         
         # Location logic
-        location = None
+        location_name = None
+        tags = []
         start_latlng = activity.get('start_latlng')
         
         # 1. ALWAYS check custom location first (to override existing generic ones)
         if start_latlng and len(start_latlng) == 2:
-            location = get_custom_location(start_latlng[0], start_latlng[1])
+            custom_data = get_custom_location(start_latlng[0], start_latlng[1])
+            if custom_data:
+                location_name = custom_data['name']
+                tags = custom_data['tags']
         
         # 2. Fallback to existing routes if not a custom location
-        if not location and existing_routes:
+        if not location_name and existing_routes:
             match = next((r for r in existing_routes if r['stravaId'] == str(activity['id'])), None)
             if match and match.get('location'):
-                location = match['location']
+                location_name = match['location']
+                tags = match.get('tags', [])
         
         # 3. Last resort: Fetch from Mapbox
-        if not location and start_latlng and len(start_latlng) == 2:
+        if not location_name and start_latlng and len(start_latlng) == 2:
             print(f"    📍 Geocoding start location for {activity['id']}...")
-            location = get_location_name(start_latlng[0], start_latlng[1])
+            location_name, tags = get_location_name(start_latlng[0], start_latlng[1])
 
         route = {
             'name': activity.get('name', 'Unnamed Run'),
             'stravaId': str(activity['id']),
             'distance': activity.get('distance', 0),
             'elevation': activity.get('total_elevation_gain', 0),
-            'location': location,
+            'location': location_name,
+            'tags': tags,
+            'startLatLng': start_latlng,
             'dateDisplay': date_display,
             'dateFull': start_date,
             'isRace': is_race,
