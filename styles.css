@@ -349,42 +349,48 @@ main {
 
 .route-actions {
     display: flex;
-    gap: 10px;
+    justify-content: flex-end;
+    gap: 12px;
     margin-top: auto;
-    /* Pushes buttons to bottom */
 }
 
-.btn {
-    flex: 1;
-    padding: 12px 18px;
-    text-align: center;
-    text-decoration: none;
-    border: 1.5px solid #eee;
+.btn-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--border-color);
     background-color: #fff;
     color: var(--text-main);
     cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 10px;
     transition: var(--transition);
+    text-decoration: none;
 }
 
-.btn:hover {
-    background-color: #f0f0f0;
+.btn-icon:hover {
+    background-color: #f8f8f8;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
     border-color: #ddd;
 }
 
-.btn-primary {
+.btn-icon.primary {
     background: var(--primary-gradient);
-    color: #fff;
+    color: white;
     border: none;
     box-shadow: 0 4px 12px rgba(252, 76, 2, 0.2);
 }
 
-.btn-primary:hover {
-    transform: translateY(-2px);
+.btn-icon.primary:hover {
     box-shadow: 0 6px 20px rgba(252, 76, 2, 0.3);
-    opacity: 0.95;
+}
+
+.btn-icon svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
 }
 
 
