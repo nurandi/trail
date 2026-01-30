@@ -50,6 +50,7 @@
         document.getElementById('filterDistance')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('filterElevation')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('sortBy')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
+        document.getElementById('searchQuery')?.addEventListener('input', () => { currentPage = 1; applyFilters(); });
 
         // Toggle Filters Logic
         const toggleBtn = document.getElementById('toggleFilters');
@@ -93,9 +94,13 @@
         const distVal = document.getElementById('filterDistance')?.value || 'all';
         const elevVal = document.getElementById('filterElevation')?.value || 'all';
         const sortVal = document.getElementById('sortBy')?.value || 'date-desc';
+        const searchQuery = document.getElementById('searchQuery')?.value.toLowerCase() || '';
 
         // Filter
         filteredRoutes = allRoutes.filter(r => {
+            // Search
+            if (searchQuery && !r.name.toLowerCase().includes(searchQuery)) return false;
+
             // Distance
             if (distVal !== 'all') {
                 const km = r.distance / 1000;

@@ -14,6 +14,7 @@
         <div class="container">
             <h1>The Trail Archive</h1>
             <p>Private archive of routes and GPX downloads.</p>
+            <p class="last-update">Last updated: <span id="last-update">Calculating...</span></p>
         </div>
     </header>
 
@@ -28,6 +29,11 @@
 
         <div id="filtersWrapper" class="filters-wrapper collapsed">
             <div class="controls-bar">
+                <div class="control-group">
+                    <label for="searchQuery">Search</label>
+                    <input type="text" id="searchQuery" placeholder="Activity name..." autocomplete="off">
+                </div>
+
                 <div class="control-group">
                     <label for="filterDistance">Distance</label>
                     <select id="filterDistance">

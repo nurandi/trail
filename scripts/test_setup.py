@@ -69,24 +69,24 @@ def run_fetch_script():
 
 
 def check_output():
-    """Verify that data.js was created"""
-    if not os.path.exists('data.js'):
-        print("❌ data.js not created")
+    """Verify that data.json was created"""
+    if not os.path.exists('data.json'):
+        print("❌ data.json not created")
         return False
     
-    # Read and check data.js
-    with open('data.js', 'r', encoding='utf-8') as f:
+    # Read and check data.json
+    with open('data.json', 'r', encoding='utf-8') as f:
         content = f.read()
     
-    if 'const routes' not in content:
-        print("❌ data.js has invalid format")
+    if '"routes"' not in content:
+        print("❌ data.json has invalid format")
         return False
     
     if 'Sample Trail Run' in content:
-        print("⚠️  data.js still contains placeholder data")
+        print("⚠️  data.json still contains placeholder data")
         print("   This is OK for initial testing, but make sure Strava fetch works")
     else:
-        print("✓ data.js contains real route data")
+        print("✓ data.json contains real route data")
     
     return True
 

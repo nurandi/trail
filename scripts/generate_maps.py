@@ -7,6 +7,8 @@ Reads from data.json and assets/streams/
 import os
 import json
 import requests
+import matplotlib
+matplotlib.use('Agg') # Headless mode for CI/CD
 import matplotlib.pyplot as plt
 import io
 import base64

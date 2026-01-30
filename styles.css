@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700;800&display=swap');
+
+:root {
+    --primary-color: #fc4c02;
+    /* Strava Orange */
+    --primary-gradient: linear-gradient(135deg, #fc4c02 0%, #ff8552 100%);
+    --bg-color: #f8f9fa;
+    --card-bg: #ffffff;
+    --text-main: #1a1a1a;
+    --text-muted: #666666;
+    --border-color: #eeeeee;
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -6,10 +22,10 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #fff;
+    color: var(--text-main);
+    background-color: var(--bg-color);
 }
 
 .container {
@@ -20,20 +36,36 @@ body {
 
 /* Header */
 header {
-    background-color: #fff;
-    padding: 40px 0;
+    background: #ffffff;
+    padding: 60px 0;
     text-align: center;
+    border-bottom: 1px solid var(--border-color);
 }
 
 header h1 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    color: #222;
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 header p {
-    color: #666;
-    font-size: 1rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.last-update {
+    font-size: 0.85rem;
+    margin-top: 10px;
+    opacity: 0.7;
+    font-weight: 500;
 }
 
 /* Main Content */
@@ -137,24 +169,32 @@ main {
     text-transform: uppercase;
 }
 
-.control-group select {
-    padding: 10px;
+.control-group select,
+.control-group input[type="text"] {
+    padding: 10px 14px;
     border: 1px solid #ddd;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.95rem;
-    color: #333;
+    color: var(--text-main);
     background-color: #fff;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: var(--transition);
 }
 
-.control-group select:hover {
-    border-color: #bbb;
+.control-group input[type="text"] {
+    cursor: text;
 }
 
-.control-group select:focus {
-    border-color: #333;
+.control-group select:hover,
+.control-group input[type="text"]:hover {
+    border-color: var(--primary-color);
+}
+
+.control-group select:focus,
+.control-group input[type="text"]:focus {
+    border-color: var(--primary-color);
     outline: none;
+    box-shadow: 0 0 0 3px rgba(252, 76, 2, 0.1);
 }
 
 /* Routes Grid */
@@ -167,22 +207,33 @@ main {
 
 /* Route Card */
 .route-card {
-    border: 1px solid #ddd;
-    background-color: #fff;
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
     overflow: hidden;
-    /* Flexbox to keep content aligned */
     display: flex;
     flex-direction: column;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+
+.route-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(252, 76, 2, 0.2);
 }
 
 .route-card img {
     width: 100%;
     height: auto;
     aspect-ratio: 3/2;
-    /* 600x400 */
-    object-fit: contain;
+    object-fit: cover;
     display: block;
-    border-bottom: 1px solid #ddd;
+    transition: var(--transition);
+}
+
+.route-card:hover img {
+    transform: scale(1.05);
 }
 
 /* Card Badges */
@@ -193,34 +244,35 @@ main {
 
 .badge-overlay {
     position: absolute;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.75rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.7rem;
     font-weight: 700;
     color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 10;
     pointer-events: none;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .badge-date {
-    top: 10px;
-    left: 10px;
-    background-color: rgba(33, 37, 41, 0.85);
-    font-weight: 600;
+    top: 12px;
+    left: 12px;
+    background-color: rgba(26, 26, 26, 0.7);
 }
 
 .badge-date.old {
-    background-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.8);
 }
 
 .badge-race {
-    top: 10px;
-    right: 10px;
-    background-color: #e34935;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, rgba(227, 73, 53, 0.9) 0%, rgba(252, 76, 2, 0.9) 100%);
 }
 
 .route-info {
@@ -231,17 +283,21 @@ main {
 }
 
 .route-info h3 {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-    color: #222;
-    /* Allow up to 2 lines and then truncate */
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+    /* Truncate to a single line with ellipsis */
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: 2.8rem;
-    /* Keeps titles aligned if 1 vs 2 lines */
+    text-overflow: ellipsis;
+    min-height: 1.5rem;
 }
+
 
 .route-stats {
     display: grid;
@@ -279,31 +335,37 @@ main {
 
 .btn {
     flex: 1;
-    padding: 10px 15px;
+    padding: 12px 18px;
     text-align: center;
     text-decoration: none;
-    border: 1px solid #333;
+    border: 1.5px solid #eee;
     background-color: #fff;
-    color: #333;
+    color: var(--text-main);
     cursor: pointer;
     font-size: 0.9rem;
-    transition: all 0.2s;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: var(--transition);
 }
 
 .btn:hover {
-    background-color: #333;
-    color: #fff;
+    background-color: #f0f0f0;
+    border-color: #ddd;
 }
 
 .btn-primary {
-    background-color: #333;
+    background: var(--primary-gradient);
     color: #fff;
+    border: none;
+    box-shadow: 0 4px 12px rgba(252, 76, 2, 0.2);
 }
 
 .btn-primary:hover {
-    background-color: #555;
-    border-color: #555;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(252, 76, 2, 0.3);
+    opacity: 0.95;
 }
+
 
 /* Loading State */
 .loading {
