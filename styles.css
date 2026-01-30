@@ -196,10 +196,10 @@ main {
 
 .control-group select,
 .control-group input[type="text"] {
-    padding: 10px 14px;
+    padding: 8px 12px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: var(--text-main);
     background-color: #fff;
     cursor: pointer;
