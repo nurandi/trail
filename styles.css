@@ -535,18 +535,22 @@ footer a:hover {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(2px);
+    overflow-y: auto;
 }
 
 .modal-content {
     background-color: #ffffff;
-    margin: 5% auto;
-    padding: 35px;
+    margin: 20px auto;
+    padding: 20px 25px;
     border: none;
     width: 95%;
     max-width: 500px;
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     position: relative;
+    max-height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
 }
 
 .close {
@@ -566,13 +570,13 @@ footer a:hover {
 }
 
 .modal-content h2 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-size: 1.5rem;
     color: #333;
 }
 
 .toc-text {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 15px;
     background-color: #f9f9f9;
     border: 1px solid #eee;
@@ -580,7 +584,7 @@ footer a:hover {
     font-size: 0.9rem;
     color: #555;
     line-height: 1.6;
-    max-height: 250px;
+    max-height: 180px;
     overflow-y: auto;
 }
 
@@ -700,7 +704,7 @@ footer a:hover {
     color: #856404;
     border: 1px solid #ffeeba;
     padding: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     border-radius: 4px;
     font-size: 0.95rem;
     font-weight: 500;
