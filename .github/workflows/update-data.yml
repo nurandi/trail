@@ -25,9 +25,9 @@ jobs:
             assets/maps
             assets/streams
             all_routes.json
-          key: data-${{ runner.os }}-${{ github.run_id }}
+          key: data-v2-${{ runner.os }}-${{ github.run_id }}
           restore-keys: |
-            data-${{ runner.os }}-
+            data-v2-${{ runner.os }}-
 
       - name: Set up Python
         uses: actions/setup-python@v5
