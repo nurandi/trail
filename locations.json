@@ -64,5 +64,16 @@
         ],
         "lat": -6.594598,
         "lng": 106.932626
+    },
+    {
+        "name": "Foothill Forest",
+        "tag": [
+            "Karang Tengah",
+            "Babakan Madang",
+            "Sentul",
+            "Bogor"
+        ],
+        "lat": -6.594318,
+        "lng": 106.902492
     }
 ]
