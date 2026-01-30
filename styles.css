@@ -350,46 +350,62 @@ main {
 .route-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
+    gap: 10px;
     margin-top: auto;
 }
 
-.btn-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
+.btn-action {
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1.5px solid var(--border-color);
-    background-color: #fff;
+    border: 1.5px solid transparent;
+    background-color: #f6f6f6;
     color: var(--text-main);
     cursor: pointer;
     transition: var(--transition);
     text-decoration: none;
+    gap: 8px;
 }
 
-.btn-icon:hover {
-    background-color: #f8f8f8;
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-sm);
-    border-color: #ddd;
+.btn-action:hover {
+    background-color: #eee;
+    transform: translateY(-2px);
 }
 
-.btn-icon.primary {
+.btn-action.strava {
+    color: #fc4c02;
+    /* Strava Orange */
+    background-color: rgba(252, 76, 2, 0.05);
+}
+
+.btn-action.strava:hover {
+    background-color: rgba(252, 76, 2, 0.1);
+    border-color: rgba(252, 76, 2, 0.2);
+}
+
+.btn-action.primary {
     background: var(--primary-gradient);
     color: white;
-    border: none;
-    box-shadow: 0 4px 12px rgba(252, 76, 2, 0.2);
+    box-shadow: 0 4px 12px rgba(252, 76, 2, 0.15);
 }
 
-.btn-icon.primary:hover {
-    box-shadow: 0 6px 20px rgba(252, 76, 2, 0.3);
+.btn-action.primary:hover {
+    box-shadow: 0 6px 15px rgba(252, 76, 2, 0.25);
+    opacity: 0.95;
 }
 
-.btn-icon svg {
-    width: 22px;
-    height: 22px;
+.btn-action span {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.btn-action svg {
+    width: 20px;
+    height: 20px;
     display: block;
     fill: currentColor;
 }
