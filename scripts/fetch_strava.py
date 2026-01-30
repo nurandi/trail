@@ -33,6 +33,7 @@ DB_FILE = 'all_routes.json'
 def get_access_token():
     """Get a fresh access token using the refresh token"""
     if not all([STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET, STRAVA_REFRESH_TOKEN]):
+        print(f"  ❌ Missing credentials: ID={bool(STRAVA_CLIENT_ID)}, Secret={bool(STRAVA_CLIENT_SECRET)}, Refresh={bool(STRAVA_REFRESH_TOKEN)}")
         # Fallback
         token = os.getenv('STRAVA_ACCESS_TOKEN')
         if token:
@@ -49,6 +50,9 @@ def get_access_token():
 
     try:
         response = requests.post(STRAVA_AUTH_URL, data=payload)
+        if response.status_code != 200:
+            print(f"  ❌ Strava Auth Error: {response.status_code}")
+            print(f"  ❌ Response JSON: {response.text}")
         response.raise_for_status()
         return response.json()['access_token']
     except Exception as e:
