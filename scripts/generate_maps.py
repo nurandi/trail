@@ -144,12 +144,13 @@ def generate_map(activity):
 
 
 def main():
-    if not os.path.exists('strava_data.json'):
-        print("strava_data.json not found. Run fetch_strava.py first.")
+    if not os.path.exists('data.json'):
+        print("data.json not found. Run fetch_strava.py first.")
         return
 
-    with open('strava_data.json', 'r') as f:
-        queue = json.load(f)
+    with open('data.json', 'r') as f:
+        data = json.load(f)
+        queue = data.get('routes', [])
         
     print(f"Found {len(queue)} routes to process...")
     
@@ -157,7 +158,12 @@ def main():
     os.makedirs(MAPS_DIR, exist_ok=True)
     
     for item in queue:
-        generate_map(item)
+        # Map fields to what generate_map expects
+        activity = {
+            'id': item['stravaId'],
+            'polyline': item['polyline']
+        }
+        generate_map(activity)
         
     print("✓ Map generation complete!")
     

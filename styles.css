@@ -105,6 +105,9 @@ main {
     border: 1px solid #ddd;
     background-color: #fff;
     overflow: hidden;
+    /* Flexbox to keep content aligned */
+    display: flex;
+    flex-direction: column;
 }
 
 .route-card img {
@@ -157,16 +160,22 @@ main {
 
 .route-info {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
 .route-info h3 {
     font-size: 1.1rem;
     margin-bottom: 15px;
     color: #222;
-    /* Truncate to single line */
-    white-space: nowrap;
+    /* Allow up to 2 lines and then truncate */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
+    min-height: 2.8rem;
+    /* Keeps titles aligned if 1 vs 2 lines */
 }
 
 .route-stats {
@@ -199,6 +208,8 @@ main {
 .route-actions {
     display: flex;
     gap: 10px;
+    margin-top: auto;
+    /* Pushes buttons to bottom */
 }
 
 .btn {
