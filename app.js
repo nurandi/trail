@@ -439,7 +439,7 @@
 
                 if (new Date(route.dateFull) < oneYearAgo) {
                     const dateStr = route.dateDisplay || new Date(route.dateFull).toLocaleDateString();
-                    warningEl.innerHTML = `<strong>⚠️ Old Route Warning:</strong> This activity was recorded in ${dateStr}.<br>Trail conditions may have changed significantly.`;
+                    warningEl.innerHTML = `<strong>⚠️ Old Route Warning:</strong> This activity was recorded in ${dateStr}. Trail conditions may have changed significantly.`;
                     warningEl.style.display = 'block';
                 }
             }
