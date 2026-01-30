@@ -258,7 +258,7 @@
 
         // Effort = km + 0.01 * elevation(m)
         const effortValue = (route.distance / 1000) + (0.01 * route.elevation);
-        const effort = effortValue.toFixed(1);
+        const effort = `${Math.round(effortValue)} km`;
 
         const stravaUrl = `https://www.strava.com/activities/${route.stravaId}`;
 
