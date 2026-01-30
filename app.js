@@ -35,6 +35,14 @@
 
             if (athleteRes.ok) {
                 athleteData = await athleteRes.json();
+
+                // Set Avatar Logo
+                const avatarEl = document.getElementById('athlete-avatar');
+                if (avatarEl && athleteData && athleteData.profile) {
+                    avatarEl.src = athleteData.profile;
+                    avatarEl.alt = athleteData.name || 'Athlete Profile';
+                    avatarEl.style.display = 'block';
+                }
             }
 
             // Initial Render
