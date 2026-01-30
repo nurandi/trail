@@ -403,11 +403,9 @@ main {
     letter-spacing: 0.2px;
 }
 
-.btn-action svg {
-    width: 20px;
-    height: 20px;
+.btn-action i {
+    font-size: 1.1rem;
     display: block;
-    fill: currentColor;
 }
 
 

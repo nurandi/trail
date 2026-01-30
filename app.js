@@ -286,11 +286,11 @@
                 </div>
                 <div class="route-actions">
                     <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava" title="View on Strava">
-                        <svg viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-4.433L2 14.331l5.15 10.171h3.066l-5.15-10.171h3.065l2.089 4.116"/></svg>
+                        <i class="fab fa-strava"></i>
                         <span>Strava</span>
                     </a>
                     <button class="btn-action primary" onclick="downloadGPX('${route.stravaId}', '${route.name}')" title="Download GPX">
-                        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></svg>
+                        <i class="fas fa-download"></i>
                         <span>GPX</span>
                     </button>
                 </div>
