@@ -163,6 +163,10 @@ main {
     font-size: 1.1rem;
     margin-bottom: 15px;
     color: #222;
+    /* Truncate to single line */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .route-stats {
