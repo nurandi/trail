@@ -59,6 +59,7 @@
         document.getElementById('filterElevation')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('sortBy')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('filterType')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
+        document.getElementById('filterRecency')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('searchQuery')?.addEventListener('input', () => { currentPage = 1; applyFilters(); });
 
         // Toggle Filters Logic
@@ -104,6 +105,7 @@
         const elevVal = document.getElementById('filterElevation')?.value || 'all';
         const sortVal = document.getElementById('sortBy')?.value || 'date-desc';
         const typeVal = document.getElementById('filterType')?.value || 'all';
+        const recencyVal = document.getElementById('filterRecency')?.value || 'all';
         const searchQuery = document.getElementById('searchQuery')?.value.toLowerCase() || '';
 
         // Filter
@@ -114,6 +116,16 @@
             // Type (Race/Training)
             if (typeVal === 'race' && !r.isRace) return false;
             if (typeVal === 'training' && r.isRace) return false;
+
+            // Recency
+            if (recencyVal !== 'all') {
+                const oneYearAgo = new Date();
+                oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+                const isRecent = new Date(r.dateFull) >= oneYearAgo;
+
+                if (recencyVal === 'recent' && !isRecent) return false;
+                if (recencyVal === 'classic' && isRecent) return false;
+            }
 
             // Distance
             if (distVal !== 'all') {
