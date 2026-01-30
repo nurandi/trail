@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate static map images with elevation profiles
-Reads from strava_data.json and assets/streams/
+Reads from data.json and assets/streams/
 """
 
 import os
@@ -168,7 +168,8 @@ def main():
     print("✓ Map generation complete!")
     
     # Optional: cleanup intermediate file
-    # os.remove('strava_data.json')
+    # if os.path.exists('data.json'):
+    #     os.remove('data.json')
 
 
 if __name__ == '__main__':
