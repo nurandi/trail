@@ -255,6 +255,11 @@
         const mapImage = route.mapImage || 'assets/maps/placeholder.png';
         const distance = formatDistance(route.distance);
         const elevation = formatElevation(route.elevation);
+
+        // Effort = km + 0.01 * elevation(m)
+        const effortValue = (route.distance / 1000) + (0.01 * route.elevation);
+        const effort = effortValue.toFixed(1);
+
         const stravaUrl = `https://www.strava.com/activities/${route.stravaId}`;
 
         const dateDisplay = route.dateDisplay || '';
@@ -294,6 +299,10 @@
                     <div class="stat">
                         <div class="stat-label">Elevation</div>
                         <div class="stat-value">${elevation}</div>
+                    </div>
+                    <div class="stat" title="Effort = distance(km) + 0.01 * elevation(m)">
+                        <div class="stat-label">Effort</div>
+                        <div class="stat-value">${effort}</div>
                     </div>
                 </div>
                 <div class="route-actions">
@@ -405,17 +414,17 @@
     function generateGPX(coords, name) {
         let gpx = '<?xml version="1.0" encoding="UTF-8"?>\n';
         gpx += '<gpx version="1.1" creator="The Trail Archive" xmlns="http://www.topografix.com/GPX/1/1">\n';
-        gpx += `  <metadata>\n    <name>${name}</name>\n  </metadata>\n`;
+        gpx += `  < metadata >\n < name > ${name}</name >\n  </metadata >\n`;
         gpx += '  <trk>\n';
-        gpx += `    <name>${name}</name>\n`;
+        gpx += `    < name > ${name}</name >\n`;
         gpx += '    <trkseg>\n';
 
         coords.forEach(point => {
-            let pt = `      <trkpt lat="${point[0]}" lon="${point[1]}">`;
+            let pt = `      < trkpt lat = "${point[0]}" lon = "${point[1]}" > `;
             if (point.length > 2) {
-                pt += `<ele>${point[2]}</ele>`;
+                pt += `< ele > ${point[2]}</ele > `;
             }
-            pt += `</trkpt>\n`;
+            pt += `</trkpt >\n`;
             gpx += pt;
         });
 
@@ -448,7 +457,7 @@
 
                 if (new Date(route.dateFull) < oneYearAgo) {
                     const dateStr = route.dateDisplay || new Date(route.dateFull).toLocaleDateString();
-                    warningEl.innerHTML = `<strong>⚠️ Old Route Warning:</strong> This activity was recorded in ${dateStr}. Trail conditions may have changed significantly.`;
+                    warningEl.innerHTML = `< strong >⚠️ Old Route Warning:</strong > This activity was recorded in ${dateStr}. Trail conditions may have changed significantly.`;
                     warningEl.style.display = 'block';
                 }
             }
@@ -540,7 +549,7 @@
 
             // 1. Try to fetch detailed stream (NOW .dat)
             try {
-                const response = await fetch(`assets/streams/${stravaId}.dat`);
+                const response = await fetch(`assets / streams / ${stravaId}.dat`);
                 if (response.ok) {
                     const encryptedText = await response.text();
 
