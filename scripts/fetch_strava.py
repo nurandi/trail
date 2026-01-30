@@ -212,7 +212,7 @@ def get_custom_location(lat, lng):
             custom_locs = json.load(f)
             for loc in custom_locs:
                 dist = calculate_distance(lat, lng, loc['lat'], loc['lng'])
-                if dist <= 50:  # 50m radius as requested
+                if dist <= 300:  # Increased to 300m for better match rate
                     return loc['name']
     except Exception as e:
         print(f"    ⚠️ Error reading custom locations: {e}")
@@ -267,18 +267,22 @@ def create_route_data(activities, existing_routes=None):
         
         # Location logic
         location = None
-        # Try to find in existing routes first
-        if existing_routes:
+        start_latlng = activity.get('start_latlng')
+        
+        # 1. ALWAYS check custom location first (to override existing generic ones)
+        if start_latlng and len(start_latlng) == 2:
+            location = get_custom_location(start_latlng[0], start_latlng[1])
+        
+        # 2. Fallback to existing routes if not a custom location
+        if not location and existing_routes:
             match = next((r for r in existing_routes if r['stravaId'] == str(activity['id'])), None)
             if match and match.get('location'):
                 location = match['location']
         
-        # If not found, fetch from Mapbox
-        if not location:
-            start_latlng = activity.get('start_latlng')
-            if start_latlng and len(start_latlng) == 2:
-                print(f"    📍 Geocoding start location for {activity['id']}...")
-                location = get_location_name(start_latlng[0], start_latlng[1])
+        # 3. Last resort: Fetch from Mapbox
+        if not location and start_latlng and len(start_latlng) == 2:
+            print(f"    📍 Geocoding start location for {activity['id']}...")
+            location = get_location_name(start_latlng[0], start_latlng[1])
 
         route = {
             'name': activity.get('name', 'Unnamed Run'),

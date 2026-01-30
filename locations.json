@@ -1,12 +1,68 @@
 [
     {
-        "name": "Km 0 Sentul",
-        "lat": -6.5898,
-        "lng": 106.9189
+        "name": "Kandang Sapi",
+        "tag": [
+            "Karang Tengah",
+            "Babakan Madang",
+            "Sentul",
+            "Bogor"
+        ],
+        "lat": -6.627632,
+        "lng": 106.910543
     },
     {
-        "name": "Paniisan",
-        "lat": -6.6123,
-        "lng": 106.9234
+        "name": "Leuwi Pangaduan",
+        "tag": [
+            "Karang Tengah",
+            "Babakan Madang",
+            "Sentul",
+            "Bogor"
+        ],
+        "lat": -6.600636,
+        "lng": 106.906467
+    },
+    {
+        "name": "Warung Pak Tatang",
+        "tag": [
+            "Karang Tengah",
+            "Babakan Madang",
+            "Sentul",
+            "Bogor"
+        ],
+        "lat": -6.590048,
+        "lng": 106.900523
+    },
+    {
+        "name": "Sentul Nirwana",
+        "tag": [
+            "Karang Tengah",
+            "Babakan Madang",
+            "Sentul",
+            "Bogor"
+        ],
+        "lat": -6.579673,
+        "lng": 106.891759
+    },
+    {
+        "name": "Wangun",
+        "tag": [
+            "Karang Tengah",
+            "Babakan Madang",
+            "Sentul",
+            "Bogor"
+        ],
+        "lat": -6.592257,
+        "lng": 106.929789
+    },
+    {
+        "name": "Wangun",
+        "tag": [
+            "Karang Tengah",
+            "Babakan Madang",
+            "Sentul",
+            "Bogor"
+        ],
+        "lat": -6.594598,
+        "lng": 106.932626
     }
 ]
