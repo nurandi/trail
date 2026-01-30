@@ -455,9 +455,33 @@
 
     if (closeBtn) closeBtn.onclick = closeModal;
     if (cancelBtn) cancelBtn.onclick = closeModal;
+
+    // --- About Modal Logic ---
+    const aboutModal = document.getElementById("aboutModal");
+    const aboutLink = document.getElementById("aboutLink");
+    const closeAboutSpan = document.getElementById("closeAbout");
+    const closeAboutBtn = document.getElementById("closeAboutBtn");
+
+    if (aboutLink) {
+        aboutLink.onclick = function (e) {
+            e.preventDefault();
+            if (aboutModal) aboutModal.style.display = "block";
+        }
+    }
+
+    function closeAboutModal() {
+        if (aboutModal) aboutModal.style.display = "none";
+    }
+
+    if (closeAboutSpan) closeAboutSpan.onclick = closeAboutModal;
+    if (closeAboutBtn) closeAboutBtn.onclick = closeAboutModal;
+
     window.onclick = function (event) {
         if (event.target == modal) {
             closeModal();
+        }
+        if (event.target == aboutModal) {
+            closeAboutModal();
         }
     }
 

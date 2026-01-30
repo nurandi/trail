@@ -468,6 +468,18 @@ footer p {
     margin: 5px 0;
 }
 
+footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+footer a:hover {
+    color: #ff8552;
+    text-decoration: underline;
+}
+
 .attribution {
     margin-top: 15px;
     font-weight: 600;
