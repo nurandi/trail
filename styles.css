@@ -355,8 +355,8 @@ main {
 }
 
 .btn-action {
-    height: 40px;
-    padding: 0 12px;
+    width: 44px;
+    height: 44px;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -367,7 +367,11 @@ main {
     cursor: pointer;
     transition: var(--transition);
     text-decoration: none;
-    gap: 8px;
+}
+
+.btn-action i {
+    font-size: 1.3rem;
+    display: block;
 }
 
 .btn-action:hover {
@@ -396,18 +400,6 @@ main {
     box-shadow: 0 6px 15px rgba(252, 76, 2, 0.25);
     opacity: 0.95;
 }
-
-.btn-action span {
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.2px;
-}
-
-.btn-action i {
-    font-size: 1.1rem;
-    display: block;
-}
-
 
 /* Loading State */
 .loading {

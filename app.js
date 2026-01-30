@@ -287,11 +287,9 @@
                 <div class="route-actions">
                     <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava" title="View on Strava">
                         <i class="fab fa-strava"></i>
-                        <span>Strava</span>
                     </a>
                     <button class="btn-action primary" onclick="downloadGPX('${route.stravaId}', '${route.name}')" title="Download GPX">
                         <i class="fas fa-download"></i>
-                        <span>GPX</span>
                     </button>
                 </div>
             </div>
