@@ -99,48 +99,49 @@ main {
 /* Filters Toggle */
 .filters-header {
     display: flex;
-    justify-content: flex-start;
-    margin-bottom: 20px;
+    justify-content: flex-end;
+    /* Move to the right */
+    margin-bottom: 25px;
 }
 
 .btn-toggle {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 18px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    color: #333;
+    gap: 12px;
+    padding: 10px 22px;
+    background-color: #f6f6f6;
+    border: 1.5px solid transparent;
+    border-radius: 50px;
+    /* Pill shape */
+    color: var(--text-main);
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .btn-toggle:hover {
-    background-color: #f8f9fa;
-    border-color: #bbb;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
+    background-color: #eee;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .btn-toggle.active {
-    background-color: #333;
+    background: var(--primary-gradient);
     color: #fff;
-    border-color: #333;
+    box-shadow: 0 4px 15px rgba(252, 76, 2, 0.3);
 }
 
 .btn-toggle .icon {
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .btn-toggle .arrow {
-    font-size: 0.7rem;
-    margin-left: 5px;
-    transition: transform 0.3s ease;
-    opacity: 0.6;
+    font-size: 0.6rem;
+    margin-left: 2px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0.8;
 }
 
 .btn-toggle.active .arrow {
