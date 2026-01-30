@@ -178,7 +178,12 @@ main {
     flex-direction: column;
     gap: 6px;
     flex: 1;
-    min-width: 140px;
+    min-width: 120px;
+}
+
+.control-group.search-group {
+    flex: 2;
+    min-width: 250px;
 }
 
 .control-group label {
