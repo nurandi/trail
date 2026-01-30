@@ -182,8 +182,8 @@ main {
 }
 
 .control-group.search-group {
-    flex: 2;
-    min-width: 250px;
+    flex: 1.6;
+    min-width: 200px;
 }
 
 .control-group label {
