@@ -79,7 +79,7 @@
                 if (!existing) {
                     const p = document.createElement('p');
                     p.className = 'attribution';
-                    p.innerHTML = `Activities by <a href="https://www.strava.com/athletes/${athleteData.id}" target="_blank" style="color: #fc4c02; text-decoration: none; font-weight: bold;">${athleteData.name}</a>`;
+                    p.innerHTML = `Activities by <a href="https://www.strava.com/athletes/${athleteData.id}" target="_blank">${athleteData.name}</a>`;
                     footerDiv.appendChild(p);
                 }
             }
