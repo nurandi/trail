@@ -99,8 +99,7 @@ main {
 /* Filters Toggle */
 .filters-header {
     display: flex;
-    justify-content: flex-end;
-    /* Move to the right */
+    justify-content: center;
     margin-bottom: 25px;
 }
 
