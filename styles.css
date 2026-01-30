@@ -579,6 +579,15 @@ footer a:hover {
     border-radius: 4px;
     font-size: 0.9rem;
     color: #555;
+    line-height: 1.6;
+}
+
+.toc-text p {
+    margin-bottom: 12px;
+}
+
+.toc-text p:last-child {
+    margin-bottom: 0;
 }
 
 .toc-text a {
