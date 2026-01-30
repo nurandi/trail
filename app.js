@@ -15,9 +15,10 @@
     async function initApp() {
         try {
             // Load Data
-            const [dataRes, athleteRes] = await Promise.all([
+            const [dataRes, athleteRes, legalRes] = await Promise.all([
                 fetch('data.json'),
-                fetch('athlete.json')
+                fetch('athlete.json'),
+                fetch('legal.json')
             ]);
 
             if (dataRes.ok) {
@@ -43,6 +44,14 @@
                     avatarEl.alt = athleteData.name || 'Athlete Profile';
                     avatarEl.style.display = 'block';
                 }
+            }
+
+            if (legalRes.ok) {
+                const legalData = await legalRes.json();
+                const tosContent = document.getElementById('tosContent');
+                const aboutContent = document.getElementById('aboutContent');
+                if (tosContent && legalData.tos) tosContent.innerHTML = legalData.tos;
+                if (aboutContent && legalData.about) aboutContent.innerHTML = legalData.about;
             }
 
             // Initial Render
