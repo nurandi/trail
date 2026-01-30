@@ -194,17 +194,9 @@ def save_stream_data(activity_id):
 def create_route_data(activities):
     """Convert Strava activities to route data format"""
     routes = []
-    map_generation_queue = []
-    
     for activity in activities:
         # Save streams 
         save_stream_data(activity['id'])
-        
-        # Add to map queue
-        map_generation_queue.append({
-            'id': str(activity['id']),
-            'polyline': activity.get('map', {}).get('summary_polyline')
-        })
         
         # Date Parsing
         start_date = activity.get('start_date_local', '')
@@ -232,16 +224,6 @@ def create_route_data(activities):
         }
         routes.append(route)
     
-    # Save queue for map generator
-    # We load existing if possible to append? No, map generator just needs current batch or we can dump all?
-    # generate_maps.py likely reads strava_data.json. 
-    # To be safe, we should dump ALL routes to strava_data.json if we want to ensure maps exist for all.
-    # But filtering "new" activities is handled by main.
-    # We will write 'map_generation_queue' which contains ONLY NEW activities. 
-    # generate_maps.py should append/check exists.
-    with open('strava_data.json', 'w') as f:
-        json.dump(map_generation_queue, f)
-        
     return routes
 
 

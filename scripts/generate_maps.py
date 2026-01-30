@@ -143,6 +143,20 @@ def generate_map(activity):
         print(f"    ❌ Error: {e}")
 
 
+def deobfuscate_polyline(encrypted_str):
+    """Decrypt polyline string"""
+    if not encrypted_str:
+        return None
+    try:
+        data = base64.b64decode(encrypted_str)
+        key = GPX_ENCRYPTION_KEY.encode('utf-8')
+        xored = bytearray(b ^ key[i % len(key)] for i, b in enumerate(data))
+        return xored.decode('utf-8')
+    except Exception as e:
+        print(f"Polyline decryption error: {e}")
+        return None
+
+
 def main():
     if not os.path.exists('data.json'):
         print("data.json not found. Run fetch_strava.py first.")
@@ -158,10 +172,16 @@ def main():
     os.makedirs(MAPS_DIR, exist_ok=True)
     
     for item in queue:
-        # Map fields to what generate_map expects
+        # Decrypt polyline for Mapbox
+        raw_polyline = deobfuscate_polyline(item.get('ePolyline'))
+        
+        if not raw_polyline:
+            print(f"  ⚠️ Skipping {item['stravaId']} - No polyline available")
+            continue
+
         activity = {
             'id': item['stravaId'],
-            'polyline': item['polyline']
+            'polyline': raw_polyline
         }
         generate_map(activity)
         
