@@ -110,8 +110,9 @@
 
         // Filter
         filteredRoutes = allRoutes.filter(r => {
-            // Search
-            if (searchQuery && !r.name.toLowerCase().includes(searchQuery)) return false;
+            // Search (Name or Location)
+            const searchableText = `${r.name} ${r.location || ''}`.toLowerCase();
+            if (searchQuery && !searchableText.includes(searchQuery)) return false;
 
             // Type (Race/Training)
             if (typeVal === 'race' && !r.isRace) return false;
@@ -273,6 +274,10 @@
                 ${overlays}
             </div>
             <div class="route-info">
+                <div class="route-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>${route.location || 'Unknown Location'}</span>
+                </div>
                 <h3>${route.name}</h3>
                 <div class="route-stats">
                     <div class="stat">

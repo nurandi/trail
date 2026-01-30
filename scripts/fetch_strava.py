@@ -191,7 +191,29 @@ def save_stream_data(activity_id):
         print(f"    ❌ Error fetching streams: {e}")
 
 
-def create_route_data(activities):
+def get_location_name(lat, lng):
+    """Reverse geocode coordinates using Mapbox API"""
+    if not MAPBOX_ACCESS_TOKEN:
+        return None
+    try:
+        url = f"https://api.mapbox.com/geocoding/v5/mapbox.places/{lng},{lat}.json"
+        params = {
+            'access_token': MAPBOX_ACCESS_TOKEN,
+            'types': 'place,locality',
+            'limit': 1
+        }
+        res = requests.get(url, params=params)
+        if res.status_code == 200:
+            data = res.json()
+            if data['features']:
+                return data['features'][0]['place_name'].split(',')[0]
+        return None
+    except Exception as e:
+        print(f"    ⚠️ Error reverse geocoding: {e}")
+        return None
+
+
+def create_route_data(activities, existing_routes=None):
     """Convert Strava activities to route data format"""
     routes = []
     for activity in activities:
@@ -208,12 +230,28 @@ def create_route_data(activities):
             date_display = start_date[:10] 
 
         is_race = activity.get('workout_type') == 1
+        
+        # Location logic
+        location = None
+        # Try to find in existing routes first
+        if existing_routes:
+            match = next((r for r in existing_routes if r['stravaId'] == str(activity['id'])), None)
+            if match and match.get('location'):
+                location = match['location']
+        
+        # If not found, fetch from Mapbox
+        if not location:
+            start_latlng = activity.get('start_latlng')
+            if start_latlng and len(start_latlng) == 2:
+                print(f"    📍 Geocoding start location for {activity['id']}...")
+                location = get_location_name(start_latlng[0], start_latlng[1])
 
         route = {
             'name': activity.get('name', 'Unnamed Run'),
             'stravaId': str(activity['id']),
             'distance': activity.get('distance', 0),
             'elevation': activity.get('total_elevation_gain', 0),
+            'location': location,
             'dateDisplay': date_display,
             'dateFull': start_date,
             'isRace': is_race,
@@ -307,7 +345,7 @@ def main():
         
         # 5. Convert & Merge
         if activities:
-            new_routes = create_route_data(activities)
+            new_routes = create_route_data(activities, existing_routes)
             
             # Deduplicate by ID
             routes_map = {r['stravaId']: r for r in existing_routes}

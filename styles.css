@@ -303,6 +303,22 @@ main {
     flex: 1;
 }
 
+.route-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.route-location i {
+    font-size: 0.7rem;
+    color: var(--primary-color);
+    opacity: 0.8;
+}
+
 .route-info h3 {
     font-family: 'Outfit', sans-serif;
     font-size: 1.15rem;
