@@ -66,6 +66,7 @@
         // Listeners for Filters
         document.getElementById('filterDistance')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('filterElevation')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
+        document.getElementById('filterEffort')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('sortBy')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('filterType')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('filterRecency')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
@@ -112,6 +113,7 @@
 
         const distVal = document.getElementById('filterDistance')?.value || 'all';
         const elevVal = document.getElementById('filterElevation')?.value || 'all';
+        const effortVal = document.getElementById('filterEffort')?.value || 'all';
         const sortVal = document.getElementById('sortBy')?.value || 'date-desc';
         const typeVal = document.getElementById('filterType')?.value || 'all';
         const recencyVal = document.getElementById('filterRecency')?.value || 'all';
@@ -156,6 +158,18 @@
                 if (elevVal === '2000-3000' && (m < 2000 || m >= 3000)) return false;
                 if (elevVal === '3000+' && m < 3000) return false;
             }
+
+            // Effort
+            if (effortVal !== 'all') {
+                const eff = (r.distance / 1000) + (0.01 * r.elevation);
+                if (effortVal === '0-25' && eff >= 25) return false;
+                if (effortVal === '25-45' && (eff < 25 || eff >= 45)) return false;
+                if (effortVal === '45-75' && (eff < 45 || eff >= 75)) return false;
+                if (effortVal === '75-115' && (eff < 75 || eff >= 115)) return false;
+                if (effortVal === '115-155' && (eff < 115 || eff >= 155)) return false;
+                if (effortVal === '155-210' && (eff < 155 || eff >= 210)) return false;
+                if (effortVal === '210+' && eff < 210) return false;
+            }
             return true;
         });
 
@@ -167,6 +181,16 @@
             if (sortVal === 'dist-asc') return a.distance - b.distance;
             if (sortVal === 'elev-desc') return b.elevation - a.elevation;
             if (sortVal === 'elev-asc') return a.elevation - b.elevation;
+            if (sortVal === 'effort-desc') {
+                const effA = (a.distance / 1000) + (0.01 * a.elevation);
+                const effB = (b.distance / 1000) + (0.01 * b.elevation);
+                return effB - effA;
+            }
+            if (sortVal === 'effort-asc') {
+                const effA = (a.distance / 1000) + (0.01 * a.elevation);
+                const effB = (b.distance / 1000) + (0.01 * b.elevation);
+                return effA - effB;
+            }
             return 0;
         });
 

@@ -65,6 +65,20 @@
                 </div>
 
                 <div class="control-group">
+                    <label for="filterEffort">Effort</label>
+                    <select id="filterEffort">
+                        <option value="all">All</option>
+                        <option value="0-25">&lt; 25 km</option>
+                        <option value="25-45">25 - 45 km</option>
+                        <option value="45-75">45 - 75 km</option>
+                        <option value="75-115">75 - 115 km</option>
+                        <option value="115-155">115 - 155 km</option>
+                        <option value="155-210">155 - 210 km</option>
+                        <option value="210+">&gt; 210 km</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
                     <label for="filterType">Activity Type</label>
                     <select id="filterType">
                         <option value="all">All</option>
@@ -87,6 +101,8 @@
                     <select id="sortBy">
                         <option value="date-desc">Newest First</option>
                         <option value="date-asc">Oldest First</option>
+                        <option value="effort-desc">Effort (High-Low)</option>
+                        <option value="effort-asc">Effort (Low-High)</option>
                         <option value="dist-desc">Distance (High-Low)</option>
                         <option value="dist-asc">Distance (Low-High)</option>
                         <option value="elev-desc">Elevation (High-Low)</option>
