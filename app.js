@@ -264,9 +264,6 @@
             const oldClass = isOld ? 'old' : '';
             overlays += `<div class="badge-overlay badge-date ${oldClass}">${dateDisplay}</div>`;
         }
-        if (isRace) {
-            overlays += `<div class="badge-overlay badge-race">RACE</div>`;
-        }
 
         card.innerHTML = `
             <div class="card-image-wrapper">
