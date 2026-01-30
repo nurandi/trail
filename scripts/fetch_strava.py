@@ -8,6 +8,7 @@ import os
 import json
 import requests
 import base64
+import math
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -28,6 +29,7 @@ OUTPUT_FILE = 'data.json'
 MAPS_DIR = 'assets/maps'
 STREAMS_DIR = 'assets/streams'
 DB_FILE = 'all_routes.json'
+LOCATIONS_FILE = 'locations.json'
 
 
 def get_access_token():
@@ -191,8 +193,40 @@ def save_stream_data(activity_id):
         print(f"    ❌ Error fetching streams: {e}")
 
 
+def calculate_distance(lat1, lon1, lat2, lon2):
+    """Calculate distance between two GPS points in meters"""
+    R = 6371000  # Radius of Earth in meters
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+    a = math.sin(dphi / 2)**2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2)**2
+    return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+
+def get_custom_location(lat, lng):
+    """Check if coordinates are near a custom location defined in locations.json"""
+    if not os.path.exists(LOCATIONS_FILE):
+        return None
+    try:
+        with open(LOCATIONS_FILE, 'r', encoding='utf-8') as f:
+            custom_locs = json.load(f)
+            for loc in custom_locs:
+                dist = calculate_distance(lat, lng, loc['lat'], loc['lng'])
+                if dist <= 50:  # 50m radius as requested
+                    return loc['name']
+    except Exception as e:
+        print(f"    ⚠️ Error reading custom locations: {e}")
+    return None
+
+
 def get_location_name(lat, lng):
-    """Reverse geocode coordinates using Mapbox API"""
+    """Get location name: custom list first, then Mapbox reverse geocoding"""
+    # 1. Check Custom Data First
+    custom_name = get_custom_location(lat, lng)
+    if custom_name:
+        return custom_name
+
+    # 2. Fallback to Mapbox
     if not MAPBOX_ACCESS_TOKEN:
         return None
     try:
