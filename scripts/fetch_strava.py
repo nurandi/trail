@@ -157,14 +157,9 @@ def save_stream_data(activity_id):
         
         if response.status_code == 200:
             streams = response.json()
-            latlngs = []
-            alts = []
-            
-            for s in streams:
-                if s['type'] == 'latlng':
-                    latlngs = s['data']
-                elif s['type'] == 'altitude':
-                    alts = s['data']
+            # Streams is a dict when key_by_type=true
+            latlngs = streams.get('latlng', {}).get('data', [])
+            alts = streams.get('altitude', {}).get('data', [])
             
             if latlngs:
                 # Combine [lat, lng, ele]
