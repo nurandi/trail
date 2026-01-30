@@ -285,12 +285,17 @@
                     </div>
                 </div>
                 <div class="route-actions">
-                    <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava" title="View on Strava">
-                        <i class="fab fa-strava"></i>
-                    </a>
-                    <button class="btn-action primary" onclick="downloadGPX('${route.stravaId}', '${route.name}')" title="Download GPX">
-                        <i class="fas fa-download"></i>
-                    </button>
+                    <div class="route-type-badge ${isRace ? 'race' : 'training'}">
+                        ${isRace ? 'Race' : 'Training'}
+                    </div>
+                    <div class="action-buttons">
+                        <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava" title="View on Strava">
+                            <i class="fab fa-strava"></i>
+                        </a>
+                        <button class="btn-action primary" onclick="downloadGPX('${route.stravaId}', '${route.name}')" title="Download GPX">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         `;

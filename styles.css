@@ -349,9 +349,37 @@ main {
 
 .route-actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
     margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.route-type-badge {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background-color: #f0f0f0;
+    color: #888;
+}
+
+.route-type-badge.race {
+    background-color: rgba(252, 76, 2, 0.1);
+    color: #fc4c02;
+}
+
+.route-type-badge.training {
+    background-color: #f6f6f6;
+    color: #999;
 }
 
 .btn-action {
