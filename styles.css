@@ -581,4 +581,18 @@ footer p {
     header h1 {
         font-size: 1.5rem;
     }
+
+    .filters-header {
+        justify-content: center;
+    }
+
+    .controls-bar {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .control-group {
+        min-width: 100%;
+        /* Stack on small screens */
+    }
 }
