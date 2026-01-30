@@ -42,6 +42,71 @@ main {
     min-height: 60vh;
 }
 
+/* Filters Toggle */
+.filters-header {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.btn-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: #333;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.btn-toggle:hover {
+    background-color: #f8f9fa;
+    border-color: #bbb;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.btn-toggle.active {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+.btn-toggle .icon {
+    font-size: 1rem;
+}
+
+.btn-toggle .arrow {
+    font-size: 0.7rem;
+    margin-left: 5px;
+    transition: transform 0.3s ease;
+    opacity: 0.6;
+}
+
+.btn-toggle.active .arrow {
+    transform: rotate(180deg);
+}
+
+.filters-wrapper {
+    overflow: hidden;
+    max-height: 500px;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;
+    opacity: 1;
+}
+
+.filters-wrapper.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+    pointer-events: none;
+}
+
 /* Controls Bar */
 .controls-bar {
     display: flex;

@@ -18,41 +18,51 @@
     </header>
 
     <main class="container">
-        <div class="controls-bar">
-            <div class="control-group">
-                <label for="filterDistance">Distance</label>
-                <select id="filterDistance">
-                    <option value="all">All</option>
-                    <option value="0-10">&lt; 10 km</option>
-                    <option value="10-20">10 - 20 km</option>
-                    <option value="20-30">20 - 30 km</option>
-                    <option value="30-40">30 - 40 km</option>
-                    <option value="40+">&gt; 40 km</option>
-                </select>
-            </div>
+        <div class="filters-header">
+            <button id="toggleFilters" class="btn-toggle">
+                <span class="icon">🔍</span>
+                <span class="text">Show Filters</span>
+                <span class="arrow">▼</span>
+            </button>
+        </div>
 
-            <div class="control-group">
-                <label for="filterElevation">Elevation</label>
-                <select id="filterElevation">
-                    <option value="all">All</option>
-                    <option value="0-500">&lt; 500 m</option>
-                    <option value="500-1000">500 - 1000 m</option>
-                    <option value="1000-2000">1000 - 2000 m</option>
-                    <option value="2000-3000">2000 - 3000 m</option>
-                    <option value="3000+">&gt; 3000 m</option>
-                </select>
-            </div>
+        <div id="filtersWrapper" class="filters-wrapper collapsed">
+            <div class="controls-bar">
+                <div class="control-group">
+                    <label for="filterDistance">Distance</label>
+                    <select id="filterDistance">
+                        <option value="all">All</option>
+                        <option value="0-10">&lt; 10 km</option>
+                        <option value="10-20">10 - 20 km</option>
+                        <option value="20-30">20 - 30 km</option>
+                        <option value="30-40">30 - 40 km</option>
+                        <option value="40+">&gt; 40 km</option>
+                    </select>
+                </div>
 
-            <div class="control-group">
-                <label for="sortBy">Sort By</label>
-                <select id="sortBy">
-                    <option value="date-desc">Newest First</option>
-                    <option value="date-asc">Oldest First</option>
-                    <option value="dist-desc">Distance (High-Low)</option>
-                    <option value="dist-asc">Distance (Low-High)</option>
-                    <option value="elev-desc">Elevation (High-Low)</option>
-                    <option value="elev-asc">Elevation (Low-High)</option>
-                </select>
+                <div class="control-group">
+                    <label for="filterElevation">Elevation</label>
+                    <select id="filterElevation">
+                        <option value="all">All</option>
+                        <option value="0-500">&lt; 500 m</option>
+                        <option value="500-1000">500 - 1000 m</option>
+                        <option value="1000-2000">1000 - 2000 m</option>
+                        <option value="2000-3000">2000 - 3000 m</option>
+                        <option value="3000+">&gt; 3000 m</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="sortBy">Sort By</label>
+                    <select id="sortBy">
+                        <option value="date-desc">Newest First</option>
+                        <option value="date-asc">Oldest First</option>
+                        <option value="dist-desc">Distance (High-Low)</option>
+                        <option value="dist-asc">Distance (Low-High)</option>
+                        <option value="elev-desc">Elevation (High-Low)</option>
+                        <option value="elev-asc">Elevation (Low-High)</option>
+                    </select>
+                </div>
             </div>
         </div>
 

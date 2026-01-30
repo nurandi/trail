@@ -50,6 +50,22 @@
         document.getElementById('filterDistance')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('filterElevation')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
         document.getElementById('sortBy')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
+
+        // Toggle Filters Logic
+        const toggleBtn = document.getElementById('toggleFilters');
+        const wrapper = document.getElementById('filtersWrapper');
+        if (toggleBtn && wrapper) {
+            // Start collapsed if on mobile or by preference (optional)
+            // For now, let's start expanded but allow toggle
+            toggleBtn.addEventListener('click', () => {
+                const isCollapsed = wrapper.classList.toggle('collapsed');
+                toggleBtn.classList.toggle('active', !isCollapsed);
+                const textSpan = toggleBtn.querySelector('.text');
+                if (textSpan) {
+                    textSpan.textContent = isCollapsed ? 'Show Filters' : 'Hide Filters';
+                }
+            });
+        }
     }
 
     function renderAttribution() {
