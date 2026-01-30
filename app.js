@@ -286,7 +286,7 @@
                 </div>
                 <div class="route-actions">
                     <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-icon" title="View on Strava">
-                        <svg viewBox="0 0 384 512"><path d="M158.4 0L7 355.7h123.7l30.1-66.7L211.2 355.7h123.8L158.4 0zm176.6 355.7l-25.3 56.4 25.3 56.4h90.6l-25.3-56.4 25.3-56.4h-90.6z"/></svg>
+                        <svg viewBox="-64 0 512 512"><path d="M158.4 0L7 355.7h123.7l30.1-66.7L211.2 355.7h123.8L158.4 0zm176.6 355.7l-25.3 56.4 25.3 56.4h90.6l-25.3-56.4 25.3-56.4h-90.6z"/></svg>
                     </a>
                     <button class="btn-icon primary" onclick="downloadGPX('${route.stravaId}', '${route.name}')" title="Download GPX">
                         <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"></path></svg>
