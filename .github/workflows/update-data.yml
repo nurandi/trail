@@ -1,0 +1,62 @@
+name: Update Data and Deploy
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore Data Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            assets/maps
+            assets/streams
+            all_routes.json
+          key: data-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            data-${{ runner.os }}-
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Fetch and Generate
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+          GPX_ENCRYPTION_KEY: ${{ secrets.GPX_ENCRYPTION_KEY }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+        run: |
+          python scripts/fetch_strava.py
+          python scripts/generate_maps.py
+
+      - name: Prepare Deployment
+        run: |
+          mkdir _site
+          cp index.html styles.css app.js data.json athlete.json _site/
+          cp -r assets _site/
+          # Ensure favicon or other static assets are copied if they exist
+          
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

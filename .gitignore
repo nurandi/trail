@@ -1,0 +1,39 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+strava_data.json
+
+# Generated Data
+data.json
+athlete.json
+all_routes.json
+
+# Generated Assets
+assets/maps/*
+!assets/maps/.gitkeep
+!assets/maps/placeholder.png
+assets/streams/*
+!assets/streams/.gitkeep

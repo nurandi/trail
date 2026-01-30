@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Personal collection of trail running routes and GPX downloads">
+    <title>The Trail Archive</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>The Trail Archive</h1>
+            <p>Personal collection of routes and GPX downloads.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="controls-bar">
+            <div class="control-group">
+                <label for="filterDistance">Distance</label>
+                <select id="filterDistance">
+                    <option value="all">All</option>
+                    <option value="0-10">&lt; 10 km</option>
+                    <option value="10-20">10 - 20 km</option>
+                    <option value="20-30">20 - 30 km</option>
+                    <option value="30-40">30 - 40 km</option>
+                    <option value="40+">&gt; 40 km</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="filterElevation">Elevation</label>
+                <select id="filterElevation">
+                    <option value="all">All</option>
+                    <option value="0-500">&lt; 500 m</option>
+                    <option value="500-1000">500 - 1000 m</option>
+                    <option value="1000-2000">1000 - 2000 m</option>
+                    <option value="2000-3000">2000 - 3000 m</option>
+                    <option value="3000+">&gt; 3000 m</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="sortBy">Sort By</label>
+                <select id="sortBy">
+                    <option value="date-desc">Newest First</option>
+                    <option value="date-asc">Oldest First</option>
+                    <option value="dist-desc">Distance (High-Low)</option>
+                    <option value="dist-asc">Distance (Low-High)</option>
+                    <option value="elev-desc">Elevation (High-Low)</option>
+                    <option value="elev-asc">Elevation (Low-High)</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="routes-grid" class="routes-grid">
+            <!-- Route cards will be dynamically inserted here -->
+            <div class="loading">Loading routes...</div>
+        </div>
+
+        <div id="pagination" class="pagination"></div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Trail Running Routes. All rights reserved.</p>
+            <p>Data provided by Strava</p>
+        </div>
+    </footer>
+
+    <!-- TOC Modal -->
+    <div id="tocModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Terms of Use</h2>
+
+            <div id="oldRouteWarning" class="alert-warning" style="display: none;"></div>
+
+            <div class="toc-text">
+                <p><strong>Warning:</strong> Trail running is inherently dangerous.</p>
+                <p>By downloading this GPX file, you acknowledge that:</p>
+                <ul>
+                    <li>You are responsible for your own safety and navigation.</li>
+                    <li>Conditions on the trail may have changed since this route was recorded.</li>
+                    <li>You have the necessary skills and equipment for this route.</li>
+                    <li>The author assumes no liability for accidents or injuries.</li>
+                </ul>
+            </div>
+            <div class="toc-agreement">
+                <input type="checkbox" id="tocCheckbox">
+                <label for="tocCheckbox">I have read and agree to the Terms of Use</label>
+            </div>
+            <div class="modal-actions">
+                <button id="cancelBtn" class="btn">Cancel</button>
+                <button id="confirmDownloadBtn" class="btn btn-primary" disabled>Download GPX</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

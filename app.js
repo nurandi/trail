@@ -1,0 +1,506 @@
+// Main application logic
+(function () {
+    'use strict';
+
+    const ITEMS_PER_PAGE = 9;
+    let currentPage = 1;
+    let allRoutes = [];
+    let filteredRoutes = [];
+    let athleteData = null;
+    let ENCRYPTION_KEY = 'Run2026';
+
+    // Initialize the app when DOM is ready
+    document.addEventListener('DOMContentLoaded', initApp);
+
+    async function initApp() {
+        try {
+            // Load Data
+            const [dataRes, athleteRes] = await Promise.all([
+                fetch('data.json'),
+                fetch('athlete.json')
+            ]);
+
+            if (dataRes.ok) {
+                const data = await dataRes.json();
+                if (data.routes && Array.isArray(data.routes)) {
+                    allRoutes = [...data.routes];
+                }
+                if (data.encryptionKey) {
+                    ENCRYPTION_KEY = data.encryptionKey;
+                }
+                updateLastUpdateTime(data.lastUpdated);
+            } else {
+                console.error("Failed to load data.json");
+            }
+
+            if (athleteRes.ok) {
+                athleteData = await athleteRes.json();
+            }
+
+            // Initial Render
+            applyFilters();
+            renderAttribution();
+
+        } catch (e) {
+            console.error("Error initializing app:", e);
+            document.getElementById('routes-grid').innerHTML = '<div class="loading">Error loading routes. Please check console.</div>';
+        }
+
+        // Listeners for Filters
+        document.getElementById('filterDistance')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
+        document.getElementById('filterElevation')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
+        document.getElementById('sortBy')?.addEventListener('change', () => { currentPage = 1; applyFilters(); });
+    }
+
+    function renderAttribution() {
+        if (athleteData && athleteData.id) {
+            const footerDiv = document.querySelector('footer .container');
+            if (footerDiv) {
+                // Check if already exists to avoid dupes on re-run (though init only runs once)
+                const existing = footerDiv.querySelector('.attribution'); // Add class if needed, or just append
+                if (!existing) {
+                    const p = document.createElement('p');
+                    p.className = 'attribution';
+                    p.innerHTML = `Activities by <a href="https://www.strava.com/athletes/${athleteData.id}" target="_blank" style="color: #fc4c02; text-decoration: none; font-weight: bold;">${athleteData.name}</a>`;
+                    footerDiv.appendChild(p);
+                }
+            }
+        }
+    }
+
+    function applyFilters() {
+        if (!allRoutes.length) {
+            renderRoutesPage(1);
+            return;
+        }
+
+        const distVal = document.getElementById('filterDistance')?.value || 'all';
+        const elevVal = document.getElementById('filterElevation')?.value || 'all';
+        const sortVal = document.getElementById('sortBy')?.value || 'date-desc';
+
+        // Filter
+        filteredRoutes = allRoutes.filter(r => {
+            // Distance
+            if (distVal !== 'all') {
+                const km = r.distance / 1000;
+                if (distVal === '0-10' && km >= 10) return false;
+                if (distVal === '10-20' && (km < 10 || km >= 20)) return false;
+                if (distVal === '20-30' && (km < 20 || km >= 30)) return false;
+                if (distVal === '30-40' && (km < 30 || km >= 40)) return false;
+                if (distVal === '40+' && km < 40) return false;
+            }
+            // Elevation
+            if (elevVal !== 'all') {
+                const m = r.elevation;
+                if (elevVal === '0-500' && m >= 500) return false;
+                if (elevVal === '500-1000' && (m < 500 || m >= 1000)) return false;
+                if (elevVal === '1000-2000' && (m < 1000 || m >= 2000)) return false;
+                if (elevVal === '2000-3000' && (m < 2000 || m >= 3000)) return false;
+                if (elevVal === '3000+' && m < 3000) return false;
+            }
+            return true;
+        });
+
+        // Sort
+        filteredRoutes.sort((a, b) => {
+            if (sortVal === 'date-desc') return parseInt(b.stravaId) - parseInt(a.stravaId);
+            if (sortVal === 'date-asc') return parseInt(a.stravaId) - parseInt(b.stravaId);
+            if (sortVal === 'dist-desc') return b.distance - a.distance;
+            if (sortVal === 'dist-asc') return a.distance - b.distance;
+            if (sortVal === 'elev-desc') return b.elevation - a.elevation;
+            if (sortVal === 'elev-asc') return a.elevation - b.elevation;
+            return 0;
+        });
+
+        renderRoutesPage(currentPage);
+    }
+
+    function renderRoutesPage(page) {
+        currentPage = page;
+        const gridContainer = document.getElementById('routes-grid');
+        const paginationContainer = document.getElementById('pagination');
+
+        if (!filteredRoutes || filteredRoutes.length === 0) {
+            gridContainer.innerHTML = '<div class="loading">No routes match your filters.</div>';
+            if (paginationContainer) paginationContainer.innerHTML = '';
+            return;
+        }
+
+        // Clear grid
+        gridContainer.innerHTML = '';
+
+        // Slice data
+        const start = (page - 1) * ITEMS_PER_PAGE;
+        const end = start + ITEMS_PER_PAGE;
+        const pageItems = filteredRoutes.slice(start, end);
+
+        // Create cards
+        pageItems.forEach(route => {
+            const card = createRouteCard(route);
+            gridContainer.appendChild(card);
+        });
+
+        renderPagination();
+
+        // Scroll to top on page change
+        if (page > 1) {
+            document.querySelector('main').scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    function renderPagination() {
+        const container = document.getElementById('pagination');
+        if (!container) return;
+
+        container.innerHTML = '';
+        const totalPages = Math.ceil(filteredRoutes.length / ITEMS_PER_PAGE);
+
+        if (totalPages <= 1) return;
+
+        // Prev
+        const prevBtn = document.createElement('button');
+        prevBtn.innerText = '←';
+        prevBtn.className = 'page-btn';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => renderRoutesPage(currentPage - 1);
+        container.appendChild(prevBtn);
+
+        // Page Numbers logic
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 4);
+
+        if (endPage - startPage < 4) {
+            startPage = Math.max(1, endPage - 4);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const btn = document.createElement('button');
+            btn.innerText = i;
+            btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+            btn.onclick = () => renderRoutesPage(i);
+            container.appendChild(btn);
+        }
+
+        // Next
+        const nextBtn = document.createElement('button');
+        nextBtn.innerText = '→';
+        nextBtn.className = 'page-btn';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => renderRoutesPage(currentPage + 1);
+        container.appendChild(nextBtn);
+    }
+
+    function createRouteCard(route) {
+        const card = document.createElement('div');
+        card.className = 'route-card';
+
+        const mapImage = route.mapImage || 'assets/maps/placeholder.png';
+        const distance = formatDistance(route.distance);
+        const elevation = formatElevation(route.elevation);
+        const stravaUrl = `https://www.strava.com/activities/${route.stravaId}`;
+
+        const dateDisplay = route.dateDisplay || '';
+        const isRace = route.isRace;
+        let isOld = false;
+
+        if (route.dateFull) {
+            const oneYearAgo = new Date();
+            oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+            if (new Date(route.dateFull) < oneYearAgo) {
+                isOld = true;
+            }
+        }
+
+        let overlays = '';
+        if (dateDisplay) {
+            const oldClass = isOld ? 'old' : '';
+            overlays += `<div class="badge-overlay badge-date ${oldClass}">${dateDisplay}</div>`;
+        }
+        if (isRace) {
+            overlays += `<div class="badge-overlay badge-race">RACE</div>`;
+        }
+
+        card.innerHTML = `
+            <div class="card-image-wrapper">
+                <img src="${mapImage}" alt="${route.name} map" loading="lazy">
+                ${overlays}
+            </div>
+            <div class="route-info">
+                <h3>${route.name}</h3>
+                <div class="route-stats">
+                    <div class="stat">
+                        <div class="stat-label">Distance</div>
+                        <div class="stat-value">${distance}</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Elevation</div>
+                        <div class="stat-value">${elevation}</div>
+                    </div>
+                </div>
+                <div class="route-actions">
+                    <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn">View on Strava</a>
+                    <button class="btn btn-primary" onclick="downloadGPX('${route.stravaId}', '${route.name}')">Download GPX</button>
+                </div>
+            </div>
+        `;
+
+        return card;
+    }
+
+    function formatDistance(meters) {
+        const km = (meters / 1000).toFixed(1);
+        return `${km} km`;
+    }
+
+    function formatElevation(meters) {
+        return `${Math.round(meters)} m`;
+    }
+
+    function updateLastUpdateTime(lastUpdated) {
+        const lastUpdateElement = document.getElementById('last-update');
+        if (lastUpdated && lastUpdateElement) {
+            const date = new Date(lastUpdated);
+            lastUpdateElement.textContent = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+    }
+
+    // --- GPX Generation Utilities ---
+
+    function decodePolyline(str, precision) {
+        var index = 0,
+            lat = 0,
+            lng = 0,
+            coordinates = [],
+            shift = 0,
+            result = 0,
+            byte = null,
+            latitude_change,
+            longitude_change,
+            factor = Math.pow(10, precision || 5);
+
+        if (!str) return [];
+
+        while (index < str.length) {
+            byte = null;
+            shift = 0;
+            result = 0;
+
+            do {
+                byte = str.charCodeAt(index++) - 63;
+                result |= (byte & 0x1f) << shift;
+                shift += 5;
+            } while (byte >= 0x20);
+
+            latitude_change = ((result & 1) ? ~(result >> 1) : (result >> 1));
+            shift = result = 0;
+
+            do {
+                byte = str.charCodeAt(index++) - 63;
+                result |= (byte & 0x1f) << shift;
+                shift += 5;
+            } while (byte >= 0x20);
+
+            longitude_change = ((result & 1) ? ~(result >> 1) : (result >> 1));
+
+            lat += latitude_change;
+            lng += longitude_change;
+
+            coordinates.push([lat / factor, lng / factor]);
+        }
+
+        return coordinates;
+    }
+
+    function deObfuscate(str) {
+        if (!str) return null;
+        try {
+            // Use local scoped KEY
+            const KEY = ENCRYPTION_KEY;
+            const decoded = atob(str);
+            let result = '';
+            for (let i = 0; i < decoded.length; i++) {
+                const charCode = decoded.charCodeAt(i);
+                const keyCode = KEY.charCodeAt(i % KEY.length);
+                result += String.fromCharCode(charCode ^ keyCode);
+            }
+            return result;
+        } catch (e) {
+            console.error("De-obfuscation failed", e);
+            return null;
+        }
+    }
+
+    function generateGPX(coords, name) {
+        let gpx = '<?xml version="1.0" encoding="UTF-8"?>\n';
+        gpx += '<gpx version="1.1" creator="The Trail Archive" xmlns="http://www.topografix.com/GPX/1/1">\n';
+        gpx += `  <metadata>\n    <name>${name}</name>\n  </metadata>\n`;
+        gpx += '  <trk>\n';
+        gpx += `    <name>${name}</name>\n`;
+        gpx += '    <trkseg>\n';
+
+        coords.forEach(point => {
+            let pt = `      <trkpt lat="${point[0]}" lon="${point[1]}">`;
+            if (point.length > 2) {
+                pt += `<ele>${point[2]}</ele>`;
+            }
+            pt += `</trkpt>\n`;
+            gpx += pt;
+        });
+
+        gpx += '    </trkseg>\n  </trk>\n</gpx>';
+        return gpx;
+    }
+
+    // --- TOC Modal Logic ---
+    const modal = document.getElementById("tocModal");
+    const closeBtn = document.getElementsByClassName("close")[0];
+    const cancelBtn = document.getElementById("cancelBtn");
+    const confirmBtn = document.getElementById("confirmDownloadBtn");
+    const checkbox = document.getElementById("tocCheckbox");
+
+    let pendingRoute = null;
+
+    function openModal(stravaId, routeName) {
+        pendingRoute = { id: stravaId, name: routeName };
+        if (checkbox) checkbox.checked = false;
+        if (confirmBtn) confirmBtn.disabled = true;
+
+        const route = allRoutes.find(r => r.stravaId === stravaId);
+        const warningEl = document.getElementById('oldRouteWarning');
+
+        if (warningEl) {
+            warningEl.style.display = 'none';
+            if (route && route.dateFull) {
+                const oneYearAgo = new Date();
+                oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+                if (new Date(route.dateFull) < oneYearAgo) {
+                    const dateStr = route.dateDisplay || new Date(route.dateFull).toLocaleDateString();
+                    warningEl.innerHTML = `<strong>⚠️ Old Route Warning:</strong> This activity was recorded in ${dateStr}.<br>Trail conditions may have changed significantly.`;
+                    warningEl.style.display = 'block';
+                }
+            }
+        }
+
+        if (modal) modal.style.display = "block";
+    }
+
+    function closeModal() {
+        if (modal) modal.style.display = "none";
+        pendingRoute = null;
+    }
+
+    if (closeBtn) closeBtn.onclick = closeModal;
+    if (cancelBtn) cancelBtn.onclick = closeModal;
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
+    if (checkbox) {
+        checkbox.onchange = function () {
+            confirmBtn.disabled = !this.checked;
+        }
+    }
+
+    if (confirmBtn) {
+        confirmBtn.onclick = async function () {
+            if (!pendingRoute) return;
+
+            const originalText = confirmBtn.innerText;
+            confirmBtn.innerText = "Generating...";
+            confirmBtn.disabled = true;
+
+            try {
+                await executeDownload(pendingRoute.id, pendingRoute.name);
+                closeModal();
+            } catch (e) {
+                console.error(e);
+                alert("Download failed. Please try again.");
+            } finally {
+                confirmBtn.innerText = originalText;
+                confirmBtn.disabled = false;
+                if (modal.style.display !== "none") {
+                    confirmBtn.disabled = !checkbox.checked;
+                }
+            }
+        };
+    }
+
+    window.downloadGPX = function (stravaId, routeName) {
+        openModal(stravaId, routeName);
+    };
+
+    async function executeDownload(stravaId, routeName) {
+        const route = allRoutes.find(r => r.stravaId === stravaId);
+        if (!route) {
+            alert('Route not found.');
+            return;
+        }
+
+        try {
+            let coords = [];
+
+            // 1. Try to fetch detailed stream (NOW .dat)
+            try {
+                const response = await fetch(`assets/streams/${stravaId}.dat`);
+                if (response.ok) {
+                    const encryptedText = await response.text();
+
+                    try {
+                        const decryptedText = deObfuscate(encryptedText);
+                        const parsed = JSON.parse(decryptedText);
+                        if (Array.isArray(parsed)) {
+                            coords = parsed;
+                        }
+                    } catch (decryptionError) {
+                        console.warn("Decryption failed", decryptionError);
+                    }
+                }
+            } catch (e) {
+                console.log("Could not fetch stream data", e);
+            }
+
+            // 2. Fallback to Polyline
+            if (coords.length === 0) {
+                if (route.ePolyline) {
+                    const polylineStr = deObfuscate(route.ePolyline);
+                    coords = decodePolyline(polylineStr);
+                }
+            }
+
+            if (coords.length === 0) {
+                alert('GPX data not available. Redirecting to Strava...');
+                window.open(`https://www.strava.com/activities/${stravaId}/export_gpx`, '_blank');
+                return;
+            }
+
+            const gpxContent = generateGPX(coords, routeName);
+            const blob = new Blob([gpxContent], { type: 'application/gpx+xml' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+
+            const distK = Math.round(route.distance / 1000);
+            const elevM = Math.round(route.elevation);
+            link.download = `${stravaId}_${distK}K_${elevM}m.gpx`;
+
+            document.body.appendChild(link);
+            link.click();
+
+            setTimeout(() => {
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+
+        } catch (e) {
+            throw e;
+        }
+    };
+})();
