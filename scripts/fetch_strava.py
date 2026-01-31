@@ -9,6 +9,7 @@ import json
 import requests
 import base64
 import math
+import re
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -233,8 +234,8 @@ def decode_first_point(polyline_str):
         return None
 
 
-def save_stream_data(activity_id):
-    """Fetch activity streams and save as encrypted .dat file"""
+def save_stream_data(activity_id, is_route=False):
+    """Fetch activity streams or route GPX and save as encrypted .dat file"""
     try:
         filename = f"{activity_id}.dat"
         filepath = os.path.join(STREAMS_DIR, filename)
@@ -244,51 +245,73 @@ def save_stream_data(activity_id):
         if os.path.exists(filepath):
             return
 
-        print(f"    ⬇️ Fetching streams for {activity_id}...")
         access_token = get_access_token()
         headers = {'Authorization': f'Bearer {access_token}'}
-        params = {'keys': 'latlng,altitude', 'key_by_type': 'true'}
         
-        response = requests.get(
-            f"{STRAVA_API_URL}/activities/{activity_id}/streams",
-            headers=headers,
-            params=params
-        )
-        
-        if response.status_code == 200:
-            streams = response.json()
-            # Streams is a dict when key_by_type=true
-            latlngs = streams.get('latlng', {}).get('data', [])
-            alts = streams.get('altitude', {}).get('data', [])
+        if not is_route:
+            print(f"    ⬇️ Fetching streams for activity {activity_id}...")
+            params = {'keys': 'latlng,altitude', 'key_by_type': 'true'}
+            response = requests.get(
+                f"{STRAVA_API_URL}/activities/{activity_id}/streams",
+                headers=headers,
+                params=params
+            )
             
-            if latlngs:
-                # Combine [lat, lng, ele]
-                combined_data = []
-                for i in range(len(latlngs)):
-                    ele = alts[i] if i < len(alts) else 0
-                    combined_data.append([latlngs[i][0], latlngs[i][1], round(ele, 1)])
+            if response.status_code == 200:
+                streams = response.json()
+                latlngs = streams.get('latlng', {}).get('data', [])
+                alts = streams.get('altitude', {}).get('data', [])
                 
-                json_str = json.dumps(combined_data)
-                
-                # XOR Obfuscation
-                key = GPX_ENCRYPTION_KEY
-                obfuscated = []
-                for i in range(len(json_str)):
-                    char_code = ord(json_str[i])
-                    key_code = ord(key[i % len(key)])
-                    obfuscated.append(chr(char_code ^ key_code))
-                
-                encrypted_data = base64.b64encode("".join(obfuscated).encode('utf-8')).decode('utf-8')
-
-                with open(filepath, 'w') as f:
-                    f.write(encrypted_data)
-        elif response.status_code == 404:
-             print(f"    ⚠️ Stream not found (404)")
+                if latlngs:
+                    combined_data = []
+                    for i in range(len(latlngs)):
+                        ele = alts[i] if i < len(alts) else 0
+                        combined_data.append([latlngs[i][0], latlngs[i][1], round(ele, 1)])
+                    save_encrypted_dat(filepath, combined_data)
+            else:
+                print(f"    ⚠️ Failed to fetch activity streams: {response.status_code}")
         else:
-             print(f"    ⚠️ Failed to fetch streams: {response.status_code}")
+            print(f"    ⬇️ Fetching GPX for route {activity_id} to extract elevation...")
+            response = requests.get(
+                f"{STRAVA_API_URL}/routes/{activity_id}/export_gpx",
+                headers=headers
+            )
+            if response.status_code == 200:
+                # Simple XML parsing via regex to avoid extra dependencies
+                gpx_content = response.text
+                points = []
+                # Find all <trkpt lat="-6.62757" lon="106.91046"><ele>744.81</ele></trkpt>
+                # Note: Strava GPX format is predictable
+                trkpt_matches = re.finditer(r'<trkpt lat="([^"]+)" lon="([^"]+)">\s*<ele>([^<]+)</ele>', gpx_content)
+                for m in trkpt_matches:
+                    lat = float(m.group(1))
+                    lng = float(m.group(2))
+                    ele = float(m.group(3))
+                    points.append([lat, lng, round(ele, 1)])
+                
+                if points:
+                    save_encrypted_dat(filepath, points)
+                    print(f"      ✅ Extracted {len(points)} points with elevation from Route GPX")
+            else:
+                print(f"    ⚠️ Failed to fetch route GPX: {response.status_code}")
 
     except Exception as e:
-        print(f"    ❌ Error fetching streams: {e}")
+        print(f"    ❌ Error fetching stream data: {e}")
+
+
+def save_encrypted_dat(filepath, combined_data):
+    """Common logic to encrypt and save the coordinate data"""
+    json_str = json.dumps(combined_data)
+    key = GPX_ENCRYPTION_KEY
+    obfuscated = []
+    for i in range(len(json_str)):
+        char_code = ord(json_str[i])
+        key_code = ord(key[i % len(key)])
+        obfuscated.append(chr(char_code ^ key_code))
+    
+    encrypted_data = base64.b64encode("".join(obfuscated).encode('utf-8')).decode('utf-8')
+    with open(filepath, 'w') as f:
+        f.write(encrypted_data)
 
 
 def calculate_distance(lat1, lon1, lat2, lon2):
@@ -355,9 +378,8 @@ def create_route_data(items, existing_routes=None, is_activity=True):
     for item in items:
         item_id = str(item['id'])
         
-        # Save streams for activities (routes don't have streams in same way)
-        if is_activity:
-            save_stream_data(item_id)
+        # Save streams (Activities via Stream API, Routes via GPX export)
+        save_stream_data(item_id, is_route=not is_activity)
         
         # Date Parsing
         if is_activity:
@@ -540,9 +562,9 @@ def main():
             if 'distance' in r: r['distance'] = round(r['distance'], 1)
             if 'elevation' in r: r['elevation'] = round(r['elevation'], 1)
 
-            # If location is still unknown and we have startLatLng now, try one more time?
-            # Or if startLatLng is missing and we have a polyline (handled in refetch below)
-            pass
+            # If it's a route, make sure it has the stream file for elevation profile
+            if r.get('type') == 'route':
+                save_stream_data(r['stravaId'], is_route=True)
         
         # 3. Determine Latest Activity Date
         latest_timestamp = None
