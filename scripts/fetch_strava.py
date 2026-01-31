@@ -30,6 +30,8 @@ MAPS_DIR = 'assets/maps'
 STREAMS_DIR = 'assets/streams'
 DB_FILE = 'all_routes.json'
 LOCATIONS_FILE = 'locations.json'
+WHITELIST_FILE = 'filters/whitelist.txt'
+BLACKLIST_FILE = 'filters/blacklist.txt'
 
 
 def get_access_token():
@@ -77,6 +79,48 @@ def save_routes_db(routes):
     """Save routes to local JSON file"""
     with open(DB_FILE, 'w', encoding='utf-8') as f:
         json.dump(routes, f, indent=4)
+
+
+def load_filter_list(filepath):
+    """Load IDs from a text file, ignoring comments and empty lines"""
+    if not os.path.exists(filepath):
+        return set()
+    ids = set()
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            for line in f:
+                # Remove comments and whitespace
+                clean_line = line.split('#')[0].strip()
+                if clean_line:
+                    ids.add(clean_line)
+    except Exception as e:
+        print(f"  ⚠️ Error loading filter list {filepath}: {e}")
+    return ids
+
+
+def should_include_activity(activity_id, activity_date_str, whitelist, blacklist):
+    """
+    Logic:
+    1. If blacklisted -> False
+    2. If whitelisted -> True
+    3. If year is 2025 or newer -> True
+    4. Otherwise -> False
+    """
+    str_id = str(activity_id)
+    if str_id in blacklist:
+        return False
+    if str_id in whitelist:
+        return True
+    
+    try:
+        # Extract year from date string (usually 2025-01-01T...)
+        year = int(activity_date_str[:4])
+        if year >= 2025:
+            return True
+    except:
+        pass
+        
+    return False
 
 
 def fetch_activities(after_timestamp=None):
@@ -375,9 +419,12 @@ def main():
         athlete = get_athlete_info()
         write_athlete_json(athlete)
         
-        # 2. Load Existing Routes
+        # 2. Load Existing Routes & Filters
         existing_routes = load_stored_routes()
         print(f"  📂 Loaded {len(existing_routes)} existing routes.")
+        
+        whitelist = load_filter_list(WHITELIST_FILE)
+        blacklist = load_filter_list(BLACKLIST_FILE)
         
         # 3. Determine Latest Date
         latest_timestamp = None
@@ -399,26 +446,33 @@ def main():
         print(f"  ✓ Found {len(activities)} new running activities")
         
         # 5. Convert & Merge
+        # Start with all existing
+        routes_map = {r['stravaId']: r for r in existing_routes}
+        
+        # Add new ones
         if activities:
             new_routes = create_route_data(activities, existing_routes)
-            
-            # Deduplicate by ID
-            routes_map = {r['stravaId']: r for r in existing_routes}
             for r in new_routes:
                 routes_map[r['stravaId']] = r
-                
-            final_routes = list(routes_map.values())
-            # Sort newest first
-            final_routes.sort(key=lambda x: x.get('dateFull', ''), reverse=True)
-            
-            save_routes_db(final_routes)
-            routes_to_write = final_routes
-        else:
-            print("  ✓ No new activities found.")
-            routes_to_write = existing_routes
-
-        # 6. Write to data.json
-        write_data_json(routes_to_write)
+        
+        # 6. Apply Filter (2025 + Whitelist - Blacklist)
+        all_merged_routes = list(routes_map.values())
+        final_filtered_routes = [
+            r for r in all_merged_routes 
+            if should_include_activity(r['stravaId'], r['dateFull'], whitelist, blacklist)
+        ]
+        
+        # Sort newest first
+        final_filtered_routes.sort(key=lambda x: x.get('dateFull', ''), reverse=True)
+        
+        # Log difference
+        dropped = len(all_merged_routes) - len(final_filtered_routes)
+        if dropped > 0:
+            print(f"  🧹 Filtered out {dropped} activities not matching 2025 or whitelist criteria.")
+        
+        # 7. Write to storage
+        save_routes_db(final_filtered_routes)
+        write_data_json(final_filtered_routes)
         
         print("✓ Data fetch complete!")
         

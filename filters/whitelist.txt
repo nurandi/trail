@@ -1,0 +1,10 @@
+# Add Strava Activity IDs here to ALWAYS include them (even if not in 2025)
+# One ID per line. Comments starting with # are allowed.
+
+13159003793 
+13069559123
+12865919112
+12810280392
+12745896720
+11654881521
+11228666115

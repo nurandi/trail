@@ -1,0 +1,9 @@
+# Add Strava Activity IDs here to NEVER include them
+# This overrides the 2025 rule and the whitelist.
+# One ID per line.
+
+16670745383
+15019263817
+16395069495
+15960288952
+14160801411
