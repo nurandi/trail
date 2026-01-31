@@ -135,9 +135,12 @@
             const searchableText = `${r.name} ${r.location || ''} ${tagsText}`.toLowerCase();
             if (searchQuery && !searchableText.includes(searchQuery)) return false;
 
-            // Type (Race/Training)
-            if (typeVal === 'race' && !r.isRace) return false;
-            if (typeVal === 'training' && r.isRace) return false;
+            // Type (Race/Training/Route)
+            if (typeVal !== 'all') {
+                if (typeVal === 'race' && r.type !== 'race') return false;
+                if (typeVal === 'training' && r.type !== 'train') return false;
+                if (typeVal === 'route' && r.type !== 'route') return false;
+            }
 
             // Recency
             if (recencyVal !== 'all') {
@@ -283,7 +286,7 @@
 
     function createRouteCard(route) {
         const card = document.createElement('div');
-        card.className = 'route-card';
+        card.className = `route-card ${route.type || ''}`;
 
         const mapImage = route.mapImage || 'assets/maps/placeholder.png';
         const distance = formatDistance(route.distance);
@@ -293,10 +296,14 @@
         const effortValue = (route.distance / 1000) + (0.01 * route.elevation);
         const effort = `${Math.round(effortValue)} km`;
 
-        const stravaUrl = `https://www.strava.com/activities/${route.stravaId}`;
+        // Strava URL: Activities vs Routes
+        const isRouteSource = route.type === 'route';
+        const stravaUrl = isRouteSource
+            ? `https://www.strava.com/routes/${route.stravaId}`
+            : `https://www.strava.com/activities/${route.stravaId}`;
 
         const dateDisplay = route.dateDisplay || '';
-        const isRace = route.isRace;
+        const rType = route.type || (route.isRace ? 'race' : 'train');
         let isOld = false;
 
         if (route.dateFull) {
@@ -339,8 +346,8 @@
                     </div>
                 </div>
                 <div class="route-actions">
-                    <div class="route-type-badge ${isRace ? 'race' : 'training'}">
-                        ${isRace ? 'Race' : 'Training'}
+                    <div class="route-type-badge ${rType}">
+                        ${rType === 'race' ? 'Race' : (rType === 'route' ? 'Route' : 'Training')}
                     </div>
                     <div class="action-buttons">
                         <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava" title="View on Strava">

@@ -32,6 +32,7 @@ DB_FILE = 'all_routes.json'
 LOCATIONS_FILE = 'locations.json'
 WHITELIST_FILE = 'filters/whitelist.txt'
 BLACKLIST_FILE = 'filters/blacklist.txt'
+ROUTES_WHITELIST_FILE = 'filters/routes_whitelist.txt'
 
 
 def get_access_token():
@@ -160,7 +161,7 @@ def fetch_activities(after_timestamp=None):
                 is_trail_run = (a.get('sport_type') == 'TrailRun' or a.get('type') == 'TrailRun')
                 if is_trail_run:
                     filtered_activities.append(a)
-                    print(f"      ✅ Found: {a.get('name')} ({a.get('start_date_local')[:10]})")
+                    print(f"      ✅ Found Act: {a.get('name')} ({a.get('start_date_local')[:10]})")
             
             print(f"    Page {page}: Found {len(activities)} activities ({len(filtered_activities)} Trail Runs)")
             
@@ -172,6 +173,23 @@ def fetch_activities(after_timestamp=None):
             break
             
     return all_runs
+
+
+def fetch_route_details(route_id):
+    """Fetch details for a specific Strava route"""
+    access_token = get_access_token()
+    headers = {'Authorization': f'Bearer {access_token}'}
+    
+    try:
+        response = requests.get(f"{STRAVA_API_URL}/routes/{route_id}", headers=headers)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            print(f"    ⚠️ Failed to fetch route {route_id}: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"    ❌ Error fetching route {route_id}: {e}")
+        return None
 
 
 def obfuscate_polyline(polyline):
@@ -301,65 +319,85 @@ def get_location_name(lat, lng):
         return None
 
 
-def create_route_data(activities, existing_routes=None):
-    """Convert Strava activities to route data format"""
+def create_route_data(items, existing_routes=None, is_activity=True):
+    """Convert Strava activities or routes to unified data format"""
     routes = []
-    for activity in activities:
-        # Save streams 
-        save_stream_data(activity['id'])
+    for item in items:
+        item_id = str(item['id'])
+        
+        # Save streams for activities (routes don't have streams in same way)
+        if is_activity:
+            save_stream_data(item_id)
         
         # Date Parsing
-        start_date = activity.get('start_date_local', '')
+        if is_activity:
+            raw_date = item.get('start_date_local', '')
+        else:
+            # For routes, use updated_at or created_at
+            raw_date = item.get('updated_at') or item.get('created_at') or ''
+            
         date_display = ''
         try:
-            dt = datetime.fromisoformat(start_date.replace('Z', ''))
+            dt = datetime.fromisoformat(raw_date.replace('Z', ''))
             date_display = dt.strftime('%b %Y')
         except:
-            date_display = start_date[:10] 
+            date_display = raw_date[:10] 
 
-        is_race = activity.get('workout_type') == 1
+        # Type logic: race, train, route
+        if not is_activity:
+            rtype = 'route'
+            is_race = False
+        else:
+            is_race = item.get('workout_type') == 1
+            rtype = 'race' if is_race else 'train'
         
         # Location logic
         location_name = None
         tags = []
-        start_latlng = activity.get('start_latlng')
         
-        # 1. ALWAYS check custom location first (to override existing generic ones)
+        if is_activity:
+            start_latlng = item.get('start_latlng')
+        else:
+            # Routes have segments or just map? Actually they usually have start_latlng
+            start_latlng = item.get('start_latlng')
+        
+        # 1. ALWAYS check custom location first
         if start_latlng and len(start_latlng) == 2:
             custom_data = get_custom_location(start_latlng[0], start_latlng[1])
             if custom_data:
                 location_name = custom_data['name']
                 tags = custom_data['tags']
         
-        # 2. Fallback to existing routes if not a custom location
+        # 2. Fallback to existing routes
         if not location_name and existing_routes:
-            match = next((r for r in existing_routes if r['stravaId'] == str(activity['id'])), None)
+            match = next((r for r in existing_routes if r['stravaId'] == item_id), None)
             if match and match.get('location'):
                 location_name = match['location']
                 tags = match.get('tags', [])
         
         # 3. Last resort: Fetch from Mapbox
         if not location_name and start_latlng and len(start_latlng) == 2:
-            print(f"    📍 Geocoding start location for {activity['id']}...")
+            print(f"    📍 Geocoding start location for {item_id}...")
             location_name, tags = get_location_name(start_latlng[0], start_latlng[1])
 
-        route = {
-            'name': activity.get('name', 'Unnamed Run'),
-            'stravaId': str(activity['id']),
-            'distance': activity.get('distance', 0),
-            'elevation': activity.get('total_elevation_gain', 0),
+        route_entry = {
+            'name': item.get('name', 'Unnamed'),
+            'stravaId': item_id,
+            'distance': item.get('distance', 0),
+            'elevation': item.get('total_elevation_gain', 0) if is_activity else item.get('elevation_gain', 0),
             'location': location_name,
             'tags': tags,
             'startLatLng': start_latlng,
             'dateDisplay': date_display,
-            'dateFull': start_date,
+            'dateFull': raw_date,
+            'type': rtype,
             'isRace': is_race,
-            'mapImage': f"assets/maps/{activity['id']}.png",
+            'mapImage': f"assets/maps/{item_id}.png",
             'ePolyline': obfuscate_polyline(
-                activity.get('map', {}).get('summary_polyline')
+                item.get('map', {}).get('summary_polyline') or item.get('map', {}).get('polyline')
             )
         }
-        routes.append(route)
+        routes.append(route_entry)
     
     return routes
 
@@ -407,9 +445,34 @@ def write_data_json(routes):
     print(f"✓ Successfully wrote {len(routes)} routes to {OUTPUT_FILE}")
 
 
+def should_include_item(item_id, date_str, whitelist, routes_whitelist, blacklist):
+    """
+    Logic:
+    1. If blacklisted -> False
+    2. If whitelisted (Activity or Route) -> True
+    3. If year is 2025 or newer -> True
+    4. Otherwise -> False
+    """
+    str_id = str(item_id)
+    if str_id in blacklist:
+        return False
+    if str_id in whitelist or str_id in routes_whitelist:
+        return True
+    
+    try:
+        # Extract year from date string
+        year = int(date_str[:4])
+        if year >= 2025:
+            return True
+    except:
+        pass
+        
+    return False
+
+
 def main():
     """Main execution function"""
-    print("Fetching activities from Strava...")
+    print("Fetching activities and routes from Strava...")
     
     try:
         os.makedirs(MAPS_DIR, exist_ok=True)
@@ -425,13 +488,15 @@ def main():
         
         whitelist = load_filter_list(WHITELIST_FILE)
         blacklist = load_filter_list(BLACKLIST_FILE)
+        routes_whitelist = load_filter_list(ROUTES_WHITELIST_FILE)
         
-        # 3. Determine Latest Date
+        # 3. Determine Latest Activity Date
         latest_timestamp = None
         if existing_routes:
             timestamps = []
             for r in existing_routes:
-                if 'dateFull' in r:
+                # Only use activities for calculating the sync window
+                if r.get('type') != 'route' and 'dateFull' in r:
                     try:
                         dt_str = r['dateFull'].replace('Z', '+00:00')
                         dt = datetime.fromisoformat(dt_str)
@@ -445,21 +510,37 @@ def main():
         activities = fetch_activities(after_timestamp=latest_timestamp)
         print(f"  ✓ Found {len(activities)} new running activities")
         
-        # 5. Convert & Merge
+        # 5. Fetch WHITELISTED routes from Strava
+        raw_routes = []
+        if routes_whitelist:
+            print(f"  ⬇️ Fetching {len(routes_whitelist)} whitelisted routes...")
+            for rid in routes_whitelist:
+                r_detail = fetch_route_details(rid)
+                if r_detail:
+                    raw_routes.append(r_detail)
+                    print(f"      ✅ Found Route: {r_detail.get('name')}")
+
+        # 6. Convert & Merge
         # Start with all existing
         routes_map = {r['stravaId']: r for r in existing_routes}
         
-        # Add new ones
+        # Add new activities
         if activities:
-            new_routes = create_route_data(activities, existing_routes)
-            for r in new_routes:
+            new_activity_data = create_route_data(activities, existing_routes, is_activity=True)
+            for r in new_activity_data:
+                routes_map[r['stravaId']] = r
+                
+        # Add whitelisted routes (always overwrite to get latest info)
+        if raw_routes:
+            new_route_data = create_route_data(raw_routes, existing_routes, is_activity=False)
+            for r in new_route_data:
                 routes_map[r['stravaId']] = r
         
-        # 6. Apply Filter (2025 + Whitelist - Blacklist)
+        # 7. Apply Filter (2025 + Whitelists - Blacklist)
         all_merged_routes = list(routes_map.values())
         final_filtered_routes = [
             r for r in all_merged_routes 
-            if should_include_activity(r['stravaId'], r['dateFull'], whitelist, blacklist)
+            if should_include_item(r['stravaId'], r.get('dateFull', ''), whitelist, routes_whitelist, blacklist)
         ]
         
         # Sort newest first
@@ -468,13 +549,13 @@ def main():
         # Log difference
         dropped = len(all_merged_routes) - len(final_filtered_routes)
         if dropped > 0:
-            print(f"  🧹 Filtered out {dropped} activities not matching 2025 or whitelist criteria.")
+            print(f"  🧹 Filtered out {dropped} items not matching 2025 or whitelist criteria.")
         
-        # 7. Write to storage
+        # 8. Write to storage
         save_routes_db(final_filtered_routes)
         write_data_json(final_filtered_routes)
         
-        print("✓ Data fetch complete!")
+        print(f"✓ Data fetch complete! Total items: {len(final_filtered_routes)}")
         
     except Exception as e:
         print(f"✗ Error: {e}")

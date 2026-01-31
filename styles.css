@@ -396,9 +396,15 @@ main {
     color: #fc4c02;
 }
 
+.route-type-badge.train,
 .route-type-badge.training {
-    background-color: #f6f6f6;
-    color: #999;
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+
+.route-type-badge.route {
+    background-color: rgba(111, 66, 193, 0.1);
+    color: #6f42c1;
 }
 
 .btn-action {
