@@ -187,8 +187,8 @@
 
         // Sort
         filteredRoutes.sort((a, b) => {
-            if (sortVal === 'date-desc') return parseInt(b.stravaId) - parseInt(a.stravaId);
-            if (sortVal === 'date-asc') return parseInt(a.stravaId) - parseInt(b.stravaId);
+            if (sortVal === 'date-desc') return new Date(b.dateFull) - new Date(a.dateFull);
+            if (sortVal === 'date-asc') return new Date(a.dateFull) - new Date(b.dateFull);
             if (sortVal === 'dist-desc') return b.distance - a.distance;
             if (sortVal === 'dist-asc') return a.distance - b.distance;
             if (sortVal === 'elev-desc') return b.elevation - a.elevation;
