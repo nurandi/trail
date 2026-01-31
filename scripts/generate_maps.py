@@ -51,10 +51,6 @@ def generate_map(activity):
     
     map_filepath = os.path.join(MAPS_DIR, f"{activity_id}.png")
     
-    if os.path.exists(map_filepath):
-        #print(f"  ✓ Map exists for {activity_id}")
-        return
-
     print(f"  🎨 Generating map for {activity_id}...")
 
     # 1. Get Elevation Data (from encrypted stream file)
