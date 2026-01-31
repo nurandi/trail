@@ -203,6 +203,36 @@ def obfuscate_polyline(polyline):
     return base64.b64encode(xored).decode('ascii')
 
 
+def decode_first_point(polyline_str):
+    """Decode the first point [lat, lng] from an encoded polyline string"""
+    if not polyline_str:
+        return None
+    try:
+        index = 0
+        lat = 0
+        lng = 0
+        
+        # We only need the first coordinate
+        for _ in range(2):
+            shift = 0
+            result = 0
+            while True:
+                b = ord(polyline_str[index]) - 63
+                index += 1
+                result |= (b & 0x1f) << shift
+                shift += 5
+                if b < 0x20:
+                    break
+            delta = ~(result >> 1) if (result & 1) else (result >> 1)
+            if _ == 0:
+                lat += delta
+            else:
+                lng += delta
+        return [lat / 1e5, lng / 1e5]
+    except:
+        return None
+
+
 def save_stream_data(activity_id):
     """Fetch activity streams and save as encrypted .dat file"""
     try:
@@ -355,11 +385,14 @@ def create_route_data(items, existing_routes=None, is_activity=True):
         location_name = None
         tags = []
         
-        if is_activity:
-            start_latlng = item.get('start_latlng')
-        else:
-            # Routes have segments or just map? Actually they usually have start_latlng
-            start_latlng = item.get('start_latlng')
+        # Strava Routes often miss start_latlng in summary API
+        start_latlng = item.get('start_latlng')
+        
+        # FALLBACK: Decode first point of polyline if start_latlng is missing
+        if not start_latlng or len(start_latlng) != 2:
+            polyline = item.get('map', {}).get('summary_polyline') or item.get('map', {}).get('polyline')
+            if polyline:
+                start_latlng = decode_first_point(polyline)
         
         # 1. ALWAYS check custom location first
         if start_latlng and len(start_latlng) == 2:
@@ -380,11 +413,15 @@ def create_route_data(items, existing_routes=None, is_activity=True):
             print(f"    📍 Geocoding start location for {item_id}...")
             location_name, tags = get_location_name(start_latlng[0], start_latlng[1])
 
+        # Round distance and elevation for cleaner UI
+        dist = round(item.get('distance', 0), 1)
+        elev = round(item.get('total_elevation_gain', 0) if is_activity else item.get('elevation_gain', 0), 1)
+
         route_entry = {
             'name': item.get('name', 'Unnamed'),
             'stravaId': item_id,
-            'distance': item.get('distance', 0),
-            'elevation': item.get('total_elevation_gain', 0) if is_activity else item.get('elevation_gain', 0),
+            'distance': dist,
+            'elevation': elev,
             'location': location_name,
             'tags': tags,
             'startLatLng': start_latlng,
@@ -489,6 +526,23 @@ def main():
         whitelist = load_filter_list(WHITELIST_FILE)
         blacklist = load_filter_list(BLACKLIST_FILE)
         routes_whitelist = load_filter_list(ROUTES_WHITELIST_FILE)
+
+        # 2.5 Backfill/Clean existing entries
+        for r in existing_routes:
+            if 'type' not in r:
+                # If stravaId is in routes_whitelist, it's a route
+                if str(r.get('stravaId')) in routes_whitelist:
+                    r['type'] = 'route'
+                else:
+                    r['type'] = 'race' if r.get('isRace') else 'train'
+            
+            # Ensure rounded stats for all existing entries
+            if 'distance' in r: r['distance'] = round(r['distance'], 1)
+            if 'elevation' in r: r['elevation'] = round(r['elevation'], 1)
+
+            # If location is still unknown and we have startLatLng now, try one more time?
+            # Or if startLatLng is missing and we have a polyline (handled in refetch below)
+            pass
         
         # 3. Determine Latest Activity Date
         latest_timestamp = None
@@ -530,7 +584,7 @@ def main():
             for r in new_activity_data:
                 routes_map[r['stravaId']] = r
                 
-        # Add whitelisted routes (always overwrite to get latest info)
+        # Add whitelisted routes (always overwrite to get latest info & fix locations/roundings)
         if raw_routes:
             new_route_data = create_route_data(raw_routes, existing_routes, is_activity=False)
             for r in new_route_data:
