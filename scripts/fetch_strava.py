@@ -110,7 +110,13 @@ def fetch_activities(after_timestamp=None):
             if not activities:
                 break 
                 
-            filtered_activities = [a for a in activities if a.get('sport_type') == 'TrailRun']
+            filtered_activities = []
+            for a in activities:
+                # Check both sport_type and legacy type
+                is_trail_run = (a.get('sport_type') == 'TrailRun' or a.get('type') == 'TrailRun')
+                if is_trail_run:
+                    filtered_activities.append(a)
+                    print(f"      ✅ Found: {a.get('name')} ({a.get('start_date_local')[:10]})")
             
             print(f"    Page {page}: Found {len(activities)} activities ({len(filtered_activities)} Trail Runs)")
             
