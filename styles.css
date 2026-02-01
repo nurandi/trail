@@ -340,11 +340,21 @@ main {
     color: var(--text-muted);
 }
 
+.route-date.legacy {
+    background-color: rgba(230, 126, 34, 0.15);
+    /* Soft Amber Warning */
+    color: #d35400;
+    /* Darker Amber Text */
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
 .warning-icon {
     font-size: 0.7rem;
-    margin-right: 2px;
     color: #e67e22;
-    /* Muted Amber for the warning icon only */
 }
 
 .route-info h3 {
