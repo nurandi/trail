@@ -738,6 +738,10 @@ def main():
             # Ensure rounded stats for all existing entries
             if 'distance' in r: r['distance'] = round(r['distance'], 1)
             if 'elevation' in r: r['elevation'] = round(r['elevation'], 1)
+            
+            # Migration: Ensure all map images point to .jpg
+            if 'mapImage' in r and r['mapImage'].endswith('.png'):
+                r['mapImage'] = r['mapImage'].replace('.png', '.jpg')
 
             # If it's a route, make sure it has the stream file for elevation profile
             if r.get('type') == 'route':
