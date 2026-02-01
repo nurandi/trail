@@ -460,11 +460,7 @@ main {
     align-content: flex-start;
 }
 
-/* On desktop, hide extra POIs and show the "more" badge */
-.extra-poi {
-    display: none !important;
-}
-
+/* POI Overflow Styling */
 .poi-badge.more {
     display: inline-flex !important;
 }
@@ -477,15 +473,6 @@ main {
         /* Fixed limit for 3 lines on mobile */
         overflow: hidden;
         min-height: 32px;
-    }
-
-    .extra-poi {
-        display: inline-flex !important;
-    }
-
-    .poi-badge.more {
-        display: none !important;
-        /* Hide "more" badge on mobile as we show badges directly */
     }
 }
 
