@@ -5,8 +5,8 @@
         "lng": 106.910543,
         "radius": 50,
         "type": [
-            "Start",
-            "Parking"
+            "start",
+            "parking"
         ]
     },
     {
@@ -15,8 +15,8 @@
         "lng": 106.906467,
         "radius": 50,
         "type": [
-            "Start",
-            "Parking"
+            "start",
+            "parking"
         ]
     },
     {
@@ -24,21 +24,30 @@
         "lat": -6.590048,
         "lng": 106.900523,
         "radius": 50,
-        "type": []
+        "type": [
+            "parking",
+            "start"
+        ]
     },
     {
         "name": "Sentul Nirwana",
         "lat": -6.579673,
         "lng": 106.891759,
         "radius": 50,
-        "type": []
+        "type": [
+            "start",
+            "warung"
+        ]
     },
     {
         "name": "Wangun",
         "lat": -6.592257,
         "lng": 106.929789,
         "radius": 50,
-        "type": []
+        "type": [
+            "start",
+            "warung"
+        ]
     },
     {
         "name": "Pondok Pemburu",
@@ -46,7 +55,7 @@
         "lng": 106.930705,
         "radius": 50,
         "type": [
-            "Campground"
+            "campground"
         ]
     },
     {
@@ -55,7 +64,7 @@
         "lng": 106.933043,
         "radius": 50,
         "type": [
-            "Warung"
+            "warung"
         ]
     },
     {
@@ -64,7 +73,7 @@
         "lng": 106.936194,
         "radius": 50,
         "type": [
-            "Warung"
+            "warung"
         ]
     },
     {
@@ -73,7 +82,7 @@
         "lng": 106.935376,
         "radius": 50,
         "type": [
-            "Hill"
+            "hill"
         ]
     },
     {
@@ -82,8 +91,8 @@
         "lng": 106.938176,
         "radius": 50,
         "type": [
-            "Hill",
-            "Warung"
+            "hill",
+            "warung"
         ]
     },
     {
@@ -92,8 +101,8 @@
         "lng": 106.935464,
         "radius": 50,
         "type": [
-            "Hill",
-            "Warung"
+            "hill",
+            "warung"
         ]
     },
     {
@@ -102,8 +111,8 @@
         "lng": 106.935467,
         "radius": 50,
         "type": [
-            "Hill",
-            "Warung"
+            "hill",
+            "warung"
         ]
     },
     {
@@ -112,8 +121,8 @@
         "lng": 106.94382,
         "radius": 50,
         "type": [
-            "Curug",
-            "Warung"
+            "curug",
+            "warung"
         ]
     },
     {
@@ -121,7 +130,9 @@
         "lat": -6.623922,
         "lng": 106.944265,
         "radius": 50,
-        "type": []
+        "type": [
+            "intersection"
+        ]
     },
     {
         "name": "Desa Cisadon",
@@ -129,7 +140,7 @@
         "lng": 106.95206,
         "radius": 150,
         "type": [
-            "Warung"
+            "warung"
         ]
     },
     {
@@ -138,8 +149,8 @@
         "lng": 106.950729,
         "radius": 100,
         "type": [
-            "Lake",
-            "Warung"
+            "lake",
+            "warung"
         ]
     },
     {
@@ -148,8 +159,8 @@
         "lng": 106.937647,
         "radius": 50,
         "type": [
-            "Curug",
-            "Warung"
+            "curug",
+            "warung"
         ]
     },
     {
@@ -158,9 +169,9 @@
         "lng": 106.929748,
         "radius": 50,
         "type": [
-            "Hill",
-            "Warung",
-            "Campground"
+            "hill",
+            "warung",
+            "campground"
         ]
     },
     {
@@ -169,7 +180,7 @@
         "lng": 106.928888,
         "radius": 50,
         "type": [
-            "Hill"
+            "hill"
         ]
     },
     {
@@ -178,8 +189,8 @@
         "lng": 106.929939,
         "radius": 50,
         "type": [
-            "Hill",
-            "Warung"
+            "hill",
+            "warung"
         ]
     },
     {
@@ -188,7 +199,7 @@
         "lng": 106.929166,
         "radius": 50,
         "type": [
-            "Hill"
+            "hill"
         ]
     },
     {
@@ -197,8 +208,8 @@
         "lng": 106.927024,
         "radius": 50,
         "type": [
-            "Hill",
-            "Warung"
+            "hill",
+            "warung"
         ]
     },
     {
@@ -207,8 +218,8 @@
         "lng": 106.926233,
         "radius": 50,
         "type": [
-            "Hill",
-            "Warung"
+            "hill",
+            "warung"
         ]
     },
     {
@@ -217,8 +228,8 @@
         "lng": 106.92921,
         "radius": 50,
         "type": [
-            "Hill",
-            "Warung"
+            "hill",
+            "warung"
         ]
     },
     {
@@ -227,7 +238,7 @@
         "lng": 106.927615,
         "radius": 50,
         "type": [
-            "Warung"
+            "warung"
         ]
     },
     {
@@ -246,7 +257,7 @@
         "lng": 106.926472,
         "radius": 50,
         "type": [
-            "Hill"
+            "hill"
         ]
     },
     {
@@ -255,7 +266,7 @@
         "lng": 106.922948,
         "radius": 50,
         "type": [
-            "Hill"
+            "hill"
         ]
     },
     {
@@ -264,8 +275,8 @@
         "lng": 106.917851,
         "radius": 50,
         "type": [
-            "Hill",
-            "Warung"
+            "hill",
+            "warung"
         ]
     },
     {
@@ -274,8 +285,8 @@
         "lng": 106.915746,
         "radius": 50,
         "type": [
-            "Campground",
-            "Warung"
+            "campground",
+            "warung"
         ]
     },
     {
@@ -284,7 +295,7 @@
         "lng": 106.918117,
         "radius": 50,
         "type": [
-            "Warung",
+            "warung",
             "campground"
         ]
     },
@@ -294,8 +305,8 @@
         "lng": 106.918639,
         "radius": 50,
         "type": [
-            "Hill",
-            "Warung"
+            "hill",
+            "warung"
         ]
     },
     {
@@ -304,7 +315,7 @@
         "lng": 106.902366,
         "radius": 50,
         "type": [
-            "Caffe",
+            "caffe",
             "start",
             "parking"
         ]
@@ -315,8 +326,8 @@
         "lng": 106.911965,
         "radius": 100,
         "type": [
-            "Hill",
-            "Warung"
+            "hill",
+            "warung"
         ]
     },
     {
@@ -325,7 +336,7 @@
         "lng": 106.906357,
         "radius": 50,
         "type": [
-            "Climb"
+            "climb"
         ]
     },
     {
@@ -334,7 +345,7 @@
         "lng": 106.912852,
         "radius": 50,
         "type": [
-            "Incline"
+            "incline"
         ]
     },
     {
@@ -343,7 +354,7 @@
         "lng": 106.9156,
         "radius": 50,
         "type": [
-            "Warung"
+            "warung"
         ]
     },
     {
@@ -352,7 +363,7 @@
         "lng": 106.921446,
         "radius": 50,
         "type": [
-            "Curug"
+            "curug"
         ]
     }
 ]
