@@ -453,8 +453,8 @@
         });
 
         if (extra > 0) {
-            const extraNames = unique.slice(maxVisible).map(p => p.name).join(', ');
-            html += `<span class="poi-badge more" title="${extraNames}">+${extra} more</span>`;
+            const allNames = unique.map(p => p.name).join(', ');
+            html += `<span class="poi-badge more" title="${allNames}">+${extra} more</span>`;
         }
         html += '</div>';
         return html;
