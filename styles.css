@@ -454,8 +454,8 @@ main {
     gap: 6px;
     row-gap: 8px;
     margin-bottom: 12px;
-    height: 68px;
-    /* Fixed height for 2 lines on desktop */
+    height: 60px;
+    /* Precise height for 2 lines on desktop */
     overflow: hidden;
     align-content: flex-start;
 }
@@ -469,8 +469,8 @@ main {
 @media (max-width: 600px) {
     .poi-section {
         height: auto;
-        max-height: 102px;
-        /* Fixed limit for 3 lines on mobile */
+        max-height: 90px;
+        /* Precise limit for 3 lines on mobile */
         overflow: hidden;
         min-height: 32px;
     }

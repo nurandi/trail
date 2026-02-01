@@ -427,14 +427,22 @@
         // Note: No sorting here anymore, we respect the backend order
         // which is sorted by first match along the route.
 
-        const limit = 5; // Shows ~2 lines on desktop, ~2-3 on mobile
+        // Logic: Show max 5 items total (either 5 POIs or 4 POIs + "+N" badge)
         const totalPois = unique.length;
-        const extraCount = totalPois > limit ? totalPois - limit : 0;
+        let displayPois = [];
+        let extraCount = 0;
+
+        if (totalPois > 5) {
+            displayPois = unique.slice(0, 4);
+            extraCount = totalPois - 4;
+        } else {
+            displayPois = unique;
+            extraCount = 0;
+        }
 
         let html = '<div class="poi-section">';
 
-        // Render up to the limit
-        unique.slice(0, limit).forEach(p => {
+        displayPois.forEach(p => {
             const type = (p.type && p.type[0]) ? p.type[0].toLowerCase() : 'generic';
             let icon = '📍';
             if (type === 'start') icon = '🏁';
@@ -448,9 +456,8 @@
             html += `<span class="poi-badge ${type} has-tooltip" data-tooltip="${p.name}">${icon} <span class="poi-name">${p.name}</span></span>`;
         });
 
-        // Add the 'More' badge if we have overflow
         if (extraCount > 0) {
-            const hiddenNames = unique.slice(limit).map(p => p.name).join(', ');
+            const hiddenNames = unique.slice(4).map(p => p.name).join(', ');
             html += `<span class="poi-badge more has-tooltip" data-tooltip="${hiddenNames}">+${extraCount} more</span>`;
         }
         html += '</div>';
