@@ -747,6 +747,7 @@ def main():
                     raw_routes.append(r_detail)
                     print(f"      ✅ Found Route: {r_detail.get('name')}")
 
+
         # 6. Convert & Merge
         # Start with all existing
         routes_map = {r['stravaId']: r for r in existing_routes}
@@ -769,6 +770,17 @@ def main():
             r for r in all_merged_routes 
             if should_include_item(r['stravaId'], r.get('dateFull', ''), include_list, include_routes, exclude_list)
         ]
+
+        # 7.5 Enrich ALL routes with POIs (ensure even old ones get updated)
+        pois = load_pois()
+        if pois:
+            print(f"  📍 Loaded {len(pois)} POIs. Checking all {len(final_filtered_routes)} routes...")
+            for r in final_filtered_routes:
+                # Get POIs using existing logic helper
+                updated_pois = get_pois_for_route(r['stravaId'], r.get('type') == 'route', pois)
+                r['pois'] = updated_pois
+                # if updated_pois:
+                    # print(f"      Matched {len(updated_pois)} for {r['name']}")
         
         # Sort newest first
         final_filtered_routes.sort(key=lambda x: x.get('dateFull', ''), reverse=True)
@@ -788,6 +800,20 @@ def main():
         print(f"✗ Error: {e}")
         raise
 
+def get_pois_for_route(strava_id, is_route, pois):
+    """Helper to fetch stream/GPX and calculate POIs for any route entry"""
+    # Ensure stream file exists
+    stream_path = save_stream_data(strava_id, is_route=is_route)
+    
+    if stream_path and os.path.exists(stream_path):
+        try:
+            with open(stream_path, 'r') as f:
+                encrypted_content = f.read()
+                coords = deobfuscate_stream(encrypted_content)
+                return check_pois(coords, pois)
+        except:
+             return []
+    return []
 
 if __name__ == '__main__':
     main()
