@@ -436,8 +436,10 @@
             if (type === 'start') icon = '🏁';
             else if (type === 'parking') icon = '🅿️';
             else if (type === 'hill' || type === 'mountain') icon = '⛰️';
-            else if (type === 'warung') icon = '☕';
+            else if (type === 'warung' || type === 'caffe') icon = '☕';
             else if (type === 'curug' || type === 'lake') icon = '🌊';
+            else if (type === 'campground') icon = '⛺';
+            else if (type === 'incline' || type === 'climb') icon = '🚀';
 
             html += `<span class="poi-badge ${type}" title="${p.name}">${icon} <span class="poi-name">${p.name}</span></span>`;
         });
