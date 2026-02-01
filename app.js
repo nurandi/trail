@@ -336,10 +336,21 @@
 
         // Parse Creator from Name: [Creator] Route Name
         let displayTitle = route.name;
+        let creatorName = null;
         const creatorMatch = route.name.match(/^\[(.*?)\]\s*(.*)/);
+
         if (creatorMatch) {
-            displayTitle = `<span class="creator-badge">${creatorMatch[1]}</span> ${creatorMatch[2]}`;
+            creatorName = creatorMatch[1];
+            displayTitle = `<span class="creator-badge">${creatorName}</span> ${creatorMatch[2]}`;
         }
+
+        // Determine date label
+        let datePrefix = 'Activity date';
+        if (isRouteSource) {
+            datePrefix = creatorName ? `Route created from ${creatorName}'s activity` : 'Route created date';
+        }
+
+        const hoverTitle = `${datePrefix}: ${route.dateDisplay || ''}`;
 
         card.innerHTML = `
             <div class="card-image-wrapper">
