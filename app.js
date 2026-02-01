@@ -408,15 +408,11 @@
     function renderPoiSection(pois, currentLocation) {
         if (!pois || pois.length === 0) return '';
 
-        // Prioritize: Start/Parking first, then Hills, then others
-        const priority = { 'start': 0, 'parking': 1, 'hill': 2, 'mountain': 3, 'curug': 4, 'lake': 5, 'warung': 6 };
-
-        // Remove duplicates by name
+        // Remove duplicates by name and filter out route location
         const unique = [];
         const seen = new Set();
         pois.forEach(p => {
             if (!seen.has(p.name)) {
-                // Remove if redundant with card location
                 if (p.name !== currentLocation) {
                     unique.push(p);
                 }
@@ -426,14 +422,8 @@
 
         if (unique.length === 0) return '';
 
-        // Sort by priority
-        unique.sort((a, b) => {
-            const typeA = (a.type && a.type[0]) ? a.type[0].toLowerCase() : 'z';
-            const typeB = (b.type && b.type[0]) ? b.type[0].toLowerCase() : 'z';
-            const pA = priority[typeA] !== undefined ? priority[typeA] : 99;
-            const pB = priority[typeB] !== undefined ? priority[typeB] : 99;
-            return pA - pB;
-        });
+        // Note: No sorting here anymore, we respect the backend order
+        // which is sorted by first match along the route.
 
         const maxVisible = 2; // Keep it clean as per user request
         const visible = unique.slice(0, maxVisible);

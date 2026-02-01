@@ -457,7 +457,7 @@ def check_pois(route_coords, pois):
     min_lng -= margin
     max_lng += margin
 
-    detected_pois = []
+    detected_pois_with_index = []
     
     # Analyze Start Point (0 index)
     start_pt = route_coords[0]
@@ -469,43 +469,48 @@ def check_pois(route_coords, pois):
 
         radius = poi.get('radius', 100)
         
-        # 1. Start Match Check
+        # 1. Finding first encounter index
+        first_index = -1
+        
+        # Check start first
         dist_start = calculate_distance(start_pt[0], start_pt[1], poi['lat'], poi['lng'])
-        is_start_match = dist_start <= radius
-        
-        # 2. General Route Match Check
-        # If it matches start, it definitely matches route
-        is_route_match = is_start_match
-        
-        # If not start, scan the whole stream
-        if not is_route_match:
-            for point in route_coords:
+        if dist_start <= radius:
+            first_index = 0
+        else:
+            # Scan the stream for the first encounter
+            for idx, point in enumerate(route_coords):
                 d = calculate_distance(point[0], point[1], poi['lat'], poi['lng'])
                 if d <= radius:
-                    is_route_match = True
+                    first_index = idx
                     break
         
-        if is_route_match:
+        if first_index != -1:
             # Context Filtering
-            # If we passed it but didn't start there, remove 'start' and 'parking'
-            # Assuming types in poi.json are already lowercase (we normalized them)
+            # If we passed it but didn't start there (index 0), remove 'start' and 'parking'
+            is_start_match = (first_index == 0)
             original_types = [t.lower() for t in poi.get('type', [])]
             
             final_types = []
             if is_start_match:
                 final_types = original_types
             else:
-                # Filter out start-specific tags if not a start match
+                # Filter out start-specific tags if not matched at the very start
                 final_types = [t for t in original_types if t not in ['start', 'parking']]
             
-            # Only add if tags remain (e.g. don't add a parking lot we just ran past)
             if final_types:
-                detected_pois.append({
-                    "name": poi['name'],
-                    "type": final_types
+                detected_pois_with_index.append({
+                    "index": first_index,
+                    "poi": {
+                        "name": poi['name'],
+                        "type": final_types
+                    }
                 })
 
-    return detected_pois
+    # Sort by the encounter index (First encounter shows first)
+    detected_pois_with_index.sort(key=lambda x: x['index'])
+    
+    # Return just the POI data
+    return [item['poi'] for item in detected_pois_with_index]
 
 
 def deobfuscate_stream(data_str):
