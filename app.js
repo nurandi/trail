@@ -384,7 +384,7 @@
                     </div>
                 </div>
                 
-                ${renderPoiSection(route.pois)}
+                ${renderPoiSection(route.pois, route.location)}
 
                 <div class="route-actions">
                     <div class="route-type-badge ${rType}">
@@ -405,7 +405,7 @@
         return card;
     }
 
-    function renderPoiSection(pois) {
+    function renderPoiSection(pois, currentLocation) {
         if (!pois || pois.length === 0) return '';
 
         // Prioritize: Start/Parking first, then Hills, then others
@@ -416,10 +416,15 @@
         const seen = new Set();
         pois.forEach(p => {
             if (!seen.has(p.name)) {
-                unique.push(p);
+                // Remove if redundant with card location
+                if (p.name !== currentLocation) {
+                    unique.push(p);
+                }
                 seen.add(p.name);
             }
         });
+
+        if (unique.length === 0) return '';
 
         // Sort by priority
         unique.sort((a, b) => {
