@@ -144,12 +144,14 @@
 
             // Recency
             if (recencyVal !== 'all') {
-                const oneYearAgo = new Date();
-                oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-                const isRecent = new Date(r.dateFull) >= oneYearAgo;
+                const today = new Date();
+                const routeDate = new Date(r.dateFull);
+                const diffDays = (today - routeDate) / (1000 * 60 * 60 * 24);
 
-                if (recencyVal === 'recent' && !isRecent) return false;
-                if (recencyVal === 'classic' && isRecent) return false;
+                if (recencyVal === 'week' && diffDays >= 7) return false;
+                if (recencyVal === 'month' && diffDays >= 30) return false;
+                if (recencyVal === 'year' && diffDays >= 365) return false;
+                if (recencyVal === 'legacy' && diffDays < 365) return false;
             }
 
             // Distance
