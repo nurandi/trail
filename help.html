@@ -210,15 +210,18 @@
                     <h3 lang="en">Effort Metric</h3>
                     <h3 lang="id">Metrik Effort (Upaya)</h3>
                     <p lang="en">A calculated value to help compare different terrains. It uses the formula:
-                        <code>Distance (km) + (Elevation / 100)</code>.</p>
+                        <code>Distance (km) + (Elevation / 100)</code>.
+                    </p>
                     <p lang="id">Nilai kalkulasi untuk membantu membandingkan berbagai medan. Menggunakan rumus:
-                        <code>Jarak (km) + (Elevasi / 100)</code>.</p>
+                        <code>Jarak (km) + (Elevasi / 100)</code>.
+                    </p>
                 </div>
                 <div class="feature-card">
                     <h3 lang="en">Activity Type</h3>
                     <h3 lang="id">Jenis Aktivitas</h3>
                     <p lang="en">Distinguish between <strong>Races</strong>, <strong>Training Runs</strong>, and planned
-                        <strong>Routes</strong> from Strava.</p>
+                        <strong>Routes</strong> from Strava.
+                    </p>
                     <p lang="id">Bedakan antara <strong>Balapan (Race)</strong>, <strong>Lari Latihan
                             (Training)</strong>, dan <strong>Rute (Route)</strong> terencana dari Strava.</p>
                 </div>
@@ -320,31 +323,39 @@
 
     <script>
         function setLang(lang) {
+            lang = lang || 'en';
+            console.log('Setting language to:', lang);
+
             // Update buttons
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if ((lang === 'en' && btn.innerText === 'English') ||
-                    (lang === 'id' && btn.innerText === 'Bahasa Indonesia')) {
+                const btnLang = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                if (btnLang === lang) {
                     btn.classList.add('active');
                 }
             });
 
             // Update content visibility
-            document.querySelectorAll('[lang="en"]').forEach(el => {
-                el.style.display = lang === 'en' ? (el.tagName === 'SPAN' || el.tagName === 'EM' ? 'inline' : 'block') : 'none';
-                if (el.tagName === 'H2') el.style.display = lang === 'en' ? 'flex' : 'none';
-            });
-            document.querySelectorAll('[lang="id"]').forEach(el => {
-                el.style.display = lang === 'id' ? (el.tagName === 'SPAN' || el.tagName === 'EM' ? 'inline' : 'block') : 'none';
-                if (el.tagName === 'H2') el.style.display = lang === 'id' ? 'flex' : 'none';
+            document.querySelectorAll('[lang]').forEach(el => {
+                const elLang = el.getAttribute('lang');
+                const isMatch = elLang === lang;
+
+                if (el.tagName === 'SPAN' || el.tagName === 'EM' || el.tagName === 'I') {
+                    el.style.display = isMatch ? 'inline' : 'none';
+                } else if (el.tagName === 'H2') {
+                    el.style.display = isMatch ? 'flex' : 'none';
+                } else {
+                    el.style.display = isMatch ? 'block' : 'none';
+                }
             });
 
             localStorage.setItem('trail_lang', lang);
         }
 
-        // Load preferred language
-        const savedLang = localStorage.getItem('trail_lang') || 'en';
-        setLang(savedLang);
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('trail_lang') || 'en';
+            setLang(savedLang);
+        });
     </script>
 </body>
 
