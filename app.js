@@ -334,7 +334,8 @@
         // Apply classes to card
         card.className = `route-card ${route.type || ''}`;
 
-        const hoverTitle = route.dateDisplay || '';
+        const datePrefix = isRouteSource ? 'Route created date' : 'Activity date';
+        const hoverTitle = `${datePrefix}: ${route.dateDisplay || ''}`;
 
         card.innerHTML = `
             <div class="card-image-wrapper">
@@ -347,7 +348,7 @@
                         <span>${route.location || 'Unknown Location'}</span>
                     </div>
                     ${timeLabel ? `
-                        <span class="route-date ${timeClass}" title="Activity Date: ${hoverTitle}">
+                        <span class="route-date ${timeClass}" title="${hoverTitle}">
                             ${timeLabel}
                             ${hasWarning ? '<i class="fas fa-exclamation-triangle warning-icon"></i>' : ''}
                         </span>` : ''}
