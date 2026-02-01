@@ -314,21 +314,17 @@
             }
         }
 
-        let overlays = '';
-        if (dateDisplay) {
-            const oldClass = isOld ? 'old' : '';
-            overlays += `<div class="badge-overlay badge-date ${oldClass}">${dateDisplay}</div>`;
-        }
-
         card.innerHTML = `
             <div class="card-image-wrapper">
                 <img src="${mapImage}" alt="${route.name} map" loading="lazy">
-                ${overlays}
             </div>
             <div class="route-info">
                 <div class="route-location">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span>${route.location || 'Unknown Location'}</span>
+                    <div class="loc-left">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>${route.location || 'Unknown Location'}</span>
+                    </div>
+                    ${dateDisplay ? `<span class="route-date ${isOld ? 'old' : ''}">${dateDisplay}</span>` : ''}
                 </div>
                 <h3>${route.name}</h3>
                 <div class="route-stats">
