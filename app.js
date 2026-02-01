@@ -334,8 +334,12 @@
         // Apply classes to card
         card.className = `route-card ${route.type || ''}`;
 
-        const datePrefix = isRouteSource ? 'Route created date' : 'Activity date';
-        const hoverTitle = `${datePrefix}: ${route.dateDisplay || ''}`;
+        // Parse Creator from Name: [Creator] Route Name
+        let displayTitle = route.name;
+        const creatorMatch = route.name.match(/^\[(.*?)\]\s*(.*)/);
+        if (creatorMatch) {
+            displayTitle = `<span class="creator-badge">${creatorMatch[1]}</span> ${creatorMatch[2]}`;
+        }
 
         card.innerHTML = `
             <div class="card-image-wrapper">
@@ -353,7 +357,7 @@
                             ${hasWarning ? '<i class="fas fa-exclamation-triangle warning-icon"></i>' : ''}
                         </span>` : ''}
                 </div>
-                <h3>${route.name}</h3>
+                <h3>${displayTitle}</h3>
                 <div class="route-stats">
                     <div class="stat">
                         <div class="stat-label">Distance</div>
