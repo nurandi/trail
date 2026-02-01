@@ -383,6 +383,7 @@
                         <div class="stat-value">${effort}</div>
                     </div>
                 </div>
+                
                 <div class="route-actions">
                     <div class="route-type-badge ${rType}">
                         ${rType === 'race' ? 'Race' : (rType === 'route' ? 'Route' : 'Training')}
