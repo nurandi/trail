@@ -334,10 +334,25 @@ main {
 .route-date {
     font-family: 'Outfit', sans-serif;
     font-weight: 600;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    /* Slightly smaller for the pill look */
     letter-spacing: 0.3px;
     cursor: help;
-    color: var(--text-muted);
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Green Shading for Recent Activities */
+.route-date.fresh,
+.route-date.active,
+.route-date.stable {
+    background-color: rgba(40, 167, 69, 0.1);
+    /* Soft Green */
+    color: #218838;
+    /* Dark Green */
 }
 
 .route-date.legacy {
