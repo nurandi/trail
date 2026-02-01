@@ -30,7 +30,8 @@ OUTPUT_FILE = 'data.json'
 MAPS_DIR = 'assets/maps'
 STREAMS_DIR = 'assets/streams'
 DB_FILE = 'all_routes.json'
-LOCATIONS_FILE = 'locations.json'
+LOCATIONS_FILE = 'data/start.json'
+POI_FILE = 'data/poi.json'
 INCLUDE_FILE = 'filters/include.txt'
 EXCLUDE_FILE = 'filters/exclude.txt'
 INCLUDE_ROUTES_FILE = 'filters/include_routes.txt'
@@ -289,7 +290,7 @@ def save_stream_data(activity_id, is_route=False):
         
         # Check if exists
         if os.path.exists(filepath):
-            return
+            return filepath  # Return path if exists
 
         access_token = get_access_token()
         headers = {'Authorization': f'Bearer {access_token}'}
@@ -314,6 +315,7 @@ def save_stream_data(activity_id, is_route=False):
                         ele = alts[i] if i < len(alts) else 0
                         combined_data.append([latlngs[i][0], latlngs[i][1], round(ele, 1)])
                     save_encrypted_dat(filepath, combined_data)
+                    return filepath
             else:
                 print(f"    ⚠️ Failed to fetch activity streams: {response.status_code}")
         else:
@@ -338,11 +340,13 @@ def save_stream_data(activity_id, is_route=False):
                 if points:
                     save_encrypted_dat(filepath, points)
                     print(f"      ✅ Extracted {len(points)} points with elevation from Route GPX")
+                    return filepath
             else:
                 print(f"    ⚠️ Failed to fetch route GPX: {response.status_code}")
 
     except Exception as e:
         print(f"    ❌ Error fetching stream data: {e}")
+    return None
 
 
 def save_encrypted_dat(filepath, combined_data):
@@ -371,7 +375,7 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 
 
 def get_custom_location(lat, lng):
-    """Check if coordinates are near a custom location defined in locations.json"""
+    """Check if coordinates are near a custom location defined in data/start.json"""
     if not os.path.exists(LOCATIONS_FILE):
         return None
     try:
@@ -418,14 +422,104 @@ def get_location_name(lat, lng):
         return None
 
 
+def load_pois():
+    """Load POI list from poi.json"""
+    if not os.path.exists(POI_FILE):
+        return []
+    try:
+        with open(POI_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"  ⚠️ Error loading POI list: {e}")
+        return []
+
+
+def check_pois(route_coords, pois):
+    """
+    Check which POIs are visited by the route.
+    route_coords: list of [lat, lng, ele]
+    pois: list of dicts {name, lat, lng, radius, type}
+    return: list of POI names
+    """
+    if not route_coords or not pois:
+        return []
+
+    # 1. Bounding Box Optimization
+    lats = [p[0] for p in route_coords]
+    lngs = [p[1] for p in route_coords]
+    min_lat, max_lat = min(lats), max(lats)
+    min_lng, max_lng = min(lngs), max(lngs)
+    
+    # Expand BB slightly (e.g., 0.01 deg ~= 1km)
+    margin = 0.01
+    min_lat -= margin
+    max_lat += margin
+    min_lng -= margin
+    max_lng += margin
+
+    detected_pois = []
+
+    for poi in pois:
+        # Quick check: is POI inside BB?
+        if not (min_lat <= poi['lat'] <= max_lat and min_lng <= poi['lng'] <= max_lng):
+            continue
+
+        # Detail check: distance to any point
+        # Optimization: only check every N points to save time? 
+        # But trails are twisty, so we should check carefully.
+        # However, 50m spacing is typical for stream data.
+        
+        is_near = False
+        radius = poi.get('radius', 100)
+        
+        for point in route_coords:
+            d = calculate_distance(point[0], point[1], poi['lat'], poi['lng'])
+            if d <= radius:
+                is_near = True
+                break
+        
+        if is_near:
+            detected_pois.append({
+                "name": poi['name'],
+                "type": poi.get('type', 'generic')
+            })
+
+    return detected_pois
+
+
+def deobfuscate_stream(data_str):
+    """De-obfuscate the stream data for processing locally (mirror of logic in javascript)"""
+    try:
+        key = GPX_ENCRYPTION_KEY
+        decoded_b64 = base64.b64decode(data_str).decode('utf-8')
+        
+        result_chars = []
+        for i in range(len(decoded_b64)):
+             char_code = ord(decoded_b64[i])
+             key_code = ord(key[i % len(key)])
+             result_chars.append(chr(char_code ^ key_code))
+        
+        json_str = "".join(result_chars)
+        return json.loads(json_str)
+    except Exception as e:
+        print(f"Error deobfuscating stream: {e}")
+        return []
+
+
 def create_route_data(items, existing_routes=None, is_activity=True):
     """Convert Strava activities or routes to unified data format"""
     routes = []
+    
+    # Load POIs once
+    pois = load_pois()
+    print(f"  📍 Loaded {len(pois)} POIs for matching.")
+
     for item in items:
         item_id = str(item['id'])
         
         # Save streams (Activities via Stream API, Routes via GPX export)
-        save_stream_data(item_id, is_route=not is_activity)
+        # We need the FILEPATH to read it back and check POIs
+        stream_path = save_stream_data(item_id, is_route=not is_activity)
         
         # Date Parsing
         if is_activity:
@@ -481,6 +575,16 @@ def create_route_data(items, existing_routes=None, is_activity=True):
             print(f"    📍 Geocoding start location for {item_id}...")
             location_name, tags = get_location_name(start_latlng[0], start_latlng[1])
 
+        # POI Matching Logic
+        detected_pois = []
+        if stream_path and os.path.exists(stream_path):
+            with open(stream_path, 'r') as f:
+                encrypted_content = f.read()
+                coords = deobfuscate_stream(encrypted_content)
+                detected_pois = check_pois(coords, pois)
+                if detected_pois:
+                    print(f"      ⛰️  Matched {len(detected_pois)} POIs for {item.get('name')}")
+
         # Round distance and elevation for cleaner UI
         dist = round(item.get('distance', 0), 1)
         elev = round(item.get('total_elevation_gain', 0) if is_activity else item.get('elevation_gain', 0), 1)
@@ -492,6 +596,7 @@ def create_route_data(items, existing_routes=None, is_activity=True):
             'elevation': elev,
             'location': location_name,
             'tags': tags,
+            'pois': detected_pois,
             'startLatLng': start_latlng,
             'dateDisplay': date_display,
             'dateFull': raw_date,

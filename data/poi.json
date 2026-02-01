@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Puncak Kuta",
+        "lat": -6.654876,
+        "lng": 106.945228,
+        "radius": 300,
+        "type": "mountain"
+    },
+    {
+        "name": "Curug Cibaliung",
+        "lat": -6.606637,
+        "lng": 106.929832,
+        "radius": 150,
+        "type": "water"
+    },
+    {
+        "name": "Cisadon",
+        "lat": -6.643333,
+        "lng": 106.918611,
+        "radius": 500,
+        "type": "checkpoint"
+    },
+    {
+        "name": "Pasir Buncir",
+        "lat": -6.666111,
+        "lng": 106.925000,
+        "radius": 300,
+        "type": "hill"
+    }
+]
