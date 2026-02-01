@@ -302,17 +302,34 @@
             ? `https://www.strava.com/routes/${route.stravaId}`
             : `https://www.strava.com/activities/${route.stravaId}`;
 
-        const dateDisplay = route.dateDisplay || '';
         const rType = route.type || (route.isRace ? 'race' : 'train');
-        let isOld = false;
 
-        if (route.dateFull) {
-            const oneYearAgo = new Date();
-            oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-            if (new Date(route.dateFull) < oneYearAgo) {
-                isOld = true;
-            }
+        const today = new Date();
+        const routeDate = route.dateFull ? new Date(route.dateFull) : null;
+        const diffDays = routeDate ? Math.floor((today - routeDate) / (1000 * 60 * 60 * 24)) : 9999;
+        const routeYear = routeDate ? routeDate.getFullYear() : 0;
+        const currentYear = today.getFullYear();
+
+        let timeLabel = '';
+        let timeClass = '';
+        let hasWarning = false;
+
+        if (diffDays < 7) {
+            timeLabel = 'THIS WEEK';
+            timeClass = 'fresh';
+        } else if (diffDays < 30) {
+            timeLabel = 'THIS MONTH';
+            timeClass = 'active';
+        } else if (routeYear === currentYear) {
+            timeLabel = 'THIS YEAR';
+            timeClass = 'stable';
+        } else {
+            timeLabel = '> LAST YEAR';
+            timeClass = 'legacy';
+            hasWarning = true;
         }
+
+        const hoverTitle = route.dateDisplay || '';
 
         card.innerHTML = `
             <div class="card-image-wrapper">
@@ -324,7 +341,11 @@
                         <i class="fas fa-map-marker-alt"></i>
                         <span>${route.location || 'Unknown Location'}</span>
                     </div>
-                    ${dateDisplay ? `<span class="route-date ${isOld ? 'old' : ''}">${dateDisplay}</span>` : ''}
+                    ${timeLabel ? `
+                        <span class="route-date ${timeClass}" title="Activity Date: ${hoverTitle}">
+                            ${hasWarning ? '<i class="fas fa-exclamation-triangle warning-icon"></i> ' : ''}
+                            ${timeLabel}
+                        </span>` : ''}
                 </div>
                 <h3>${route.name}</h3>
                 <div class="route-stats">
