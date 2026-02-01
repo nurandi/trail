@@ -255,7 +255,6 @@ main {
     border-radius: 16px;
     border: 1px solid var(--border-color);
     overflow: hidden;
-    /* Constrain tooltips to card boundaries */
     display: flex;
     flex-direction: column;
     transition: var(--transition);
@@ -349,7 +348,6 @@ main {
 }
 
 .route-date {
-    position: relative;
     font-family: 'Outfit', sans-serif;
     font-weight: 600;
     font-size: 0.72rem;
@@ -407,8 +405,6 @@ main {
 }
 
 .creator-badge {
-    position: relative;
-    /* Base for tooltip */
     background-color: #f0f0f0;
     color: #666;
     font-size: 0.75rem;
@@ -434,7 +430,6 @@ main {
 }
 
 .stat {
-    position: relative;
     text-align: center;
 }
 
@@ -462,14 +457,11 @@ main {
     margin-bottom: 12px;
     height: 62px;
     /* Providing ample room for two lines */
-    overflow: visible;
-    /* Allow tooltips to pop out */
+    overflow: hidden;
     align-content: flex-start;
 }
 
 .poi-badge {
-    position: relative;
-    /* Base for tooltip */
     font-size: 0.75rem;
     padding: 2px 8px;
     border-radius: 12px;
@@ -480,87 +472,7 @@ main {
     align-items: center;
     gap: 4px;
     white-space: nowrap;
-    cursor: help;
-}
-
-/* Custom Tooltip Styling */
-.has-tooltip::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(0);
-    background: rgba(33, 33, 33, 0.9);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 0.75rem;
-    white-space: pre-wrap;
-    width: max-content;
-    max-width: 200px;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    pointer-events: none;
-    margin-bottom: 10px;
-    line-height: 1.4;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Tooltip Arrow */
-.has-tooltip::before {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 6px solid transparent;
-    border-top-color: rgba(33, 33, 33, 0.9);
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
-    margin-bottom: -4px;
-}
-
-.has-tooltip:hover::after,
-.has-tooltip:hover::before {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(-3px);
-    /* Tighter float */
-}
-
-/* Specific positioning for top row to stay 'in the card' */
-.route-date.has-tooltip::after,
-.creator-badge.has-tooltip::after {
-    top: 100%;
-    bottom: auto;
-    margin-top: 10px;
-    margin-bottom: 0;
-}
-
-.route-date.has-tooltip::before,
-.creator-badge.has-tooltip::before {
-    top: 100%;
-    bottom: auto;
-    border-top-color: transparent;
-    border-bottom-color: rgba(33, 33, 33, 0.9);
-    margin-top: -2px;
-    margin-bottom: 0;
-}
-
-.route-date.has-tooltip:hover::after,
-.route-date.has-tooltip:hover::before,
-.creator-badge.has-tooltip:hover::after,
-.creator-badge.has-tooltip:hover::before {
-    transform: translateX(-50%) translateY(3px);
+    cursor: default;
 }
 
 .poi-badge.start,

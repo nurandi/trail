@@ -341,7 +341,7 @@
 
         if (creatorMatch) {
             creatorName = creatorMatch[1];
-            displayTitle = `<span class="creator-badge has-tooltip" data-tooltip="Original route by: ${creatorName}">${creatorName}</span> ${creatorMatch[2]}`;
+            displayTitle = `<span class="creator-badge" title="Original route by: ${creatorName}">${creatorName}</span> ${creatorMatch[2]}`;
         }
 
         // Determine date label
@@ -363,7 +363,7 @@
                         <span>${route.location || 'Unknown Location'}</span>
                     </div>
                     ${timeLabel ? `
-                        <span class="route-date ${timeClass} has-tooltip" data-tooltip="${hoverTitle}">
+                        <span class="route-date ${timeClass}" title="${hoverTitle}">
                             ${timeLabel}
                             ${hasWarning ? '<i class="fas fa-exclamation-triangle warning-icon"></i>' : ''}
                         </span>` : ''}
@@ -378,7 +378,7 @@
                         <div class="stat-label">Elevation</div>
                         <div class="stat-value">${elevation}</div>
                     </div>
-                    <div class="stat has-tooltip" data-tooltip="Effort = distance(km) + 0.01 * elevation(m)">
+                    <div class="stat" title="Effort = distance(km) + 0.01 * elevation(m)">
                         <div class="stat-label">Effort</div>
                         <div class="stat-value">${effort}</div>
                     </div>
@@ -391,10 +391,10 @@
                         ${rType === 'race' ? 'Race' : (rType === 'route' ? 'Route' : 'Training')}
                     </div>
                     <div class="action-buttons">
-                        <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava has-tooltip" data-tooltip="View on Strava">
+                        <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava" title="View on Strava">
                             <i class="fab fa-strava"></i>
                         </a>
-                        <button class="btn-action primary has-tooltip" onclick="downloadGPX('${route.stravaId}', '${route.name}')" data-tooltip="Download GPX">
+                        <button class="btn-action primary" onclick="downloadGPX('${route.stravaId}', '${route.name}')" title="Download GPX">
                             <i class="fas fa-download"></i>
                         </button>
                     </div>
@@ -441,12 +441,12 @@
             else if (type === 'campground') icon = '⛺';
             else if (type === 'incline' || type === 'climb') icon = '🚀';
 
-            html += `<span class="poi-badge ${type} has-tooltip" data-tooltip="${p.name}">${icon} <span class="poi-name">${p.name}</span></span>`;
+            html += `<span class="poi-badge ${type}" title="${p.name}">${icon} <span class="poi-name">${p.name}</span></span>`;
         });
 
         if (extra > 0) {
             const allNames = unique.map(p => p.name).join(', ');
-            html += `<span class="poi-badge more has-tooltip" data-tooltip="${allNames}">+${extra} more</span>`;
+            html += `<span class="poi-badge more" title="${allNames}">+${extra} more</span>`;
         }
         html += '</div>';
         return html;
