@@ -453,10 +453,9 @@ main {
     flex-wrap: wrap;
     gap: 6px;
     row-gap: 8px;
-    /* Room between lines */
     margin-bottom: 12px;
-    height: 62px;
-    /* Providing ample room for two lines */
+    height: 68px;
+    /* Slightly taller to ensure 2 lines always fit even with font scaling */
     overflow: hidden;
     align-content: flex-start;
 }

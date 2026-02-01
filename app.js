@@ -427,9 +427,20 @@
         // Note: No sorting here anymore, we respect the backend order
         // which is sorted by first match along the route.
 
-        const maxVisible = 4; // Allow up to two lines
+        let maxVisible = 4;
+        let extra = 0;
+
+        // If there are exactly 5, just show them all instead of "+1 more"
+        if (unique.length === 5) {
+            maxVisible = 5;
+            extra = 0;
+        } else if (unique.length > 5) {
+            // Show 3 + "more" to ensure it fits comfortably in 2 lines on mobile
+            maxVisible = 3;
+            extra = unique.length - maxVisible;
+        }
+
         const visible = unique.slice(0, maxVisible);
-        const extra = unique.length - maxVisible;
 
         let html = '<div class="poi-section">';
         visible.forEach(p => {
