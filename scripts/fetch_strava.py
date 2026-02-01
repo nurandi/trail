@@ -458,31 +458,52 @@ def check_pois(route_coords, pois):
     max_lng += margin
 
     detected_pois = []
+    
+    # Analyze Start Point (0 index)
+    start_pt = route_coords[0]
 
     for poi in pois:
         # Quick check: is POI inside BB?
         if not (min_lat <= poi['lat'] <= max_lat and min_lng <= poi['lng'] <= max_lng):
             continue
 
-        # Detail check: distance to any point
-        # Optimization: only check every N points to save time? 
-        # But trails are twisty, so we should check carefully.
-        # However, 50m spacing is typical for stream data.
-        
-        is_near = False
         radius = poi.get('radius', 100)
         
-        for point in route_coords:
-            d = calculate_distance(point[0], point[1], poi['lat'], poi['lng'])
-            if d <= radius:
-                is_near = True
-                break
+        # 1. Start Match Check
+        dist_start = calculate_distance(start_pt[0], start_pt[1], poi['lat'], poi['lng'])
+        is_start_match = dist_start <= radius
         
-        if is_near:
-            detected_pois.append({
-                "name": poi['name'],
-                "type": poi.get('type', 'generic')
-            })
+        # 2. General Route Match Check
+        # If it matches start, it definitely matches route
+        is_route_match = is_start_match
+        
+        # If not start, scan the whole stream
+        if not is_route_match:
+            for point in route_coords:
+                d = calculate_distance(point[0], point[1], poi['lat'], poi['lng'])
+                if d <= radius:
+                    is_route_match = True
+                    break
+        
+        if is_route_match:
+            # Context Filtering
+            # If we passed it but didn't start there, remove 'start' and 'parking'
+            # Assuming types in poi.json are already lowercase (we normalized them)
+            original_types = [t.lower() for t in poi.get('type', [])]
+            
+            final_types = []
+            if is_start_match:
+                final_types = original_types
+            else:
+                # Filter out start-specific tags if not a start match
+                final_types = [t for t in original_types if t not in ['start', 'parking']]
+            
+            # Only add if tags remain (e.g. don't add a parking lot we just ran past)
+            if final_types:
+                detected_pois.append({
+                    "name": poi['name'],
+                    "type": final_types
+                })
 
     return detected_pois
 
