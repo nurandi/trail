@@ -248,15 +248,7 @@ main {
     border-color: rgba(252, 76, 2, 0.2);
 }
 
-.route-card.legacy-status {
-    background-color: #fafafa;
-    border-color: rgba(0, 0, 0, 0.05);
-}
 
-.route-card.legacy-status img {
-    filter: grayscale(40%) contrast(90%) brightness(105%);
-    opacity: 0.85;
-}
 
 .route-card img {
     width: 100%;

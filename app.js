@@ -330,7 +330,7 @@
         }
 
         // Apply classes to card
-        card.className = `route-card ${route.type || ''} ${hasWarning ? 'legacy-status' : ''}`;
+        card.className = `route-card ${route.type || ''}`;
 
         const hoverTitle = route.dateDisplay || '';
 
