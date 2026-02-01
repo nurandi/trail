@@ -5,8 +5,8 @@
         "lng": 106.910543,
         "radius": 50,
         "type": [
-            "parking",
-            "start"
+            "Start",
+            "Parking"
         ]
     },
     {
@@ -15,8 +15,8 @@
         "lng": 106.906467,
         "radius": 50,
         "type": [
-            "parking",
-            "start"
+            "Start",
+            "Parking"
         ]
     },
     {
@@ -24,39 +24,335 @@
         "lat": -6.590048,
         "lng": 106.900523,
         "radius": 50,
-        "type": [
-            "parking",
-            "start"
-        ]
+        "type": []
     },
     {
         "name": "Sentul Nirwana",
         "lat": -6.579673,
         "lng": 106.891759,
         "radius": 50,
-        "type": [
-            "parking",
-            "start"
-        ]
+        "type": []
     },
     {
         "name": "Wangun",
-        "lat": -6.594598,
-        "lng": 106.932626,
+        "lat": -6.592257,
+        "lng": 106.929789,
+        "radius": 50,
+        "type": []
+    },
+    {
+        "name": "Pondok Pemburu",
+        "lat": -6.624988,
+        "lng": 106.930705,
         "radius": 50,
         "type": [
-            "parking",
-            "start"
+            "Campground"
+        ]
+    },
+    {
+        "name": "Warung Acu",
+        "lat": -6.621761,
+        "lng": 106.933043,
+        "radius": 50,
+        "type": [
+            "Warung"
+        ]
+    },
+    {
+        "name": "Hamerang",
+        "lat": -6.619129,
+        "lng": 106.936194,
+        "radius": 50,
+        "type": [
+            "Warung"
+        ]
+    },
+    {
+        "name": "Hamerang",
+        "lat": -6.617069,
+        "lng": 106.935376,
+        "radius": 50,
+        "type": [
+            "Hill"
+        ]
+    },
+    {
+        "name": "Paris Limo",
+        "lat": -6.617894,
+        "lng": 106.938176,
+        "radius": 50,
+        "type": [
+            "Hill",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Pasir Pasang",
+        "lat": -6.611198,
+        "lng": 106.935464,
+        "radius": 50,
+        "type": [
+            "Hill",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Pasir Jambe",
+        "lat": -6.606116,
+        "lng": 106.935467,
+        "radius": 50,
+        "type": [
+            "Hill",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Curug Love",
+        "lat": -6.60816,
+        "lng": 106.94382,
+        "radius": 50,
+        "type": [
+            "Curug",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Bukit Cisadon",
+        "lat": -6.623922,
+        "lng": 106.944265,
+        "radius": 50,
+        "type": []
+    },
+    {
+        "name": "Desa Cisadon",
+        "lat": -6.628837,
+        "lng": 106.95206,
+        "radius": 150,
+        "type": [
+            "Warung"
+        ]
+    },
+    {
+        "name": "Badeur Lake",
+        "lat": -6.629917,
+        "lng": 106.950729,
+        "radius": 100,
+        "type": [
+            "Lake",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Curug Kencana",
+        "lat": -6.601387,
+        "lng": 106.937647,
+        "radius": 50,
+        "type": [
+            "Curug",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Pasir Pete",
+        "lat": -6.606279,
+        "lng": 106.929748,
+        "radius": 50,
+        "type": [
+            "Hill",
+            "Warung",
+            "Campground"
+        ]
+    },
+    {
+        "name": "Pasir Ceri",
+        "lat": -6.609022,
+        "lng": 106.928888,
+        "radius": 50,
+        "type": [
+            "Hill"
+        ]
+    },
+    {
+        "name": "Pasir Teh",
+        "lat": -6.612628,
+        "lng": 106.929939,
+        "radius": 50,
+        "type": [
+            "Hill",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Sarongge",
+        "lat": -6.613836,
+        "lng": 106.929166,
+        "radius": 50,
+        "type": [
+            "Hill"
+        ]
+    },
+    {
+        "name": "Bukit Palasari",
+        "lat": -6.612713,
+        "lng": 106.927024,
+        "radius": 50,
+        "type": [
+            "Hill",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Bukit Paniisan",
+        "lat": -6.606764,
+        "lng": 106.926233,
+        "radius": 50,
+        "type": [
+            "Hill",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Sanema",
+        "lat": -6.603027,
+        "lng": 106.92921,
+        "radius": 50,
+        "type": [
+            "Hill",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Cimaung",
+        "lat": -6.602846,
+        "lng": 106.927615,
+        "radius": 50,
+        "type": [
+            "Warung"
+        ]
+    },
+    {
+        "name": "HD Land",
+        "lat": -6.59817,
+        "lng": 106.932266,
+        "radius": 50,
+        "type": [
+            "start",
+            "campground"
+        ]
+    },
+    {
+        "name": "Puncak Silalangit",
+        "lat": -6.6205,
+        "lng": 106.926472,
+        "radius": 50,
+        "type": [
+            "Hill"
+        ]
+    },
+    {
+        "name": "Puncak Batu Tapa",
+        "lat": -6.620965,
+        "lng": 106.922948,
+        "radius": 50,
+        "type": [
+            "Hill"
+        ]
+    },
+    {
+        "name": "Gunung Ciung",
+        "lat": -6.620545,
+        "lng": 106.917851,
+        "radius": 50,
+        "type": [
+            "Hill",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Ciung Campground",
+        "lat": -6.622044,
+        "lng": 106.915746,
+        "radius": 50,
+        "type": [
+            "Campground",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Daolong",
+        "lat": -6.615596,
+        "lng": 106.918117,
+        "radius": 50,
+        "type": [
+            "Warung",
+            "campground"
+        ]
+    },
+    {
+        "name": "Silala",
+        "lat": -6.612744,
+        "lng": 106.918639,
+        "radius": 50,
+        "type": [
+            "Hill",
+            "Warung"
         ]
     },
     {
         "name": "Foothill Forest",
-        "lat": -6.594318,
-        "lng": 106.902492,
+        "lat": -6.594054,
+        "lng": 106.902366,
         "radius": 50,
         "type": [
-            "parking",
-            "start"
+            "Caffe",
+            "start",
+            "parking"
+        ]
+    },
+    {
+        "name": "Gunung Pancar",
+        "lat": -6.591845,
+        "lng": 106.911965,
+        "radius": 100,
+        "type": [
+            "Hill",
+            "Warung"
+        ]
+    },
+    {
+        "name": "Tanjakan Abah Donny",
+        "lat": -6.590369,
+        "lng": 106.906357,
+        "radius": 50,
+        "type": [
+            "Climb"
+        ]
+    },
+    {
+        "name": "Bushan",
+        "lat": -6.593051,
+        "lng": 106.912852,
+        "radius": 50,
+        "type": [
+            "Incline"
+        ]
+    },
+    {
+        "name": "Warung Mula",
+        "lat": -6.594574,
+        "lng": 106.9156,
+        "radius": 50,
+        "type": [
+            "Warung"
+        ]
+    },
+    {
+        "name": "Curug Ciung",
+        "lat": -6.624123,
+        "lng": 106.921446,
+        "radius": 50,
+        "type": [
+            "Curug"
         ]
     }
 ]
