@@ -460,12 +460,29 @@ main {
     align-content: flex-start;
 }
 
+/* On desktop, hide extra POIs and show the "more" badge */
+.extra-poi {
+    display: none !important;
+}
+
+.poi-badge.more {
+    display: inline-flex !important;
+}
+
 /* On mobile, allow POIs to wrap to more than 2 lines if needed */
 @media (max-width: 600px) {
     .poi-section {
         height: auto;
         overflow: visible;
         min-height: 32px;
+    }
+
+    .extra-poi {
+        display: inline-flex !important;
+    }
+
+    .poi-badge.more {
+        display: none !important;
     }
 }
 

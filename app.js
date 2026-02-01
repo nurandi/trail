@@ -427,12 +427,16 @@
         // Note: No sorting here anymore, we respect the backend order
         // which is sorted by first match along the route.
 
-        const maxVisible = 8;
-        const visible = unique.slice(0, maxVisible);
-        const extra = unique.length > maxVisible ? unique.length - maxVisible : 0;
+        const limit = 4; // Threshold for Desktop
+        const visiblePois = unique.slice(0, limit);
+        const hiddenPois = unique.slice(limit);
+        const extraCount = hiddenPois.length;
 
         let html = '<div class="poi-section">';
-        visible.forEach(p => {
+
+        // Render all POIs, but mark the ones beyond the limit
+        unique.forEach((p, index) => {
+            const isExtra = index >= limit;
             const type = (p.type && p.type[0]) ? p.type[0].toLowerCase() : 'generic';
             let icon = '📍';
             if (type === 'start') icon = '🏁';
@@ -443,12 +447,14 @@
             else if (type === 'campground') icon = '⛺';
             else if (type === 'incline' || type === 'climb') icon = '🚀';
 
-            html += `<span class="poi-badge ${type} has-tooltip" data-tooltip="${p.name}">${icon} <span class="poi-name">${p.name}</span></span>`;
+            const extraClass = isExtra ? 'extra-poi' : 'visible-poi';
+            html += `<span class="poi-badge ${type} ${extraClass} has-tooltip" data-tooltip="${p.name}">${icon} <span class="poi-name">${p.name}</span></span>`;
         });
 
-        if (extra > 0) {
-            const allNames = unique.map(p => p.name).join(', ');
-            html += `<span class="poi-badge more has-tooltip" data-tooltip="${allNames}">+${extra} more</span>`;
+        // Add the 'More' badge that only appears on Desktop
+        if (extraCount > 0) {
+            const allExtraNames = hiddenPois.map(p => p.name).join(', ');
+            html += `<span class="poi-badge more has-tooltip" data-tooltip="${allExtraNames}">+${extraCount} more</span>`;
         }
         html += '</div>';
         return html;
