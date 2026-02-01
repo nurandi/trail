@@ -455,9 +455,18 @@ main {
     row-gap: 8px;
     margin-bottom: 12px;
     height: 68px;
-    /* Slightly taller to ensure 2 lines always fit even with font scaling */
+    /* Fixed height for 2 lines on desktop */
     overflow: hidden;
     align-content: flex-start;
+}
+
+/* On mobile, allow POIs to wrap to more than 2 lines if needed */
+@media (max-width: 600px) {
+    .poi-section {
+        height: auto;
+        overflow: visible;
+        min-height: 32px;
+    }
 }
 
 .poi-badge {
