@@ -469,11 +469,13 @@ main {
     display: inline-flex !important;
 }
 
-/* On mobile, allow POIs to wrap to more than 2 lines if needed */
+/* On mobile, allow POIs to wrap but limit to 3 lines max */
 @media (max-width: 600px) {
     .poi-section {
         height: auto;
-        overflow: visible;
+        max-height: 102px;
+        /* Fixed limit for 3 lines on mobile */
+        overflow: hidden;
         min-height: 32px;
     }
 
@@ -483,6 +485,7 @@ main {
 
     .poi-badge.more {
         display: none !important;
+        /* Hide "more" badge on mobile as we show badges directly */
     }
 }
 

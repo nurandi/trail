@@ -427,15 +427,14 @@
         // Note: No sorting here anymore, we respect the backend order
         // which is sorted by first match along the route.
 
-        const limit = 4; // Threshold for Desktop
-        const visiblePois = unique.slice(0, limit);
-        const hiddenPois = unique.slice(limit);
-        const extraCount = hiddenPois.length;
+        const limit = 4; // Design limit for Desktop (approx 2 lines)
+        const totalPois = unique.length;
+        const extraCount = totalPois > limit ? totalPois - limit : 0;
 
         let html = '<div class="poi-section">';
 
-        // Render all POIs, but mark the ones beyond the limit
-        unique.forEach((p, index) => {
+        // Render up to 12 POIs to allow for some wrapping on mobile
+        unique.slice(0, 12).forEach((p, index) => {
             const isExtra = index >= limit;
             const type = (p.type && p.type[0]) ? p.type[0].toLowerCase() : 'generic';
             let icon = '📍';
@@ -447,14 +446,14 @@
             else if (type === 'campground') icon = '⛺';
             else if (type === 'incline' || type === 'climb') icon = '🚀';
 
-            const extraClass = isExtra ? 'extra-poi' : 'visible-poi';
+            const extraClass = isExtra ? 'extra-poi' : '';
             html += `<span class="poi-badge ${type} ${extraClass} has-tooltip" data-tooltip="${p.name}">${icon} <span class="poi-name">${p.name}</span></span>`;
         });
 
-        // Add the 'More' badge that only appears on Desktop
-        if (extraCount > 0) {
-            const allExtraNames = hiddenPois.map(p => p.name).join(', ');
-            html += `<span class="poi-badge more has-tooltip" data-tooltip="${allExtraNames}">+${extraCount} more</span>`;
+        // Add the 'More' badge. Visibility is controlled by CSS.
+        if (totalPois > limit) {
+            const hiddenNames = unique.slice(limit).map(p => p.name).join(', ');
+            html += `<span class="poi-badge more has-tooltip" data-tooltip="${hiddenNames}">+${extraCount} more</span>`;
         }
         html += '</div>';
         return html;
