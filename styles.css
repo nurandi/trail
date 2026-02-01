@@ -287,11 +287,11 @@ main {
 .badge-date {
     top: 12px;
     left: 12px;
-    background-color: rgba(26, 26, 26, 0.7);
+    background-color: rgba(26, 26, 26, 0.4);
 }
 
 .badge-date.old {
-    background-color: rgba(220, 53, 69, 0.8);
+    background-color: rgba(220, 53, 69, 0.5);
 }
 
 .badge-race {
