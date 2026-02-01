@@ -425,7 +425,7 @@
         // Note: No sorting here anymore, we respect the backend order
         // which is sorted by first match along the route.
 
-        const maxVisible = 2; // Keep it clean as per user request
+        const maxVisible = 4; // Allow up to two lines
         const visible = unique.slice(0, maxVisible);
         const extra = unique.length - maxVisible;
 

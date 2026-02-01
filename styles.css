@@ -446,8 +446,12 @@ main {
 .poi-section {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 4px;
+    /* Slightly tighter gap for better fit */
     margin-bottom: 12px;
+    height: 44px;
+    /* Fixed height for exactly two lines */
+    overflow: hidden;
 }
 
 .poi-badge {
@@ -499,7 +503,7 @@ main {
 }
 
 .poi-name {
-    max-width: 100px;
+    max-width: 85px;
     overflow: hidden;
     text-overflow: ellipsis;
 }
