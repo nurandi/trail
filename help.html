@@ -204,9 +204,9 @@
                 <div class="feature-card">
                     <h3 lang="en">Search</h3>
                     <h3 lang="id">Pencarian</h3>
-                    <p lang="en">Type a route name, location, or keyword (for example, <em>"Sentul"</em>) to instantly
+                    <p lang="en">Type a route name, location, or POI (for example, <em>"Pasir Teh"</em>) to instantly
                         narrow the list.</p>
-                    <p lang="id">Ketik nama rute, lokasi, atau kata kunci (misalnya <em>"Sentul"</em>) untuk langsung
+                    <p lang="id">Ketik nama rute, lokasi, atau POI (misalnya <em>"Pasir Teh"</em>) untuk langsung
                         menyaring hasil.</p>
                 </div>
                 <div class="feature-card">
@@ -250,89 +250,136 @@
             </div>
         </section>
 
-        <!-- Section 2: Labels -->
+        <!-- Section 2: POIs -->
         <section class="help-section">
-            <h2 lang="en"><i class="fas fa-clock"></i> Is This Trail Still Good?</h2>
-            <h2 lang="id"><i class="fas fa-clock"></i> Rute Masih Layak?</h2>
-            <p lang="en">Trails change over time—rain, mud, and vegetation can affect conditions. Color labels help you
-                judge how fresh the data is.</p>
-            <p lang="id">Kondisi trail bisa berubah karena hujan, lumpur, atau vegetasi. Label warna membantu
-                menunjukkan seberapa baru data rute.</p>
-
-            <div class="time-bucket-list">
-                <div class="time-bucket-item">
-                    <span class="bucket-pill bucket-green" lang="en">&lt; 1 Week</span>
-                    <span class="bucket-pill bucket-green" lang="id">&lt; 1 Minggu</span>
-                    <p lang="en"><strong>Super fresh.</strong> Just ran it, conditions should be accurate.</p>
-                    <p lang="id"><strong>Super fresh.</strong> Baru dijalankan, kondisi masih akurat.</p>
-                </div>
-                <div class="time-bucket-item">
-                    <span class="bucket-pill bucket-green" lang="en">&lt; 1 Month</span>
-                    <span class="bucket-pill bucket-green" lang="id">&lt; 1 Bulan</span>
-                    <p lang="en"><strong>Still fresh.</strong> Usually not much has changed.</p>
-                    <p lang="id"><strong>Masih oke.</strong> Biasanya belum banyak berubah.</p>
-                </div>
-                <div class="time-bucket-item">
-                    <span class="bucket-pill bucket-green" lang="en">&lt; 1 Year</span>
-                    <span class="bucket-pill bucket-green" lang="id">&lt; 1 Tahun</span>
-                    <p lang="en"><strong>Generally reliable.</strong> Route is solid, but check recent weather.</p>
-                    <p lang="id"><strong>Umumnya aman.</strong> Jalur masih jelas, tapi tetap cek cuaca terakhir.</p>
-                </div>
-                <div class="time-bucket-item">
-                    <span class="bucket-pill bucket-warning" lang="en">&gt; 1 Year <i
-                            class="fas fa-exclamation-triangle"></i></span>
-                    <span class="bucket-pill bucket-warning" lang="id">&gt; 1 Tahun <i
-                            class="fas fa-exclamation-triangle"></i></span>
-                    <p lang="en"><strong>Use caution.</strong> Trails may be overgrown or damaged.</p>
-                    <p lang="id"><strong>Perlu ekstra hati-hati.</strong> Jalur bisa tertutup atau rusak.</p>
-                </div>
-            </div>
-            <p style="margin-top: 20px;">
-                <em lang="en">Tip: Hover over the time label to see exactly when the route was last run.</em>
-                <em lang="id">Tips: Arahkan kursor ke label waktu untuk melihat tanggal pastinya.</em>
+            <h2 lang="en"><i class="fas fa-map-marked-alt"></i> Points of Interest (POI)</h2>
+            <h2 lang="id"><i class="fas fa-map-marked-alt"></i> Titik Menarik (POI)</h2>
+            <p lang="en">Each route now features <strong>Compact Badges</strong> that highlight important locations
+                you'll encounter along the trail. These are sorted chronologically from start to finish.</p>
+            <p lang="id">Setiap rute kini dilengkapi dengan <strong>Badge Kompak</strong> yang menandai lokasi penting
+                di sepanjang jalur. Urutannya disesuaikan dengan kapan kamu akan melewatinya (dari start sampai finish).
             </p>
-        </section>
 
-        <!-- Section 3: Downloads -->
-        <section class="help-section">
-            <h2 lang="en"><i class="fas fa-file-download"></i> Take the Route With You</h2>
-            <h2 lang="id"><i class="fas fa-file-download"></i> Download Rutenya</h2>
-            <p lang="en">All routes here are ready to use on your watch or phone.</p>
-            <p lang="id">Semua rute di sini siap digunakan.</p>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h3 lang="en"><i class="fab fa-strava"></i> Open in Strava</h3>
-                    <h3 lang="id"><i class="fab fa-strava"></i> Buka di Strava</h3>
-                    <p lang="en">Click the Strava icon to see segments, photos, and activity details.</p>
-                    <p lang="id">Klik ikon Strava untuk melihat segmen, foto, dan detail aktivitas.</p>
+                    <h3 lang="en">Icon Legend</h3>
+                    <h3 lang="id">Legenda Ikon</h3>
+                    <div style="font-size: 0.85rem; line-height: 2;">
+                        🏁 <strong>Start</strong>: Starting point.<br>
+                        🅿️ <strong>Parking</strong>: Recommended parking area.<br>
+                        ⛰️ <strong>Peak/Hill</strong>: Summits or high points.<br>
+                        ☕ <strong>Food/Drink</strong>: Warungs, cafes, or kiosks.<br>
+                        🌊 <strong>Water</strong>: Waterfalls (Curug) or lakes.<br>
+                        ⛺ <strong>Camp</strong>: Camping grounds.<br>
+                        🚀 <strong>Climb</strong>: Notable steep inclines.
+                    </div>
                 </div>
                 <div class="feature-card">
-                    <h3 lang="en"><i class="fas fa-download"></i> Download GPX</h3>
-                    <h3 lang="id"><i class="fas fa-download"></i> Download GPX</h3>
-                    <p lang="en">Download the GPX file with full elevation data—ready for Garmin, Coros, or your
-                        favorite navigation app.</p>
-                    <p lang="id">Unduh file GPX lengkap dengan data elevasi—siap dipakai di Garmin, Coros, atau aplikasi
-                        navigasi favorit.</p>
+                    <h3 lang="en">Smart Searching</h3>
+                    <h3 lang="id">Pencarian Pintar</h3>
+                    <p lang="en">Know a specific peak or warung? You can type the <strong>POI name</strong> directly in
+                        the search box to find all routes that pass through it.</p>
+                    <p lang="id">Punya tempat favorit? Kamu bisa ketik <strong>nama POI</strong> (seperti nama puncak
+                        atau warung) di kotak pencarian untuk menemukan semua rute yang melewatinya.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 lang="en">Hover for More</h3>
+                    <h3 lang="id">Arahkan Kursor</h3>
+                    <p lang="en">To keep the UI clean, we only show up to 4 badges. Hover over the <strong>"+N
+                            more"</strong> badge to see a full list of all locations on that route.</p>
+                    <p lang="id">Biar rapi, kami hanya menampilkan maksimal 4 badge. Arahkan kursor ke badge <strong>"+N
+                            more"</strong> untuk melihat daftar lengkap semua lokasi di rute tersebut.</p>
                 </div>
             </div>
-        </section>
-        <!-- Section 4: Feedback -->
-        <section class="help-section">
-            <h2 lang="en"><i class="fas fa-comment-dots"></i> Feedback</h2>
-            <h2 lang="id"><i class="fas fa-comment-dots"></i> Masukan</h2>
-            <p lang="en">If you encounter any problems with this website or the routes provided, please report them to
-                me on Instagram <a href="https://instagram.com/nurandi" target="_blank"
-                    style="color: var(--primary-color); text-decoration: none; font-weight: 600;">@nurandi</a> or via
-                email at <a href="mailto:nurandi.mail@gmail.com"
-                    style="color: var(--primary-color); text-decoration: none; font-weight: 600;">nurandi.mail@gmail.com</a>.
-            </p>
-            <p lang="id">Jika Anda menemukan masalah dengan situs web ini atau rute yang disediakan, silakan laporkan ke
-                saya di Instagram <a href="https://instagram.com/nurandi" target="_blank"
-                    style="color: var(--primary-color); text-decoration: none; font-weight: 600;">@nurandi</a> atau
-                melalui email di <a href="mailto:nurandi.mail@gmail.com"
-                    style="color: var(--primary-color); text-decoration: none; font-weight: 600;">nurandi.mail@gmail.com</a>.
-            </p>
-        </section>
+            <!-- Section 3: Labels -->
+            <section class="help-section">
+                <h2 lang="en"><i class="fas fa-clock"></i> Is This Trail Still Good?</h2>
+                <h2 lang="id"><i class="fas fa-clock"></i> Rute Masih Layak?</h2>
+                <p lang="en">Trails change over time—rain, mud, and vegetation can affect conditions. Color labels help
+                    you
+                    judge how fresh the data is.</p>
+                <p lang="id">Kondisi trail bisa berubah karena hujan, lumpur, atau vegetasi. Label warna membantu
+                    menunjukkan seberapa baru data rute.</p>
+
+                <div class="time-bucket-list">
+                    <div class="time-bucket-item">
+                        <span class="bucket-pill bucket-green" lang="en">&lt; 1 Week</span>
+                        <span class="bucket-pill bucket-green" lang="id">&lt; 1 Minggu</span>
+                        <p lang="en"><strong>Super fresh.</strong> Just ran it, conditions should be accurate.</p>
+                        <p lang="id"><strong>Super fresh.</strong> Baru dijalankan, kondisi masih akurat.</p>
+                    </div>
+                    <div class="time-bucket-item">
+                        <span class="bucket-pill bucket-green" lang="en">&lt; 1 Month</span>
+                        <span class="bucket-pill bucket-green" lang="id">&lt; 1 Bulan</span>
+                        <p lang="en"><strong>Still fresh.</strong> Usually not much has changed.</p>
+                        <p lang="id"><strong>Masih oke.</strong> Biasanya belum banyak berubah.</p>
+                    </div>
+                    <div class="time-bucket-item">
+                        <span class="bucket-pill bucket-green" lang="en">&lt; 1 Year</span>
+                        <span class="bucket-pill bucket-green" lang="id">&lt; 1 Tahun</span>
+                        <p lang="en"><strong>Generally reliable.</strong> Route is solid, but check recent weather.</p>
+                        <p lang="id"><strong>Umumnya aman.</strong> Jalur masih jelas, tapi tetap cek cuaca terakhir.
+                        </p>
+                    </div>
+                    <div class="time-bucket-item">
+                        <span class="bucket-pill bucket-warning" lang="en">&gt; 1 Year <i
+                                class="fas fa-exclamation-triangle"></i></span>
+                        <span class="bucket-pill bucket-warning" lang="id">&gt; 1 Tahun <i
+                                class="fas fa-exclamation-triangle"></i></span>
+                        <p lang="en"><strong>Use caution.</strong> Trails may be overgrown or damaged.</p>
+                        <p lang="id"><strong>Perlu ekstra hati-hati.</strong> Jalur bisa tertutup atau rusak.</p>
+                    </div>
+                </div>
+                <p style="margin-top: 20px;">
+                    <em lang="en">Tip: Hover over the time label to see exactly when the route was last run.</em>
+                    <em lang="id">Tips: Arahkan kursor ke label waktu untuk melihat tanggal pastinya.</em>
+                </p>
+            </section>
+
+            <!-- Section 4: Downloads -->
+            <section class="help-section">
+                <h2 lang="en"><i class="fas fa-file-download"></i> Take the Route With You</h2>
+                <h2 lang="id"><i class="fas fa-file-download"></i> Download Rutenya</h2>
+                <p lang="en">All routes here are ready to use on your watch or phone.</p>
+                <p lang="id">Semua rute di sini siap digunakan.</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3 lang="en"><i class="fab fa-strava"></i> Open in Strava</h3>
+                        <h3 lang="id"><i class="fab fa-strava"></i> Buka di Strava</h3>
+                        <p lang="en">Click the Strava icon to see segments, photos, and activity details.</p>
+                        <p lang="id">Klik ikon Strava untuk melihat segmen, foto, dan detail aktivitas.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3 lang="en"><i class="fas fa-download"></i> Download GPX</h3>
+                        <h3 lang="id"><i class="fas fa-download"></i> Download GPX</h3>
+                        <p lang="en">Download the GPX file with full elevation data—ready for Garmin, Coros, or your
+                            favorite navigation app.</p>
+                        <p lang="id">Unduh file GPX lengkap dengan data elevasi—siap dipakai di Garmin, Coros, atau
+                            aplikasi
+                            navigasi favorit.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- Section 5: Feedback -->
+            <section class="help-section">
+                <h2 lang="en"><i class="fas fa-comment-dots"></i> Feedback</h2>
+                <h2 lang="id"><i class="fas fa-comment-dots"></i> Masukan</h2>
+                <p lang="en">If you encounter any problems with this website or the routes provided, please report them
+                    to
+                    me on Instagram <a href="https://instagram.com/nurandi" target="_blank"
+                        style="color: var(--primary-color); text-decoration: none; font-weight: 600;">@nurandi</a> or
+                    via
+                    email at <a href="mailto:nurandi.mail@gmail.com"
+                        style="color: var(--primary-color); text-decoration: none; font-weight: 600;">nurandi.mail@gmail.com</a>.
+                </p>
+                <p lang="id">Jika Anda menemukan masalah dengan situs web ini atau rute yang disediakan, silakan
+                    laporkan ke
+                    saya di Instagram <a href="https://instagram.com/nurandi" target="_blank"
+                        style="color: var(--primary-color); text-decoration: none; font-weight: 600;">@nurandi</a> atau
+                    melalui email di <a href="mailto:nurandi.mail@gmail.com"
+                        style="color: var(--primary-color); text-decoration: none; font-weight: 600;">nurandi.mail@gmail.com</a>.
+                </p>
+            </section>
     </main>
 
     <footer style="text-align: center; padding: 40px; color: #888; font-size: 0.9rem;">
