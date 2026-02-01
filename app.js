@@ -384,6 +384,8 @@
                     </div>
                 </div>
                 
+                ${renderPoiSection(route.pois)}
+
                 <div class="route-actions">
                     <div class="route-type-badge ${rType}">
                         ${rType === 'race' ? 'Race' : (rType === 'route' ? 'Route' : 'Training')}
@@ -401,6 +403,56 @@
         `;
 
         return card;
+    }
+
+    function renderPoiSection(pois) {
+        if (!pois || pois.length === 0) return '';
+
+        // Prioritize: Start/Parking first, then Hills, then others
+        const priority = { 'start': 0, 'parking': 1, 'hill': 2, 'mountain': 3, 'curug': 4, 'lake': 5, 'warung': 6 };
+
+        // Remove duplicates by name
+        const unique = [];
+        const seen = new Set();
+        pois.forEach(p => {
+            if (!seen.has(p.name)) {
+                unique.push(p);
+                seen.add(p.name);
+            }
+        });
+
+        // Sort by priority
+        unique.sort((a, b) => {
+            const typeA = (a.type && a.type[0]) ? a.type[0].toLowerCase() : 'z';
+            const typeB = (b.type && b.type[0]) ? b.type[0].toLowerCase() : 'z';
+            const pA = priority[typeA] !== undefined ? priority[typeA] : 99;
+            const pB = priority[typeB] !== undefined ? priority[typeB] : 99;
+            return pA - pB;
+        });
+
+        const maxVisible = 2; // Keep it clean as per user request
+        const visible = unique.slice(0, maxVisible);
+        const extra = unique.length - maxVisible;
+
+        let html = '<div class="poi-section">';
+        visible.forEach(p => {
+            const type = (p.type && p.type[0]) ? p.type[0].toLowerCase() : 'generic';
+            let icon = '📍';
+            if (type === 'start') icon = '🏁';
+            else if (type === 'parking') icon = '🅿️';
+            else if (type === 'hill' || type === 'mountain') icon = '⛰️';
+            else if (type === 'warung') icon = '☕';
+            else if (type === 'curug' || type === 'lake') icon = '🌊';
+
+            html += `<span class="poi-badge ${type}" title="${p.name}">${icon} <span class="poi-name">${p.name}</span></span>`;
+        });
+
+        if (extra > 0) {
+            const extraNames = unique.slice(maxVisible).map(p => p.name).join(', ');
+            html += `<span class="poi-badge more" title="${extraNames}">+${extra} more</span>`;
+        }
+        html += '</div>';
+        return html;
     }
 
     function formatDistance(meters) {
