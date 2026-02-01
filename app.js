@@ -341,7 +341,7 @@
 
         if (creatorMatch) {
             creatorName = creatorMatch[1];
-            displayTitle = `<span class="creator-badge">${creatorName}</span> ${creatorMatch[2]}`;
+            displayTitle = `<span class="creator-badge" title="Original route by: ${creatorName}">${creatorName}</span> ${creatorMatch[2]}`;
         }
 
         // Determine date label
