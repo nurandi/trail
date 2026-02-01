@@ -51,7 +51,7 @@ jobs:
       - name: Prepare Deployment
         run: |
           mkdir _site
-          cp index.html help.html styles.css app.js data.json athlete.json legal.json analytics.js _site/
+          cp index.html help.html styles.css app.js data.json athlete.json legal.json analytics.js CNAME _site/
           cp -r assets _site/
           # Ensure favicon or other static assets are copied if they exist
           
