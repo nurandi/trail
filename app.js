@@ -315,16 +315,16 @@
         let hasWarning = false;
 
         if (diffDays < 7) {
-            timeLabel = 'This week';
+            timeLabel = '< 1 week';
             timeClass = 'fresh';
         } else if (diffDays < 30) {
-            timeLabel = 'This month';
+            timeLabel = '< 1 month';
             timeClass = 'active';
-        } else if (routeYear === currentYear) {
-            timeLabel = 'This year';
+        } else if (diffDays < 365) {
+            timeLabel = '< 1 year';
             timeClass = 'stable';
         } else {
-            timeLabel = '> Last year';
+            timeLabel = '> 1 year';
             timeClass = 'legacy';
             hasWarning = true;
         }
