@@ -160,18 +160,16 @@
             font-weight: 600;
             color: var(--primary-color);
         }
-
-        [lang="id"] {
-            display: none !important;
-        }
     </style>
 </head>
 
 <body>
     <header>
         <div class="container">
-            <h1>How to Use This Archive</h1>
-            <p>A quick guide to finding your next trail adventure.</p>
+            <h1 lang="en">How to Use This Trail Archive</h1>
+            <h1 lang="id">Cara Menggunakan The Trail Archive</h1>
+            <p lang="en">A simple guide to help you find, understand, and download trail routes.</p>
+            <p lang="id">Panduan singkat buat cari, pahami, dan download rute trail.</p>
         </div>
     </header>
 
@@ -179,133 +177,134 @@
         <div class="help-nav">
             <a href="index.html" class="btn-back">
                 <i class="fas fa-arrow-left"></i>
-                Back to Archive
+                <span lang="en">Back to Archive</span>
+                <span lang="id">Kembali ke Arsip</span>
             </a>
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="en" onclick="setLang('en')">English</button>
+                <button class="lang-btn" data-lang="id" onclick="setLang('id')">Bahasa Indonesia</button>
+            </div>
         </div>
 
         <!-- Section 1: Filters -->
         <section class="help-section">
-            <h2 lang="en"><i class="fas fa-sliders-h"></i> Finding the Right Trail</h2>
-            <h2 lang="id"><i class="fas fa-sliders-h"></i> Menemukan Jalur yang Pas</h2>
-            <p lang="en">This collection keeps growing. Here's how to filter through the noise and find exactly what
-                you're looking for—whether it's a chill weekend jog or a tough race simulation.</p>
-            <p lang="id">Koleksi ini terus bertambah. Ini caranya memilah dan menemukan apa yang Anda cari—baik itu lari
-                santai di akhir pekan atau simulasi lomba yang berat.</p>
+            <h2 lang="en"><i class="fas fa-sliders-h"></i> Finding the Right Route</h2>
+            <h2 lang="id"><i class="fas fa-sliders-h"></i> Cari Rute yang Cocok</h2>
+            <p lang="en">This archive keeps growing. Use the filters below to quickly find routes that match your plan:
+                easy runs, long efforts, or race simulations.</p>
+            <p lang="id">Koleksi rute di sini terus bertambah. Gunakan filter untuk menemukan rute yang sesuai, baik
+                untuk lari santai, long run, atau simulasi lomba.</p>
 
             <div class="feature-grid">
                 <div class="feature-card">
                     <h3 lang="en">Search</h3>
                     <h3 lang="id">Pencarian</h3>
-                    <p lang="en">Looking for something specific? Just type a name, place, or tag (like "Sentul") to
-                        narrow things down instantly.</p>
-                    <p lang="id">Mencari sesuatu yang spesifik? Cukup ketik nama, tempat, atau tag (seperti "Sentul")
-                        untuk langsung mempersempit hasil.</p>
+                    <p lang="en">Type a route name, location, or keyword (for example, <em>"Sentul"</em>) to instantly
+                        narrow the list.</p>
+                    <p lang="id">Ketik nama rute, lokasi, atau kata kunci (misalnya <em>"Sentul"</em>) untuk langsung
+                        menyaring hasil.</p>
                 </div>
                 <div class="feature-card">
                     <h3 lang="en">Distance & Elevation</h3>
                     <h3 lang="id">Jarak & Elevasi</h3>
-                    <p lang="en">The basics: how far and how high. I've rounded the elevation numbers so they're easier
-                        to read at a glance.</p>
-                    <p lang="id">Dasar-dasarnya: seberapa jauh dan seberapa tinggi. Angka elevasi sudah dibulatkan agar
-                        lebih mudah dibaca sekilas.</p>
+                    <p lang="en">The basics: how far you’ll run and how much you’ll climb. Elevation gain is rounded so
+                        it’s easy to read at a glance.</p>
+                    <p lang="id">Info dasar: seberapa jauh dan seberapa nanjak. Angka elevasi dibulatkan supaya gampang
+                        dibaca.</p>
                 </div>
                 <div class="feature-card">
-                    <h3 lang="en">Effort Score</h3>
-                    <h3 lang="id">Skor Effort (Upaya)</h3>
-                    <p lang="en">Think of this as text for "How hard does it feel?". It combines distance and vert to
-                        give you a truer sense of the challenge.</p>
-                    <p lang="id">Anggap ini sebagai "Seberapa capek rasanya?". Ini menggabungkan jarak dan tanjakan
-                        untuk memberi gambaran tantangan yang lebih nyata.</p>
+                    <h3 lang="en">Effort Score (km effort)</h3>
+                    <h3 lang="id">Effort Score (km effort)</h3>
+                    <p lang="en">A quick way to tell how hard a route feels. Calculated as:
+                        <code>distance (km) + elevation gain (m ÷ 100)</code>.<br>Example: 10 km + 500m vert ≈
+                        <strong>15 Effort</strong>.</p>
+                    <p lang="id">Cara cepat buat tahu seberapa berat rutenya. Dihitung dengan rumus:
+                        <code>jarak (km) + (total elevasi meter ÷ 100)</code>.<br>Contoh: 10 km + 500m vert ≈ <strong>15
+                            Effort</strong>.</p>
                 </div>
                 <div class="feature-card">
                     <h3 lang="en">Activity Type</h3>
                     <h3 lang="id">Jenis Aktivitas</h3>
-                    <p lang="en">Know what you're looking at: official <strong>Races</strong>, my personal
-                        <strong>Training</strong> logs, or planned <strong>Routes</strong> imported from Strava.
-                    </p>
-                    <p lang="id">Ketahui apa yang Anda lihat: <strong>Balapan</strong> resmi, catatan
-                        <strong>Latihan</strong> pribadi saya, atau <strong>Rute</strong> rencana dari Strava.
-                    </p>
+                    <p lang="en">Know what you’re looking at: <strong>Races</strong> (official events),
+                        <strong>Training</strong> (personal runs), or <strong>Routes</strong> (planned routes imported
+                        from Strava).</p>
+                    <p lang="id">Biar jelas ini rute apa: <strong>Race</strong> (lomba resmi), <strong>Training</strong>
+                        (lari latihan), atau <strong>Route</strong> (rute rencana dari Strava).</p>
                 </div>
                 <div class="feature-card">
                     <h3 lang="en">Recency</h3>
-                    <h3 lang="id">Waktu (Recency)</h3>
-                    <p lang="en">Want the latest conditions? Filter to see just the trails I've run recently.</p>
-                    <p lang="id">Ingin kondisi terbaru? Filter untuk melihat jalur yang baru saja saya lari.</p>
+                    <h3 lang="id">Terakhir Dijalankan</h3>
+                    <p lang="en">Want the most up-to-date trail conditions? Filter routes by how recently they were run.
+                    </p>
+                    <p lang="id">Mau kondisi trail paling update? Filter berdasarkan kapan rute dibuat atau terakhir
+                        dijalankan.</p>
                 </div>
             </div>
         </section>
 
         <!-- Section 2: Labels -->
         <section class="help-section">
-            <h2 lang="en"><i class="fas fa-clock"></i> Is the Trail Info Still Good?</h2>
-            <h2 lang="id"><i class="fas fa-clock"></i> Apakah Info Jalurnya Masih Oke?</h2>
-            <p lang="en">Trails are alive—weather, rain, and weeds change everything. I use color-coded labels to tell
-                you how "fresh" the data really is.</p>
-            <p lang="id">Jalur itu `hidup`—cuaca, hujan, dan semak bisa mengubah segalanya. Saya pakai label berwarna
-                untuk memberi tahu seberapa "segar" data ini.</p>
+            <h2 lang="en"><i class="fas fa-clock"></i> Is This Trail Still Good?</h2>
+            <h2 lang="id"><i class="fas fa-clock"></i> Masih Layak Dijalankan?</h2>
+            <p lang="en">Trails change over time—rain, mud, and vegetation can affect conditions. Color labels help you
+                judge how fresh the data is.</p>
+            <p lang="id">Kondisi trail bisa berubah karena hujan, lumpur, atau vegetasi. Label warna membantu
+                menunjukkan seberapa baru data rute.</p>
 
             <div class="time-bucket-list">
                 <div class="time-bucket-item">
                     <span class="bucket-pill bucket-green" lang="en">&lt; 1 Week</span>
                     <span class="bucket-pill bucket-green" lang="id">&lt; 1 Minggu</span>
-                    <p lang="en"><strong>Fresh Tracks!</strong> I was just there this week, so the info is spot on.</p>
-                    <p lang="id"><strong>Masih Anget!</strong> Saya baru saja di sana minggu ini, infonya pasti akurat.
-                    </p>
+                    <p lang="en"><strong>Super fresh.</strong> Just ran it, conditions should be accurate.</p>
+                    <p lang="id"><strong>Super fresh.</strong> Baru dijalankan, kondisi masih akurat.</p>
                 </div>
                 <div class="time-bucket-item">
                     <span class="bucket-pill bucket-green" lang="en">&lt; 1 Month</span>
                     <span class="bucket-pill bucket-green" lang="id">&lt; 1 Bulan</span>
-                    <p lang="en"><strong>Pretty New.</strong> Conditions usually haven't changed much since I ran it.
-                    </p>
-                    <p lang="id"><strong>Lumayan Baru.</strong> Kondisi biasanya belum banyak berubah sejak saya lari.
-                    </p>
+                    <p lang="en"><strong>Still fresh.</strong> Usually not much has changed.</p>
+                    <p lang="id"><strong>Masih oke.</strong> Biasanya belum banyak berubah.</p>
                 </div>
                 <div class="time-bucket-item">
                     <span class="bucket-pill bucket-green" lang="en">&lt; 1 Year</span>
                     <span class="bucket-pill bucket-green" lang="id">&lt; 1 Tahun</span>
-                    <p lang="en"><strong>Solid Info.</strong> The general route is good, just check the recent
-                        weather/rain.</p>
-                    <p lang="id"><strong>Info Aman.</strong> Rute umumnya masih bagus, tinggal cek cuaca/hujan terakhir.
-                    </p>
+                    <p lang="en"><strong>Generally reliable.</strong> Route is solid, but check recent weather.</p>
+                    <p lang="id"><strong>Umumnya aman.</strong> Jalur masih jelas, tapi tetap cek cuaca terakhir.</p>
                 </div>
                 <div class="time-bucket-item">
                     <span class="bucket-pill bucket-warning" lang="en">&gt; 1 Year <i
                             class="fas fa-exclamation-triangle"></i></span>
                     <span class="bucket-pill bucket-warning" lang="id">&gt; 1 Tahun <i
                             class="fas fa-exclamation-triangle"></i></span>
-                    <p lang="en"><strong>Heads Up.</strong> It's been a while. Trails might be overgrown or washed out.
-                        Use extra caution here.</p>
-                    <p lang="id"><strong>Hati-hati.</strong> Sudah agak lama. Jalur mungkin tertutup semak atau longsor.
-                        Harap lebih waspada di sini.</p>
+                    <p lang="en"><strong>Use caution.</strong> Trails may be overgrown or damaged.</p>
+                    <p lang="id"><strong>Perlu ekstra hati-hati.</strong> Jalur bisa tertutup atau rusak.</p>
                 </div>
             </div>
             <p style="margin-top: 20px;">
-                <em lang="en">Pro Tip: Hover over any time label to see exactly when I ran it.</em>
-                <em lang="id">Pro Tip: Arahkan mouse ke label waktu untuk melihat kapan tepatnya saya lari.</em>
+                <em lang="en">Tip: Hover over the time label to see exactly when the route was last run.</em>
+                <em lang="id">Tips: Arahkan kursor ke label waktu untuk melihat tanggal pastinya.</em>
             </p>
         </section>
 
         <!-- Section 3: Downloads -->
         <section class="help-section">
-            <h2 lang="en"><i class="fas fa-file-download"></i> Get the Maps</h2>
-            <h2 lang="id"><i class="fas fa-file-download"></i> Ambil Peta-nya</h2>
-            <p lang="en">Take these trails with you. Everything here is ready for your watch or phone.</p>
-            <p lang="id">Bawa jalur ini bersama Anda. Semuanya di sini siap untuk jam tangan atau ponsel Anda.</p>
+            <h2 lang="en"><i class="fas fa-file-download"></i> Take the Route With You</h2>
+            <h2 lang="id"><i class="fas fa-file-download"></i> Download Rutenya</h2>
+            <p lang="en">All routes here are ready to use on your watch or phone.</p>
+            <p lang="id">Semua rute di sini siap digunakan.</p>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h3 lang="en"><i class="fab fa-strava"></i> Jump to Strava</h3>
+                    <h3 lang="en"><i class="fab fa-strava"></i> Open in Strava</h3>
                     <h3 lang="id"><i class="fab fa-strava"></i> Buka di Strava</h3>
-                    <p lang="en">Click the Strava icon to see the segments, kudos, and photos from the actual day.</p>
-                    <p lang="id">Klik ikon Strava untuk melihat segmen, kudos, dan foto-foto dari hari kejadian.</p>
+                    <p lang="en">Click the Strava icon to see segments, photos, and activity details.</p>
+                    <p lang="id">Klik ikon Strava untuk melihat segmen, foto, dan detail aktivitas.</p>
                 </div>
                 <div class="feature-card">
-                    <h3 lang="en"><i class="fas fa-download"></i> Grab the GPX</h3>
-                    <h3 lang="id"><i class="fas fa-download"></i> Ambil GPX</h3>
-                    <p lang="en">Download the file with full elevation data. Ready for your Garmin, Coros, or favorite
-                        navigation app.</p>
-                    <p lang="id">Unduh file dengan data elevasi lengkap. Siap untuk Garmin, Coros, atau aplikasi
-                        navigasi favoritmu.</p>
+                    <h3 lang="en"><i class="fas fa-download"></i> Download GPX</h3>
+                    <h3 lang="id"><i class="fas fa-download"></i> Download GPX</h3>
+                    <p lang="en">Download the GPX file with full elevation data—ready for Garmin, Coros, or your
+                        favorite navigation app.</p>
+                    <p lang="id">Unduh file GPX lengkap dengan data elevasi—siap dipakai di Garmin, Coros, atau aplikasi
+                        navigasi favorit.</p>
                 </div>
             </div>
         </section>
@@ -315,6 +314,47 @@
         &copy; 2026 The Trail Archive
     </footer>
 
+    <script>
+        function setLang(lang) {
+            // Force default to english if lang is not recognized
+            if (lang !== 'id' && lang !== 'en') {
+                lang = 'en';
+            }
+            console.log('Setting language to:', lang);
+
+            // Update buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update content visibility
+            document.querySelectorAll('[lang]').forEach(el => {
+                // Skip the root html tag
+                if (el.tagName.toLowerCase() === 'html') return;
+
+                const elLang = el.getAttribute('lang');
+                const isMatch = elLang === lang;
+
+                if (el.tagName === 'SPAN' || el.tagName === 'EM' || el.tagName === 'I') {
+                    el.style.display = isMatch ? 'inline' : 'none';
+                } else if (el.tagName === 'H2') {
+                    el.style.display = isMatch ? 'flex' : 'none';
+                } else {
+                    el.style.display = isMatch ? 'block' : 'none';
+                }
+            });
+
+            localStorage.setItem('trail_lang', lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('trail_lang') || 'en';
+            setLang(savedLang);
+        });
+    </script>
 </body>
 
 </html>
