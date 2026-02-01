@@ -63,6 +63,9 @@
         .help-nav {
             margin-bottom: 30px;
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
             gap: 15px;
         }
 
@@ -83,6 +86,32 @@
         .btn-back:hover {
             transform: translateX(-5px);
             background: #000;
+        }
+
+        .lang-switcher {
+            display: flex;
+            background: #f0f0f0;
+            padding: 4px;
+            border-radius: 10px;
+            gap: 4px;
+        }
+
+        .lang-btn {
+            padding: 6px 14px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 7px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #666;
+            transition: var(--transition);
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: var(--primary-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .time-bucket-list {
@@ -131,92 +160,155 @@
             font-weight: 600;
             color: var(--primary-color);
         }
+
+        [lang="id"] {
+            display: none;
+        }
     </style>
 </head>
 
 <body>
     <header>
         <div class="container">
-            <h1>Help & User Guide</h1>
-            <p>Everything you need to know about using The Trail Archive.</p>
+            <h1 lang="en">Help & User Guide</h1>
+            <h1 lang="id">Bantuan & Panduan Pengguna</h1>
+            <p lang="en">Everything you need to know about using The Trail Archive.</p>
+            <p lang="id">Segala yang perlu Anda ketahui tentang penggunaan The Trail Archive.</p>
         </div>
     </header>
 
     <main class="container">
         <div class="help-nav">
             <a href="index.html" class="btn-back">
-                <i class="fas fa-arrow-left"></i> Back to Archive
+                <i class="fas fa-arrow-left"></i>
+                <span lang="en">Back to Archive</span>
+                <span lang="id">Kembali ke Arsip</span>
             </a>
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="setLang('en')">English</button>
+                <button class="lang-btn" onclick="setLang('id')">Bahasa Indonesia</button>
+            </div>
         </div>
 
+        <!-- Section 1: Filters -->
         <section class="help-section">
-            <h2><i class="fas fa-sliders-h"></i> Filtering Routes</h2>
-            <p>The archive grows with every run. Use the filter bar to narrowing down your search based on trail
-                difficulty, type, or timing.</p>
+            <h2 lang="en"><i class="fas fa-sliders-h"></i> Filtering Routes</h2>
+            <h2 lang="id"><i class="fas fa-sliders-h"></i> Memfilter Rute</h2>
+            <p lang="en">The archive grows with every run. Use the filter bar to narrowing down your search based on
+                trail difficulty, type, or timing.</p>
+            <p lang="id">Arsip ini berkembang seiring setiap lari. Gunakan bilah filter untuk mempersempit pencarian
+                Anda berdasarkan kesulitan jalur, jenis, atau waktu.</p>
+
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h3>Distance & Elevation</h3>
-                    <p>Standard trail metrics. Elevation is rounded to the nearest meter for clarity.</p>
+                    <h3 lang="en">Distance & Elevation</h3>
+                    <h3 lang="id">Jarak & Elevasi</h3>
+                    <p lang="en">Standard trail metrics. Elevation is rounded to the nearest meter for clarity.</p>
+                    <p lang="id">Metrik standar trail. Elevasi dibulatkan ke meter terdekat untuk kejelasan.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>Effort Metric</h3>
-                    <p>A calculated value to help compare different terrains. It uses the formula:
+                    <h3 lang="en">Effort Metric</h3>
+                    <h3 lang="id">Metrik Effort (Upaya)</h3>
+                    <p lang="en">A calculated value to help compare different terrains. It uses the formula:
                         <code>Distance (km) + (Elevation / 100)</code>.</p>
+                    <p lang="id">Nilai kalkulasi untuk membantu membandingkan berbagai medan. Menggunakan rumus:
+                        <code>Jarak (km) + (Elevasi / 100)</code>.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>Activity Type</h3>
-                    <p>Distinguish between <strong>Races</strong>, <strong>Training Runs</strong>, and planned
+                    <h3 lang="en">Activity Type</h3>
+                    <h3 lang="id">Jenis Aktivitas</h3>
+                    <p lang="en">Distinguish between <strong>Races</strong>, <strong>Training Runs</strong>, and planned
                         <strong>Routes</strong> from Strava.</p>
+                    <p lang="id">Bedakan antara <strong>Balapan (Race)</strong>, <strong>Lari Latihan
+                            (Training)</strong>, dan <strong>Rute (Route)</strong> terencana dari Strava.</p>
                 </div>
                 <div class="feature-card">
-                    <h3>Recency</h3>
-                    <p>Filter based on how fresh the route data is, ranging from the last week to archived runs.</p>
+                    <h3 lang="en">Recency</h3>
+                    <h3 lang="id">Kebaruan (Waktu)</h3>
+                    <p lang="en">Filter based on how fresh the route data is, ranging from the last week to archived
+                        runs.</p>
+                    <p lang="id">Filter berdasarkan seberapa baru data rute tersebut, mulai dari seminggu terakhir
+                        hingga lari yang sudah lama diarsipkan.</p>
                 </div>
             </div>
         </section>
 
+        <!-- Section 2: Labels -->
         <section class="help-section">
-            <h2><i class="fas fa-clock"></i> Understanding Time Labels</h2>
-            <p>Trail conditions change over time due to weather, erosion, and vegetation. Every card includes a
-                color-coded recency label to help you judge the data reliability.</p>
+            <h2 lang="en"><i class="fas fa-clock"></i> Understanding Time Labels</h2>
+            <h2 lang="id"><i class="fas fa-clock"></i> Memahami Label Waktu</h2>
+            <p lang="en">Trail conditions change over time due to weather, erosion, and vegetation. Every card includes
+                a color-coded recency label to help you judge the data reliability.</p>
+            <p lang="id">Kondisi jalur berubah seiring waktu karena cuaca, erosi, dan vegetasi. Setiap kartu menyertakan
+                label waktu berwarna untuk membantu Anda menilai keandalan data.</p>
 
             <div class="time-bucket-list">
                 <div class="time-bucket-item">
-                    <span class="bucket-pill bucket-green">&lt; 1 Week</span>
-                    <p><strong>Perfectly Fresh.</strong> Trial conditions are likely exactly as described.</p>
+                    <span class="bucket-pill bucket-green" lang="en">&lt; 1 Week</span>
+                    <span class="bucket-pill bucket-green" lang="id">&lt; 1 Minggu</span>
+                    <p lang="en"><strong>Perfectly Fresh.</strong> Trial conditions are likely exactly as described.</p>
+                    <p lang="id"><strong>Sangat Baru.</strong> Kondisi jalur kemungkinan besar sesuai dengan deskripsi.
+                    </p>
                 </div>
                 <div class="time-bucket-item">
-                    <span class="bucket-pill bucket-green">&lt; 1 Month</span>
-                    <p><strong>Recent.</strong> Very high reliability with minimal expected changes.</p>
+                    <span class="bucket-pill bucket-green" lang="en">&lt; 1 Month</span>
+                    <span class="bucket-pill bucket-green" lang="id">&lt; 1 Bulan</span>
+                    <p lang="en"><strong>Recent.</strong> Very high reliability with minimal expected changes.</p>
+                    <p lang="id"><strong>Terbaru.</strong> Keandalan sangat tinggi dengan perkiraan perubahan minimal.
+                    </p>
                 </div>
                 <div class="time-bucket-item">
-                    <span class="bucket-pill bucket-green">&lt; 1 Year</span>
-                    <p><strong>Stable.</strong> General terrain is consistent, but check local weather history.</p>
+                    <span class="bucket-pill bucket-green" lang="en">&lt; 1 Year</span>
+                    <span class="bucket-pill bucket-green" lang="id">&lt; 1 Tahun</span>
+                    <p lang="en"><strong>Stable.</strong> General terrain is consistent, but check local weather
+                        history.</p>
+                    <p lang="id"><strong>Stabil.</strong> Medan secara umum konsisten, namun periksa riwayat cuaca
+                        lokal.</p>
                 </div>
                 <div class="time-bucket-item">
-                    <span class="bucket-pill bucket-warning">&gt; 1 Year <i
+                    <span class="bucket-pill bucket-warning" lang="en">&gt; 1 Year <i
                             class="fas fa-exclamation-triangle"></i></span>
-                    <p><strong>Safety Warning.</strong> High probability of trail changes, overgrowth, or path washouts.
-                        Proceed with caution and verify with other sources.</p>
+                    <span class="bucket-pill bucket-warning" lang="id">&gt; 1 Tahun <i
+                            class="fas fa-exclamation-triangle"></i></span>
+                    <p lang="en"><strong>Safety Warning.</strong> High probability of trail changes, overgrowth, or path
+                        washouts. Proceed with caution and verify with other sources.</p>
+                    <p lang="id"><strong>Peringatan Keamanan.</strong> Probabilitas tinggi akan adanya perubahan jalur,
+                        tanaman liar, atau jalur yang longsor. Lanjutkan dengan hati-hati dan verifikasi dengan sumber
+                        lain.</p>
                 </div>
             </div>
-            <p style="margin-top: 20px;"><em>Tip: Hover your mouse over any time label to see the original month and
-                    year of the activity.</em></p>
+            <p style="margin-top: 20px;">
+                <em lang="en">Tip: Hover your mouse over any time label to see the original month and year of the
+                    activity.</em>
+                <em lang="id">Tips: Arahkan kursor mouse Anda ke label waktu mana pun untuk melihat bulan dan tahun asli
+                    dari aktivitas tersebut.</em>
+            </p>
         </section>
 
+        <!-- Section 3: Downloads -->
         <section class="help-section">
-            <h2><i class="fas fa-file-download"></i> Downloads & Strava</h2>
-            <p>Every route in the archive is fully compatible with your favorite GPS device or planning app.</p>
+            <h2 lang="en"><i class="fas fa-file-download"></i> Downloads & Strava</h2>
+            <h2 lang="id"><i class="fas fa-file-download"></i> Unduhan & Strava</h2>
+            <p lang="en">Every route in the archive is fully compatible with your favorite GPS device or planning app.
+            </p>
+            <p lang="id">Setiap rute dalam arsip ini sepenuhnya kompatibel dengan perangkat GPS favorit Anda atau
+                aplikasi perencanaan.</p>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <h3><i class="fab fa-strava"></i> Strava Integration</h3>
-                    <p>Click the Strava icon to view the original activity or route page for segment details and
-                        community photos.</p>
+                    <h3 lang="en"><i class="fab fa-strava"></i> Strava Integration</h3>
+                    <h3 lang="id"><i class="fab fa-strava"></i> Integrasi Strava</h3>
+                    <p lang="en">Click the Strava icon to view the original activity or route page for segment details
+                        and community photos.</p>
+                    <p lang="id">Klik ikon Strava untuk melihat halaman aktivitas atau rute asli untuk detail segmen dan
+                        foto komunitas.</p>
                 </div>
                 <div class="feature-card">
-                    <h3><i class="fas fa-download"></i> GPX Export</h3>
-                    <p>Download a high-fidelity GPX file with full elevation data. Perfect for Garmin, COROS, or FATMAP
-                        navigation.</p>
+                    <h3 lang="en"><i class="fas fa-download"></i> GPX Export</h3>
+                    <h3 lang="id"><i class="fas fa-download"></i> Ekspor GPX</h3>
+                    <p lang="en">Download a high-fidelity GPX file with full elevation data. Perfect for Garmin, COROS,
+                        or FATMAP navigation.</p>
+                    <p lang="id">Unduh file GPX berkualitas tinggi dengan data elevasi lengkap. Sempurna untuk navigasi
+                        Garmin, COROS, atau FATMAP.</p>
                 </div>
             </div>
         </section>
@@ -225,6 +317,35 @@
     <footer style="text-align: center; padding: 40px; color: #888; font-size: 0.9rem;">
         &copy; 2026 The Trail Archive
     </footer>
+
+    <script>
+        function setLang(lang) {
+            // Update buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if ((lang === 'en' && btn.innerText === 'English') ||
+                    (lang === 'id' && btn.innerText === 'Bahasa Indonesia')) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Update content visibility
+            document.querySelectorAll('[lang="en"]').forEach(el => {
+                el.style.display = lang === 'en' ? (el.tagName === 'SPAN' || el.tagName === 'EM' ? 'inline' : 'block') : 'none';
+                if (el.tagName === 'H2') el.style.display = lang === 'en' ? 'flex' : 'none';
+            });
+            document.querySelectorAll('[lang="id"]').forEach(el => {
+                el.style.display = lang === 'id' ? (el.tagName === 'SPAN' || el.tagName === 'EM' ? 'inline' : 'block') : 'none';
+                if (el.tagName === 'H2') el.style.display = lang === 'id' ? 'flex' : 'none';
+            });
+
+            localStorage.setItem('trail_lang', lang);
+        }
+
+        // Load preferred language
+        const savedLang = localStorage.getItem('trail_lang') || 'en';
+        setLang(savedLang);
+    </script>
 </body>
 
 </html>
