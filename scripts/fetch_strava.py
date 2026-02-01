@@ -83,8 +83,47 @@ def save_routes_db(routes):
         json.dump(routes, f, indent=4)
 
 
+def resolve_strava_id(input_str):
+    """Try to extract ID from a numeric string, a Strava URL, or an app link short code"""
+    if not input_str:
+        return None
+    
+    # 1. Direct Numeric ID
+    if input_str.isdigit():
+        return input_str
+        
+    url = input_str
+    # 2. Check if it's a short code (e.g., yJVEhiDMo0b)
+    # Typical Strava app link codes are alphanumeric and around 11 characters
+    if 'strava.app.link' not in input_str and 'strava.com' not in input_str:
+        if 10 <= len(input_str) <= 12 and input_str.isalnum():
+            url = f"https://strava.app.link/{input_str}"
+
+    # 3. Strava URL (Web or App Link)
+    if 'strava.app.link' in url or 'strava.com' in url:
+        try:
+            print(f"    🔗 Resolving Strava link: {url} ...")
+            headers = {'User-Agent': 'Mozilla/5.0'}
+            res = requests.get(url, headers=headers, allow_redirects=True, timeout=10)
+            
+            # Check final URL
+            match = re.search(r'/(?:activities|routes)/(\d+)', res.url)
+            if match:
+                return match.group(1)
+                
+            # Search in response text 
+            match = re.search(r'strava\.com/(?:activities|routes)/(\d+)', re.sub(r'\\/', '/', res.text))
+            if match:
+                return match.group(1)
+                
+        except Exception as e:
+            print(f"      ⚠️ Failed to resolve URL {url}: {e}")
+            
+    return None
+
+
 def load_filter_list(filepath):
-    """Load IDs from a text file, ignoring comments and empty lines"""
+    """Load IDs from a text file, resolving URLs to IDs on the fly"""
     if not os.path.exists(filepath):
         return set()
     ids = set()
@@ -94,7 +133,14 @@ def load_filter_list(filepath):
                 # Remove comments and whitespace
                 clean_line = line.split('#')[0].strip()
                 if clean_line:
-                    ids.add(clean_line)
+                    resolved_id = resolve_strava_id(clean_line)
+                    if resolved_id:
+                        ids.add(resolved_id)
+                    else:
+                        # If we can't resolve it but it doesn't look like a URL, 
+                        # maybe it's just a malformed ID? Add it anyway just in case.
+                        if 'http' not in clean_line:
+                            ids.add(clean_line)
     except Exception as e:
         print(f"  ⚠️ Error loading filter list {filepath}: {e}")
     return ids
