@@ -286,7 +286,7 @@
 
     function createRouteCard(route) {
         const card = document.createElement('div');
-        card.className = `route-card ${route.type || ''}`;
+        // We'll determine classes below
 
         const mapImage = route.mapImage || 'assets/maps/placeholder.png';
         const distance = formatDistance(route.distance);
@@ -315,19 +315,22 @@
         let hasWarning = false;
 
         if (diffDays < 7) {
-            timeLabel = 'THIS WEEK';
+            timeLabel = 'This week';
             timeClass = 'fresh';
         } else if (diffDays < 30) {
-            timeLabel = 'THIS MONTH';
+            timeLabel = 'This month';
             timeClass = 'active';
         } else if (routeYear === currentYear) {
-            timeLabel = 'THIS YEAR';
+            timeLabel = 'This year';
             timeClass = 'stable';
         } else {
-            timeLabel = '> LAST YEAR';
+            timeLabel = '> Last year';
             timeClass = 'legacy';
             hasWarning = true;
         }
+
+        // Apply classes to card
+        card.className = `route-card ${route.type || ''} ${hasWarning ? 'legacy-status' : ''}`;
 
         const hoverTitle = route.dateDisplay || '';
 

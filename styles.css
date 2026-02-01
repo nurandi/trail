@@ -248,6 +248,16 @@ main {
     border-color: rgba(252, 76, 2, 0.2);
 }
 
+.route-card.legacy-status {
+    background-color: #fafafa;
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.route-card.legacy-status img {
+    filter: grayscale(40%) contrast(90%) brightness(105%);
+    opacity: 0.85;
+}
+
 .route-card img {
     width: 100%;
     height: auto;
@@ -323,14 +333,34 @@ main {
 
 .route-date {
     font-family: 'Outfit', sans-serif;
-    color: #999;
-    font-weight: 500;
-    font-size: 0.75rem;
-    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 0.72rem;
+    letter-spacing: 0.3px;
+    cursor: help;
 }
 
-.route-date.old {
-    color: rgba(220, 53, 69, 0.6);
+.route-date.fresh {
+    color: #fc4c02;
+    /* Strava Orange */
+}
+
+.route-date.active {
+    color: var(--text-muted);
+}
+
+.route-date.stable {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+.route-date.legacy {
+    color: #d9534f;
+    /* Muted Warning Red */
+}
+
+.warning-icon {
+    font-size: 0.7rem;
+    margin-right: 2px;
 }
 
 .route-info h3 {
