@@ -66,6 +66,7 @@
             // Initial Render
             applyFilters();
             renderAttribution();
+            initTooltipSystem();
 
         } catch (e) {
             console.error("Error initializing app:", e);
@@ -107,7 +108,7 @@
                 if (!existing) {
                     const p = document.createElement('p');
                     p.className = 'attribution';
-                    p.innerHTML = `Activities by <a href="https://www.strava.com/athletes/${athleteData.id}" target="_blank">${athleteData.name}</a>`;
+                    p.innerHTML = `Activities by <a href="https://www.strava.com/athletes/${athleteData.id}" target="_blank" class="has-tooltip" data-tooltip="View Strava Profile">${athleteData.name}</a>`;
                     footerDiv.appendChild(p);
                 }
             }
@@ -342,7 +343,7 @@
 
         if (creatorMatch) {
             creatorName = creatorMatch[1];
-            displayTitle = `<span class="creator-badge" title="Original route by: ${creatorName}">${creatorName}</span> ${creatorMatch[2]}`;
+            displayTitle = `<span class="creator-badge has-tooltip" data-tooltip="Original route by: ${creatorName}">${creatorName}</span> ${creatorMatch[2]}`;
         }
 
         // Determine date label
@@ -364,7 +365,7 @@
                         <span>${route.location || 'Unknown Location'}</span>
                     </div>
                     ${timeLabel ? `
-                        <span class="route-date ${timeClass}" title="${hoverTitle}">
+                        <span class="route-date ${timeClass} has-tooltip" data-tooltip="${hoverTitle}">
                             ${timeLabel}
                             ${hasWarning ? '<i class="fas fa-exclamation-triangle warning-icon"></i>' : ''}
                         </span>` : ''}
@@ -379,7 +380,7 @@
                         <div class="stat-label">Elevation</div>
                         <div class="stat-value">${elevation}</div>
                     </div>
-                    <div class="stat" title="Effort = distance(km) + 0.01 * elevation(m)">
+                    <div class="stat has-tooltip" data-tooltip="Effort = distance(km) + 0.01 * elevation(m)">
                         <div class="stat-label">Effort</div>
                         <div class="stat-value">${effort}</div>
                     </div>
@@ -392,10 +393,10 @@
                         ${rType === 'race' ? 'Race' : (rType === 'route' ? 'Route' : 'Training')}
                     </div>
                     <div class="action-buttons">
-                        <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava" title="View on Strava">
+                        <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava has-tooltip" data-tooltip="View on Strava">
                             <i class="fab fa-strava"></i>
                         </a>
-                        <button class="btn-action primary" onclick="downloadGPX('${route.stravaId}', '${route.name}')" title="Download GPX">
+                        <button class="btn-action primary has-tooltip" onclick="downloadGPX('${route.stravaId}', '${route.name}')" data-tooltip="Download GPX">
                             <i class="fas fa-download"></i>
                         </button>
                     </div>
@@ -442,12 +443,12 @@
             else if (type === 'campground') icon = '⛺';
             else if (type === 'incline' || type === 'climb') icon = '🚀';
 
-            html += `<span class="poi-badge ${type}" title="${p.name}">${icon} <span class="poi-name">${p.name}</span></span>`;
+            html += `<span class="poi-badge ${type} has-tooltip" data-tooltip="${p.name}">${icon} <span class="poi-name">${p.name}</span></span>`;
         });
 
         if (extra > 0) {
             const allNames = unique.map(p => p.name).join(', ');
-            html += `<span class="poi-badge more" title="${allNames}">+${extra} more</span>`;
+            html += `<span class="poi-badge more has-tooltip" data-tooltip="${allNames}">+${extra} more</span>`;
         }
         html += '</div>';
         return html;
@@ -733,4 +734,59 @@
             throw e;
         }
     };
+
+    let tooltipEl = null;
+
+    function initTooltipSystem() {
+        tooltipEl = document.createElement('div');
+        tooltipEl.className = 'custom-tooltip';
+        document.body.appendChild(tooltipEl);
+
+        document.addEventListener('mouseover', e => {
+            const target = e.target.closest('.has-tooltip');
+            if (target) showTooltip(target.getAttribute('data-tooltip'), target);
+        });
+
+        document.addEventListener('mouseout', e => {
+            if (e.target.closest('.has-tooltip')) hideTooltip();
+        });
+
+        document.addEventListener('click', e => {
+            const target = e.target.closest('.has-tooltip');
+            if (target) {
+                showTooltip(target.getAttribute('data-tooltip'), target);
+                e.stopPropagation();
+            } else {
+                hideTooltip();
+            }
+        });
+
+        window.addEventListener('scroll', hideTooltip, { passive: true });
+    }
+
+    function showTooltip(text, target) {
+        if (!tooltipEl || !text) return;
+        tooltipEl.textContent = text;
+        tooltipEl.classList.add('visible');
+
+        const targetRect = target.getBoundingClientRect();
+        const tooltipRect = tooltipEl.getBoundingClientRect();
+
+        let top = targetRect.top - tooltipRect.height - 8;
+        let left = targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2);
+
+        if (top < 10) top = targetRect.bottom + 8;
+        if (left < 10) left = 10;
+        if (left + tooltipRect.width > window.innerWidth - 10) {
+            left = window.innerWidth - tooltipRect.width - 10;
+        }
+
+        tooltipEl.style.top = `${top}px`;
+        tooltipEl.style.left = `${left}px`;
+    }
+
+    function hideTooltip() {
+        if (tooltipEl) tooltipEl.classList.remove('visible');
+    }
+
 })();
