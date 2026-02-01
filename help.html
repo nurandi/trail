@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Help guide and documentation for The Trail Archive features">
+    <title>Help Guide - The Trail Archive</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css?v=1.1">
+    <style>
+        .help-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .help-section h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .help-section h2 i {
+            color: var(--primary-color);
+            font-size: 1.4rem;
+        }
+
+        .help-section p {
+            margin-bottom: 15px;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 12px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .feature-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .help-nav {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--text-main);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .btn-back:hover {
+            transform: translateX(-5px);
+            background: #000;
+        }
+
+        .time-bucket-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .time-bucket-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .time-bucket-item:last-child {
+            border-bottom: none;
+        }
+
+        .bucket-pill {
+            min-width: 100px;
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .bucket-green {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #218838;
+        }
+
+        .bucket-warning {
+            background-color: rgba(230, 126, 34, 0.15);
+            color: #d35400;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Help & User Guide</h1>
+            <p>Everything you need to know about using The Trail Archive.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="help-nav">
+            <a href="index.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Back to Archive
+            </a>
+        </div>
+
+        <section class="help-section">
+            <h2><i class="fas fa-sliders-h"></i> Filtering Routes</h2>
+            <p>The archive grows with every run. Use the filter bar to narrowing down your search based on trail
+                difficulty, type, or timing.</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Distance & Elevation</h3>
+                    <p>Standard trail metrics. Elevation is rounded to the nearest meter for clarity.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Effort Metric</h3>
+                    <p>A calculated value to help compare different terrains. It uses the formula:
+                        <code>Distance (km) + (Elevation / 100)</code>.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Activity Type</h3>
+                    <p>Distinguish between <strong>Races</strong>, <strong>Training Runs</strong>, and planned
+                        <strong>Routes</strong> from Strava.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Recency</h3>
+                    <p>Filter based on how fresh the route data is, ranging from the last week to archived runs.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="help-section">
+            <h2><i class="fas fa-clock"></i> Understanding Time Labels</h2>
+            <p>Trail conditions change over time due to weather, erosion, and vegetation. Every card includes a
+                color-coded recency label to help you judge the data reliability.</p>
+
+            <div class="time-bucket-list">
+                <div class="time-bucket-item">
+                    <span class="bucket-pill bucket-green">&lt; 1 Week</span>
+                    <p><strong>Perfectly Fresh.</strong> Trial conditions are likely exactly as described.</p>
+                </div>
+                <div class="time-bucket-item">
+                    <span class="bucket-pill bucket-green">&lt; 1 Month</span>
+                    <p><strong>Recent.</strong> Very high reliability with minimal expected changes.</p>
+                </div>
+                <div class="time-bucket-item">
+                    <span class="bucket-pill bucket-green">&lt; 1 Year</span>
+                    <p><strong>Stable.</strong> General terrain is consistent, but check local weather history.</p>
+                </div>
+                <div class="time-bucket-item">
+                    <span class="bucket-pill bucket-warning">&gt; 1 Year <i
+                            class="fas fa-exclamation-triangle"></i></span>
+                    <p><strong>Safety Warning.</strong> High probability of trail changes, overgrowth, or path washouts.
+                        Proceed with caution and verify with other sources.</p>
+                </div>
+            </div>
+            <p style="margin-top: 20px;"><em>Tip: Hover your mouse over any time label to see the original month and
+                    year of the activity.</em></p>
+        </section>
+
+        <section class="help-section">
+            <h2><i class="fas fa-file-download"></i> Downloads & Strava</h2>
+            <p>Every route in the archive is fully compatible with your favorite GPS device or planning app.</p>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><i class="fab fa-strava"></i> Strava Integration</h3>
+                    <p>Click the Strava icon to view the original activity or route page for segment details and
+                        community photos.</p>
+                </div>
+                <div class="feature-card">
+                    <h3><i class="fas fa-download"></i> GPX Export</h3>
+                    <p>Download a high-fidelity GPX file with full elevation data. Perfect for Garmin, COROS, or FATMAP
+                        navigation.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer style="text-align: center; padding: 40px; color: #888; font-size: 0.9rem;">
+        &copy; 2026 The Trail Archive
+    </footer>
+</body>
+
+</html>
