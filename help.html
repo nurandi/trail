@@ -160,16 +160,18 @@
             font-weight: 600;
             color: var(--primary-color);
         }
+
+        [lang="id"] {
+            display: none !important;
+        }
     </style>
 </head>
 
 <body>
     <header>
         <div class="container">
-            <h1 lang="en">How to Use This Archive</h1>
-            <h1 lang="id">Cara Menggunakan Arsip Ini</h1>
-            <p lang="en">A quick guide to finding your next trail adventure.</p>
-            <p lang="id">Panduan singkat untuk menemukan petualangan trail Anda berikutnya.</p>
+            <h1>How to Use This Archive</h1>
+            <p>A quick guide to finding your next trail adventure.</p>
         </div>
     </header>
 
@@ -177,13 +179,8 @@
         <div class="help-nav">
             <a href="index.html" class="btn-back">
                 <i class="fas fa-arrow-left"></i>
-                <span lang="en">Back to Archive</span>
-                <span lang="id">Kembali ke Arsip</span>
+                Back to Archive
             </a>
-            <div class="lang-switcher">
-                <button class="lang-btn active" data-lang="en" onclick="setLang('en')">English</button>
-                <button class="lang-btn" data-lang="id" onclick="setLang('id')">Bahasa Indonesia</button>
-            </div>
         </div>
 
         <!-- Section 1: Filters -->
@@ -224,9 +221,11 @@
                     <h3 lang="en">Activity Type</h3>
                     <h3 lang="id">Jenis Aktivitas</h3>
                     <p lang="en">Know what you're looking at: official <strong>Races</strong>, my personal
-                        <strong>Training</strong> logs, or planned <strong>Routes</strong> imported from Strava.</p>
+                        <strong>Training</strong> logs, or planned <strong>Routes</strong> imported from Strava.
+                    </p>
                     <p lang="id">Ketahui apa yang Anda lihat: <strong>Balapan</strong> resmi, catatan
-                        <strong>Latihan</strong> pribadi saya, atau <strong>Rute</strong> rencana dari Strava.</p>
+                        <strong>Latihan</strong> pribadi saya, atau <strong>Rute</strong> rencana dari Strava.
+                    </p>
                 </div>
                 <div class="feature-card">
                     <h3 lang="en">Recency</h3>
@@ -316,47 +315,6 @@
         &copy; 2026 The Trail Archive
     </footer>
 
-    <script>
-        function setLang(lang) {
-            // Force default to english if lang is not recognized
-            if (lang !== 'id' && lang !== 'en') {
-                lang = 'en';
-            }
-            console.log('Setting language to:', lang);
-
-            // Update buttons
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-lang') === lang) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // Update content visibility
-            document.querySelectorAll('[lang]').forEach(el => {
-                // Skip the root html tag
-                if (el.tagName.toLowerCase() === 'html') return;
-
-                const elLang = el.getAttribute('lang');
-                const isMatch = elLang === lang;
-
-                if (el.tagName === 'SPAN' || el.tagName === 'EM' || el.tagName === 'I') {
-                    el.style.display = isMatch ? 'inline' : 'none';
-                } else if (el.tagName === 'H2') {
-                    el.style.display = isMatch ? 'flex' : 'none';
-                } else {
-                    el.style.display = isMatch ? 'block' : 'none';
-                }
-            });
-
-            localStorage.setItem('trail_lang', lang);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('trail_lang') || 'en';
-            setLang(savedLang);
-        });
-    </script>
 </body>
 
 </html>
