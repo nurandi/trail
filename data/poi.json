@@ -4,41 +4,59 @@
         "lat": -6.627632,
         "lng": 106.910543,
         "radius": 50,
-        "type": "parking"
+        "type": [
+            "parking",
+            "start"
+        ]
     },
     {
         "name": "Leuwi Pangaduan",
         "lat": -6.600636,
         "lng": 106.906467,
         "radius": 50,
-        "type": "parking"
+        "type": [
+            "parking",
+            "start"
+        ]
     },
     {
         "name": "Warung Pak Tatang",
         "lat": -6.590048,
         "lng": 106.900523,
         "radius": 50,
-        "type": "parking"
+        "type": [
+            "parking",
+            "start"
+        ]
     },
     {
         "name": "Sentul Nirwana",
         "lat": -6.579673,
         "lng": 106.891759,
         "radius": 50,
-        "type": "parking"
+        "type": [
+            "parking",
+            "start"
+        ]
     },
     {
         "name": "Wangun",
         "lat": -6.594598,
         "lng": 106.932626,
         "radius": 50,
-        "type": "parking"
+        "type": [
+            "parking",
+            "start"
+        ]
     },
     {
         "name": "Foothill Forest",
         "lat": -6.594318,
         "lng": 106.902492,
         "radius": 50,
-        "type": "parking"
+        "type": [
+            "parking",
+            "start"
+        ]
     }
 ]
