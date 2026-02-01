@@ -31,9 +31,9 @@ MAPS_DIR = 'assets/maps'
 STREAMS_DIR = 'assets/streams'
 DB_FILE = 'all_routes.json'
 LOCATIONS_FILE = 'locations.json'
-WHITELIST_FILE = 'filters/whitelist.txt'
-BLACKLIST_FILE = 'filters/blacklist.txt'
-ROUTES_WHITELIST_FILE = 'filters/routes_whitelist.txt'
+INCLUDE_FILE = 'filters/include.txt'
+EXCLUDE_FILE = 'filters/exclude.txt'
+INCLUDE_ROUTES_FILE = 'filters/include_routes.txt'
 
 
 def get_access_token():
@@ -504,18 +504,18 @@ def write_data_json(routes):
     print(f"✓ Successfully wrote {len(routes)} routes to {OUTPUT_FILE}")
 
 
-def should_include_item(item_id, date_str, whitelist, routes_whitelist, blacklist):
+def should_include_item(item_id, date_str, include_list, include_routes, exclude_list):
     """
     Logic:
-    1. If blacklisted -> False
-    2. If whitelisted (Activity or Route) -> True
+    1. If excluded -> False
+    2. If included (Activity or Route) -> True
     3. If year is 2025 or newer -> True
     4. Otherwise -> False
     """
     str_id = str(item_id)
-    if str_id in blacklist:
+    if str_id in exclude_list:
         return False
-    if str_id in whitelist or str_id in routes_whitelist:
+    if str_id in include_list or str_id in include_routes:
         return True
     
     try:
@@ -545,15 +545,15 @@ def main():
         existing_routes = load_stored_routes()
         print(f"  📂 Loaded {len(existing_routes)} existing routes.")
         
-        whitelist = load_filter_list(WHITELIST_FILE)
-        blacklist = load_filter_list(BLACKLIST_FILE)
-        routes_whitelist = load_filter_list(ROUTES_WHITELIST_FILE)
+        include_list = load_filter_list(INCLUDE_FILE)
+        exclude_list = load_filter_list(EXCLUDE_FILE)
+        include_routes = load_filter_list(INCLUDE_ROUTES_FILE)
 
         # 2.5 Backfill/Clean existing entries
         for r in existing_routes:
             if 'type' not in r:
                 # If stravaId is in routes_whitelist, it's a route
-                if str(r.get('stravaId')) in routes_whitelist:
+                if str(r.get('stravaId')) in include_routes:
                     r['type'] = 'route'
                 else:
                     r['type'] = 'race' if r.get('isRace') else 'train'
@@ -586,11 +586,11 @@ def main():
         activities = fetch_activities(after_timestamp=latest_timestamp)
         print(f"  ✓ Found {len(activities)} new running activities")
         
-        # 5. Fetch WHITELISTED routes from Strava
+        # 5. Fetch INCLUDED routes from Strava
         raw_routes = []
-        if routes_whitelist:
-            print(f"  ⬇️ Fetching {len(routes_whitelist)} whitelisted routes...")
-            for rid in routes_whitelist:
+        if include_routes:
+            print(f"  ⬇️ Fetching {len(include_routes)} included routes...")
+            for rid in include_routes:
                 r_detail = fetch_route_details(rid)
                 if r_detail:
                     raw_routes.append(r_detail)
@@ -616,7 +616,7 @@ def main():
         all_merged_routes = list(routes_map.values())
         final_filtered_routes = [
             r for r in all_merged_routes 
-            if should_include_item(r['stravaId'], r.get('dateFull', ''), whitelist, routes_whitelist, blacklist)
+            if should_include_item(r['stravaId'], r.get('dateFull', ''), include_list, include_routes, exclude_list)
         ]
         
         # Sort newest first
@@ -625,7 +625,7 @@ def main():
         # Log difference
         dropped = len(all_merged_routes) - len(final_filtered_routes)
         if dropped > 0:
-            print(f"  🧹 Filtered out {dropped} items not matching 2025 or whitelist criteria.")
+            print(f"  🧹 Filtered out {dropped} items not matching criteria.")
         
         # 8. Write to storage
         save_routes_db(final_filtered_routes)
