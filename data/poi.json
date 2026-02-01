@@ -167,7 +167,7 @@
         "name": "Pasir Pete",
         "lat": -6.606279,
         "lng": 106.929748,
-        "radius": 50,
+        "radius": 100,
         "type": [
             "hill",
             "warung",
