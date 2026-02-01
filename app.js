@@ -346,8 +346,8 @@
                     </div>
                     ${timeLabel ? `
                         <span class="route-date ${timeClass}" title="Activity Date: ${hoverTitle}">
-                            ${hasWarning ? '<i class="fas fa-exclamation-triangle warning-icon"></i> ' : ''}
                             ${timeLabel}
+                            ${hasWarning ? '<i class="fas fa-exclamation-triangle warning-icon"></i>' : ''}
                         </span>` : ''}
                 </div>
                 <h3>${route.name}</h3>
