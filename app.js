@@ -393,10 +393,10 @@
                         ${rType === 'race' ? 'Race' : (rType === 'route' ? 'Route' : 'Training')}
                     </div>
                     <div class="action-buttons">
-                        <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava has-tooltip" data-tooltip="View on Strava">
+                        <a href="${stravaUrl}" target="_blank" rel="noopener" class="btn-action strava" title="View on Strava">
                             <i class="fab fa-strava"></i>
                         </a>
-                        <button class="btn-action primary has-tooltip" onclick="downloadGPX('${route.stravaId}', '${route.name}')" data-tooltip="Download GPX">
+                        <button class="btn-action primary" onclick="downloadGPX('${route.stravaId}', '${route.name}')" title="Download GPX">
                             <i class="fas fa-download"></i>
                         </button>
                     </div>
