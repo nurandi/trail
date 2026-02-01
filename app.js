@@ -130,9 +130,10 @@
 
         // Filter
         filteredRoutes = allRoutes.filter(r => {
-            // Search (Name, Location, or Tags)
+            // Search (Name, Location, Tags, or POIs)
             const tagsText = (r.tags || []).join(' ');
-            const searchableText = `${r.name} ${r.location || ''} ${tagsText}`.toLowerCase();
+            const poiText = (r.pois || []).map(p => p.name).join(' ');
+            const searchableText = `${r.name} ${r.location || ''} ${tagsText} ${poiText}`.toLowerCase();
             if (searchQuery && !searchableText.includes(searchQuery)) return false;
 
             // Type (Race/Training/Route)
