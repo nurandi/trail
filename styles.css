@@ -337,30 +337,18 @@ main {
     font-size: 0.72rem;
     letter-spacing: 0.3px;
     cursor: help;
-}
-
-.route-date.fresh {
-    color: #fc4c02;
-    /* Strava Orange */
-}
-
-.route-date.active {
     color: var(--text-muted);
 }
 
 .route-date.stable {
-    color: var(--text-muted);
     opacity: 0.7;
-}
-
-.route-date.legacy {
-    color: #d9534f;
-    /* Muted Warning Red */
 }
 
 .warning-icon {
     font-size: 0.7rem;
     margin-right: 2px;
+    color: #e67e22;
+    /* Muted Amber for the warning icon only */
 }
 
 .route-info h3 {
