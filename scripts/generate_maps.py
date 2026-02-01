@@ -49,8 +49,12 @@ def generate_map(activity):
     activity_id = activity['id']
     polyline = activity['polyline']
     
-    map_filepath = os.path.join(MAPS_DIR, f"{activity_id}.png")
+    map_filepath = os.path.join(MAPS_DIR, f"{activity_id}.jpg")
     
+    if os.path.exists(map_filepath):
+        # print(f"  ⏭️ Map already exists for {activity_id}, skipping.")
+        return
+
     print(f"  🎨 Generating map for {activity_id}...")
 
     # 1. Get Elevation Data (from encrypted stream file)
@@ -135,7 +139,9 @@ def generate_map(activity):
         
         map_img.paste(profile_img, (0, position_y), profile_img)
         
-        map_img.save(map_filepath, "PNG")
+        # Convert to RGB before saving as JPEG
+        map_img = map_img.convert("RGB")
+        map_img.save(map_filepath, "JPEG", quality=85, optimize=True)
         
     except Exception as e:
         print(f"    ❌ Error: {e}")

@@ -628,7 +628,7 @@ def create_route_data(items, existing_routes=None, is_activity=True):
             'dateFull': raw_date,
             'type': rtype,
             'isRace': is_race,
-            'mapImage': f"assets/maps/{item_id}.png",
+            'mapImage': f"assets/maps/{item_id}.jpg",
             'ePolyline': obfuscate_polyline(
                 item.get('map', {}).get('summary_polyline') or item.get('map', {}).get('polyline')
             )
