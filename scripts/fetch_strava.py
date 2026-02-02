@@ -457,54 +457,78 @@ def check_pois(route_coords, pois):
     min_lng -= margin
     max_lng += margin
 
-    detected_pois_with_index = []
-    
-    # Analyze Start Point (0 index)
-    start_pt = route_coords[0]
+    # Analysis
+    current_dist = 0
+    poi_matches = [] # list of (first_index, dist_at_match, poi)
 
+    # Pre-calculate points to match
+    # To speed up, we don't check every point if the route is huge
+    sampling = 1
+    if len(route_coords) > 5000:
+        sampling = 5
+    
     for poi in pois:
-        # Quick check: is POI inside BB?
         if not (min_lat <= poi['lat'] <= max_lat and min_lng <= poi['lng'] <= max_lng):
             continue
 
         radius = poi.get('radius', 100)
-        
-        # 1. Finding first encounter index
         first_index = -1
+        dist_at_match = 0
         
-        # Check start first
-        dist_start = calculate_distance(start_pt[0], start_pt[1], poi['lat'], poi['lng'])
-        if dist_start <= radius:
-            first_index = 0
-        else:
-            # Scan the stream for the first encounter
-            for idx, point in enumerate(route_coords):
-                d = calculate_distance(point[0], point[1], poi['lat'], poi['lng'])
-                if d <= radius:
-                    first_index = idx
-                    break
+        # Iterative distance tracking for this POI match check
+        running_dist = 0
+        for idx in range(0, len(route_coords), sampling):
+            if idx > 0:
+                # Add distance from previous SAMPLED point
+                prev_idx = idx - sampling
+                running_dist += calculate_distance(
+                    route_coords[prev_idx][0], route_coords[prev_idx][1],
+                    route_coords[idx][0], route_coords[idx][1]
+                )
+            
+            d = calculate_distance(route_coords[idx][0], route_coords[idx][1], poi['lat'], poi['lng'])
+            if d <= radius:
+                first_index = idx
+                dist_at_match = running_dist
+                break
         
         if first_index != -1:
-            # Context Filtering
-            # If we passed it but didn't start there (index 0), remove 'start' and 'parking'
-            is_start_match = (first_index == 0)
-            original_types = [t.lower() for t in poi.get('type', [])]
+            poi_matches.append((first_index, dist_at_match, poi))
+
+    detected_pois_with_index = []
+    
+    # Total route distance for percentage check
+    total_route_dist = 0
+    for i in range(1, len(route_coords), 10): # estimation
+        total_route_dist += calculate_distance(
+            route_coords[i-10][0], route_coords[i-10][1],
+            route_coords[i][0], route_coords[i][1]
+        )
+
+    for first_index, dist_at_match, poi in poi_matches:
+        original_types = [t.lower() for t in poi.get('type', [])]
+        
+        # A match is a "Start" match if it happens within first 1km or first 10% of route
+        is_start_area = dist_at_match < 1000 or (total_route_dist > 0 and dist_at_match / total_route_dist < 0.1)
+        
+        final_types = []
+        if is_start_area:
+            final_types = original_types
+        else:
+            # Not in start area, filter out start-only tags
+            final_types = [t for t in original_types if t not in ['start', 'parking']]
             
-            final_types = []
-            if is_start_match:
-                final_types = original_types
-            else:
-                # Filter out start-specific tags if not matched at the very start
-                final_types = [t for t in original_types if t not in ['start', 'parking']]
-            
-            if final_types:
-                detected_pois_with_index.append({
-                    "index": first_index,
-                    "poi": {
-                        "name": poi['name'],
-                        "type": final_types
-                    }
-                })
+        # If we filtered everything out, don't discard the POI, just give it a generic type
+        if not final_types:
+            final_types = ['waypoint']
+        
+        detected_pois_with_index.append({
+            "index": first_index,
+            "poi": {
+                "name": poi['name'],
+                "type": final_types
+            }
+        })
 
     # Sort by the encounter index (First encounter shows first)
     detected_pois_with_index.sort(key=lambda x: x['index'])
