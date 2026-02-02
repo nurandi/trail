@@ -408,21 +408,27 @@
     }
 
     function renderPoiSection(pois, currentLocation) {
-        if (!pois || pois.length === 0) return '';
-
         // Remove duplicates by name and filter out route location
         const unique = [];
         const seen = new Set();
-        pois.forEach(p => {
-            if (!seen.has(p.name)) {
-                if (p.name !== currentLocation) {
-                    unique.push(p);
-                }
-                seen.add(p.name);
-            }
-        });
 
-        if (unique.length === 0) return '';
+        if (pois && pois.length > 0) {
+            pois.forEach(p => {
+                if (!seen.has(p.name)) {
+                    if (p.name !== currentLocation) {
+                        unique.push(p);
+                    }
+                    seen.add(p.name);
+                }
+            });
+        }
+
+        if (unique.length === 0) {
+            unique.push({
+                name: currentLocation,
+                type: ['start']
+            });
+        }
 
         // Note: No sorting here anymore, we respect the backend order
         // which is sorted by first match along the route.

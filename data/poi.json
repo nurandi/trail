@@ -365,5 +365,96 @@
         "type": [
             "curug"
         ]
+    },
+    {
+        "name": "Loket Cibodas",
+        "lat": -6.740766,
+        "lng": 107.002409,
+        "radius": 50,
+        "type": [
+            "start"
+        ]
+    },
+    {
+        "name": "Kandang Badak",
+        "lat": -6.777475,
+        "lng": 106.975321,
+        "radius": 50,
+        "type": [
+            "campground"
+        ]
+    },
+    {
+        "name": "Puncak Pangrango",
+        "lat": -6.770133,
+        "lng": 106.964569,
+        "radius": 100,
+        "type": [
+            "hill"
+        ]
+    },
+    {
+        "name": "Puncak Gede",
+        "lat": -6.789877,
+        "lng": 106.983048,
+        "radius": 100,
+        "type": [
+            "hill"
+        ]
+    },
+    {
+        "name": "Surya Kencana Barat",
+        "lat": -6.795713,
+        "lng": 106.984802,
+        "radius": 150,
+        "type": [
+            "campground"
+        ]
+    },
+    {
+        "name": "Surya Kencana Timur",
+        "lat": -6.785779019,
+        "lng": 106.9913121,
+        "radius": 150,
+        "type": [
+            "campground"
+        ]
+    },
+    {
+        "name": "Gunung Putri",
+        "lat": -6.758068,
+        "lng": 107.007825,
+        "radius": 100,
+        "type": [
+            "start"
+        ]
+    },
+    {
+        "name": "Puncak Menara",
+        "lat": -7.361031,
+        "lng": 110.399963,
+        "radius": 100,
+        "type": [
+            "hill",
+            "warung"
+        ]
+    },
+    {
+        "name": "Puncak Ismoyo",
+        "lat": -7.365477,
+        "lng": 110.402651,
+        "radius": 100,
+        "type": [
+            "hill"
+        ]
+    },
+    {
+        "name": "BC Arsal",
+        "lat": -7.370888,
+        "lng": 110.406901,
+        "radius": 100,
+        "type": [
+            "start"
+        ]
     }
 ]
