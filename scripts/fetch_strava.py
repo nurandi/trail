@@ -10,8 +10,17 @@ import requests
 import base64
 import math
 import re
+import sys
 from datetime import datetime
 from dotenv import load_dotenv
+
+# Add scripts directory to path for imports
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+try:
+    from scrape_activity import scrape_strava_activity
+except ImportError:
+    # Fallback for different execution contexts
+    from scripts.scrape_activity import scrape_strava_activity
 
 # Load environment variables
 load_dotenv()
@@ -35,6 +44,7 @@ POI_FILE = 'data/poi.json'
 INCLUDE_FILE = 'filters/include.txt'
 EXCLUDE_FILE = 'filters/exclude.txt'
 INCLUDE_ROUTES_FILE = 'filters/include_routes.txt'
+PUBLIC_ACTIVITIES_FILE = 'filters/public_activities.txt'
 
 
 def get_access_token():
@@ -801,6 +811,79 @@ def main():
                     raw_routes.append(r_detail)
                     print(f"      ✅ Found Route: {r_detail.get('name')}")
 
+        # 5.5 Fetch PUBLIC activities via Scraping
+        public_activities = []
+        if os.path.exists(PUBLIC_ACTIVITIES_FILE):
+            public_list = load_filter_list(PUBLIC_ACTIVITIES_FILE)
+            if public_list:
+                print(f"  📡 Scraping {len(public_list)} public activities...")
+                for pid in public_list:
+                    # Sync if not already in existing_routes (or if we want to update)
+                    # For now, only sync if missing
+                    if any(str(r.get('stravaId')) == str(pid) for r in existing_routes):
+                        continue
+                        
+                    data = scrape_strava_activity(pid)
+                    if data:
+                        # Convert to unified format
+                        # We need to encrypt the stream for the website
+                        latlng = data.get('startLatLng', [])
+                        # Ensure we have a valid dateFull for sorting
+                        date_full = data.get('dateDisplay', '')
+                        if 'T' not in date_full and date_full:
+                            date_full += "T00:00:00Z"
+
+                        # Format dateDisplay for UI (e.g., "Jan 2026")
+                        display_date_str = ""
+                        try:
+                            # Strava date looks like "2026-01-10T06:56:09"
+                            temp_dt = datetime.fromisoformat(date_full.replace('Z', ''))
+                            # %b gives "Jan", %Y gives "2026" -> "Jan 2026"
+                            display_date_str = temp_dt.strftime('%b %Y')
+                        except:
+                            display_date_str = data.get('dateDisplay', '')[:10]
+
+                        # Handle streams and POIs
+                        if data.get('latlng') and data.get('altitudeStream'):
+                            points = []
+                            lats = data['latlng']
+                            alts = data['altitudeStream']
+                            for i in range(len(lats)):
+                                ele = alts[i] if i < len(alts) else 0
+                                points.append([lats[i][0], lats[i][1], round(ele, 1)])
+                            
+                            if points:
+                                stream_file = os.path.join(STREAMS_DIR, f"{data['stravaId']}.dat")
+                                save_encrypted_dat(stream_file, points)
+
+                        # Unified format for metadata
+                        # Geocode location
+                        location_name, tags = "Unknown", []
+                        if latlng:
+                            location_name, tags = get_location_name(latlng[0], latlng[1])
+
+                        scraped_route = {
+                            "stravaId": str(data['stravaId']),
+                            "name": data['name'],
+                            "distance": round(data['distance'], 1),
+                            "elevation": round(data['elevation'], 1),
+                            "date": date_full[:10] if date_full else "",
+                            "dateFull": date_full,
+                            "dateDisplay": display_date_str,
+                            "type": "train", # Default
+                            "isRace": False,
+                            "athleteId": data.get('athleteId'),
+                            "athleteName": data.get('athleteName'),
+                            "startLatLng": data['startLatLng'],
+                            "ePolyline": obfuscate_polyline(data['ePolyline']),
+                            "mapImage": f"{MAPS_DIR}/{data['stravaId']}.jpg",
+                            "location": location_name or "Unknown",
+                            "tags": tags,
+                            "isPublic": True # Mark it as a scraped public activity
+                        }
+                        
+                        public_activities.append(scraped_route)
+                        print(f"      ✅ Scraped: {data['name']} by {data.get('athleteName')} ({location_name})")
 
         # 6. Convert & Merge
         # Start with all existing
@@ -812,17 +895,21 @@ def main():
             for r in new_activity_data:
                 routes_map[r['stravaId']] = r
                 
-        # Add whitelisted routes (always overwrite to get latest info & fix locations/roundings)
+        # Add whitelisted routes
         if raw_routes:
             new_route_data = create_route_data(raw_routes, existing_routes, is_activity=False)
             for r in new_route_data:
                 routes_map[r['stravaId']] = r
+
+        # Add public/scraped activities
+        for r in public_activities:
+            routes_map[r['stravaId']] = r
         
-        # 7. Apply Filter (2025 + Whitelists - Blacklist)
+        # 7. Apply Filter
         all_merged_routes = list(routes_map.values())
         final_filtered_routes = [
             r for r in all_merged_routes 
-            if should_include_item(r['stravaId'], r.get('dateFull', ''), include_list, include_routes, exclude_list)
+            if r.get('isPublic') or should_include_item(r['stravaId'], r.get('dateFull', ''), include_list, include_routes, exclude_list)
         ]
 
         # 7.5 Enrich ALL routes with POIs (ensure even old ones get updated)

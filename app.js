@@ -338,12 +338,30 @@
 
         // Parse Creator from Name: [Creator] Route Name
         let displayTitle = route.name;
-        let creatorName = null;
-        const creatorMatch = route.name.match(/^\[(.*?)\]\s*(.*)/);
+        let creatorName = route.athleteName || null;
 
+        // If it has bracketed name in title, prefer that (legacy support)
+        const creatorMatch = route.name.match(/^\[(.*?)\]\s*(.*)/);
         if (creatorMatch) {
             creatorName = creatorMatch[1];
-            displayTitle = `<span class="creator-badge has-tooltip" data-tooltip="Original route by: ${creatorName}">${creatorName}</span> ${creatorMatch[2]}`;
+            displayTitle = creatorMatch[2];
+        }
+
+        if (creatorName && (route.isPublic || creatorMatch)) {
+            const tooltipText = route.isPublic ? `Activity by: ${creatorName}` : `Route by: ${creatorName}`;
+            const athleteUrl = route.athleteId ? `https://www.strava.com/athletes/${route.athleteId}` : null;
+
+            if (athleteUrl && route.isPublic) {
+                displayTitle = `
+                    <a href="${athleteUrl}" target="_blank" rel="noopener" class="creator-icon-link has-tooltip" data-tooltip="${tooltipText}">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a> ${displayTitle}`;
+            } else {
+                displayTitle = `
+                    <span class="creator-icon-static has-tooltip" data-tooltip="${tooltipText}">
+                        <i class="fas fa-external-link-alt"></i>
+                    </span> ${displayTitle}`;
+            }
         }
 
         // Determine date label
