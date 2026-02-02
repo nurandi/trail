@@ -1,6 +1,6 @@
 // Google Analytics Configuration
 (function () {
-    const gaId = 'G-2C4L8V8B29';
+    const gaId = 'G-R90JDQGV7Z';
 
     // Load GTAG script dynamically
     const script = document.createElement('script');
