@@ -442,9 +442,26 @@
         </section>
     </main>
 
-    <footer style="text-align: center; padding: 40px; color: #888; font-size: 0.9rem;">
-        &copy; 2026 The Trail Archive
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 The Trail Archive. All rights reserved.</p>
+            <p>Data provided by Strava | <a href="#" id="aboutLink">About & Terms</a></p>
+        </div>
     </footer>
+
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeAbout">&times;</span>
+            <h2>About & Terms</h2>
+            <div id="aboutContent" class="toc-text">
+                <!-- Loaded from legal.json -->
+            </div>
+            <div class="modal-actions">
+                <button id="closeAboutBtn" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         function setLang(lang) {
@@ -482,9 +499,48 @@
             localStorage.setItem('trail_lang', lang);
         }
 
+        async function initLegal() {
+            try {
+                const response = await fetch('legal.json');
+                if (response.ok) {
+                    const legalData = await response.json();
+                    const aboutContent = document.getElementById('aboutContent');
+                    if (aboutContent && legalData.about) aboutContent.innerHTML = legalData.about;
+                }
+            } catch (e) {
+                console.error("Error loading legal.json:", e);
+            }
+        }
+
+        const aboutModal = document.getElementById("aboutModal");
+        const aboutLink = document.getElementById("aboutLink");
+        const closeAboutSpan = document.getElementById("closeAbout");
+        const closeAboutBtn = document.getElementById("closeAboutBtn");
+
+        if (aboutLink) {
+            aboutLink.onclick = function (e) {
+                e.preventDefault();
+                if (aboutModal) aboutModal.style.display = "block";
+            }
+        }
+
+        function closeAboutModal() {
+            if (aboutModal) aboutModal.style.display = "none";
+        }
+
+        if (closeAboutSpan) closeAboutSpan.onclick = closeAboutModal;
+        if (closeAboutBtn) closeAboutBtn.onclick = closeAboutModal;
+
+        window.onclick = function (event) {
+            if (event.target == aboutModal) {
+                closeAboutModal();
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const savedLang = localStorage.getItem('trail_lang') || 'en';
             setLang(savedLang);
+            initLegal();
         });
     </script>
 </body>
