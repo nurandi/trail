@@ -560,17 +560,17 @@
     function generateGPX(coords, name) {
         let gpx = '<?xml version="1.0" encoding="UTF-8"?>\n';
         gpx += '<gpx version="1.1" creator="The Trail Archive" xmlns="http://www.topografix.com/GPX/1/1">\n';
-        gpx += `  < metadata >\n < name > ${name}</name >\n  </metadata >\n`;
+        gpx += `  <metadata>\n    <name>${name}</name>\n    <desc>Downloaded from https://trail.nurandi.id</desc>\n    <link href="https://trail.nurandi.id">\n      <text>The Trail Archive</text>\n    </link>\n  </metadata>\n`;
         gpx += '  <trk>\n';
-        gpx += `    < name > ${name}</name >\n`;
+        gpx += `    <name>${name}</name>\n`;
         gpx += '    <trkseg>\n';
 
         coords.forEach(point => {
-            let pt = `      < trkpt lat = "${point[0]}" lon = "${point[1]}" > `;
+            let pt = `      <trkpt lat="${point[0]}" lon="${point[1]}">`;
             if (point.length > 2) {
-                pt += `< ele > ${point[2]}</ele > `;
+                pt += `<ele>${point[2]}</ele>`;
             }
-            pt += `</trkpt >\n`;
+            pt += `</trkpt>\n`;
             gpx += pt;
         });
 
