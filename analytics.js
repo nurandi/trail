@@ -14,4 +14,15 @@
 
     gtag('js', new Date());
     gtag('config', gaId);
+
+    // Global helper for tracking custom events
+    window.trackEvent = function (action, category, label, value) {
+        if (typeof gtag === 'function') {
+            gtag('event', action, {
+                'event_category': category,
+                'event_label': label,
+                'value': value
+            });
+        }
+    };
 })();

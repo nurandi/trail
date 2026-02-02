@@ -747,6 +747,11 @@
             return;
         }
 
+        // Track GPX Download Event
+        if (typeof trackEvent === 'function') {
+            trackEvent('download_gpx', 'File', `${stravaId} - ${routeName}`);
+        }
+
         try {
             let coords = [];
 
