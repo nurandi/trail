@@ -2,6 +2,12 @@
 <html lang="en">
 
 <head>
+    <!-- Canonical Redirect -->
+    <script>
+        if (window.location.pathname.endsWith('/index.html')) {
+            window.location.replace(window.location.href.replace('/index.html', '/'));
+        }
+    </script>
     <!-- Google Analytics -->
     <script src="analytics.js"></script>
     <meta charset="UTF-8">
