@@ -422,8 +422,8 @@
     },
     {
         "name": "Gunung Putri",
-        "lat": -6.758068,
-        "lng": 107.007825,
+        "lat": -6.760467,
+        "lng": 107.005790,
         "radius": 100,
         "type": [
             "start"
