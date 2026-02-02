@@ -679,11 +679,41 @@
         };
     }
 
+    function checkDownloadLimit() {
+        const LIMIT = 10; // Max 10 downloads
+        const WINDOW_MS = 60 * 60 * 1000; // 1 hour
+        const now = Date.now();
+
+        let history = [];
+        try {
+            history = JSON.parse(localStorage.getItem('download_history') || '[]');
+        } catch (e) {
+            history = [];
+        }
+
+        // Clean up old timestamps
+        history = history.filter(ts => now - ts < WINDOW_MS);
+
+        if (history.length >= LIMIT) {
+            const oldest = history[0];
+            const remaining = Math.ceil((WINDOW_MS - (now - oldest)) / 60000);
+            alert(`Download limit reached (${LIMIT} per hour). Please try again in about ${remaining} minutes.`);
+            return false;
+        }
+
+        history.push(now);
+        localStorage.setItem('download_history', JSON.stringify(history));
+        return true;
+    }
+
     window.downloadGPX = function (stravaId, routeName) {
         openModal(stravaId, routeName);
     };
 
     async function executeDownload(stravaId, routeName) {
+        // Rate limiting
+        if (!checkDownloadLimit()) return;
+
         const route = allRoutes.find(r => r.stravaId === stravaId);
         if (!route) {
             alert('Route not found.');
