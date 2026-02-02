@@ -575,10 +575,19 @@
         }
     }
 
-    function generateGPX(coords, name) {
+    function generateGPX(coords, name, route) {
+        const isRouteSource = route && route.type === 'route';
+        const stravaUrl = route ? (isRouteSource
+            ? `https://www.strava.com/routes/${route.stravaId}`
+            : `https://www.strava.com/activities/${route.stravaId}`) : null;
+
         let gpx = '<?xml version="1.0" encoding="UTF-8"?>\n';
         gpx += '<gpx version="1.1" creator="The Trail Archive" xmlns="http://www.topografix.com/GPX/1/1">\n';
-        gpx += `  <metadata>\n    <name>${name}</name>\n    <desc>Downloaded from https://trail.nurandi.id</desc>\n    <link href="https://trail.nurandi.id">\n      <text>The Trail Archive</text>\n    </link>\n  </metadata>\n`;
+        gpx += `  <metadata>\n    <name>${name}</name>\n    <desc>Downloaded from https://trail.nurandi.id${stravaUrl ? `\nOriginal source: ${stravaUrl}` : ''}</desc>\n    <link href="https://trail.nurandi.id">\n      <text>The Trail Archive</text>\n    </link>\n`;
+        if (stravaUrl) {
+            gpx += `    <link href="${stravaUrl}">\n      <text>Original Source</text>\n    </link>\n`;
+        }
+        gpx += `  </metadata>\n`;
         gpx += '  <trk>\n';
         gpx += `    <name>${name}</name>\n`;
         gpx += '    <trkseg>\n';
@@ -775,7 +784,7 @@
                 return;
             }
 
-            const gpxContent = generateGPX(coords, routeName);
+            const gpxContent = generateGPX(coords, routeName, route);
             const blob = new Blob([gpxContent], { type: 'application/gpx+xml' });
             const url = URL.createObjectURL(blob);
 
