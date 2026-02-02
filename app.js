@@ -354,12 +354,12 @@
             if (athleteUrl && route.isPublic) {
                 displayTitle = `
                     <a href="${athleteUrl}" target="_blank" rel="noopener" class="creator-icon-link has-tooltip" data-tooltip="${tooltipText}">
-                        🎁
+                        <i class="fas fa-gift"></i>
                     </a> ${displayTitle}`;
             } else {
                 displayTitle = `
                     <span class="creator-icon-static has-tooltip" data-tooltip="${tooltipText}">
-                        🎁
+                        <i class="fas fa-gift"></i>
                     </span> ${displayTitle}`;
             }
         }
