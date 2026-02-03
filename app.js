@@ -757,7 +757,7 @@
 
             // 1. Try to fetch detailed stream (NOW .dat)
             try {
-                const response = await fetch(`assets / streams / ${stravaId}.dat`);
+                const response = await fetch(`assets/streams/${stravaId}.dat`);
                 if (response.ok) {
                     const encryptedText = await response.text();
 
